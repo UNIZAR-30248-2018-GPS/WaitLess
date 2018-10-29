@@ -1,0 +1,64 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: WaitLess
+# during dev, should point to your local machine
+host: localhost:3030
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /carta:
+    get:
+      description: Obtiene un listado de todos los productos del menú, junto con su precio
+      # used as the method name of the controller
+      operationId: carta
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items: 
+            # a pointer to a definition
+              $ref: "#/definitions/cartaResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  cartaResponse:
+    required:
+      - nombre
+      - precio
+      - tipo
+    properties:
+      nombre:
+        type: string
+      precio:
+        type: integer
+      tipo:
+        type: string
+        enum:
+          - plato
+          - bebida
+          - menu
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string

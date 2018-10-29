@@ -1,0 +1,31 @@
+{
+  "name": "waitless",
+  "version": "0.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "swagger_edit": "swagger project edit WaitLess-swagger"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UNIZAR-30248-2018-GPS/WaitLess.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UNIZAR-30248-2018-GPS/WaitLess/issues"
+  },
+  "homepage": "https://github.com/UNIZAR-30248-2018-GPS/WaitLess#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "npm": "^6.4.1",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.5",
+    "swagger-ui-dist": "^3.19.4",
+    "swagger-ui-express": "^4.0.1"
+  }
+}
