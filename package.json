@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/UNIZAR-30248-2018-GPS/WaitLess#readme",
   "dependencies": {
+    "enum": "^2.5.0",
     "express": "^4.16.4",
     "npm": "^6.4.1",
     "yamljs": "^0.3.0"
