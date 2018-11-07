@@ -25,7 +25,7 @@ paths:
       operationId: carta
       responses:
         "200":
-          description: Success
+          description: Exito
           schema:
             type: array
             items: 
@@ -36,6 +36,19 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /pedido:
+    post:
+      description: Añade un nuevo pedido al sistema tras confirmarlo
+      parameters:
+        - name: pedido
+          in: body
+          description: Pedido a añadir
+          required: true
+          schema:
+            $ref: '#/definitions/NuevoPedido'
+      responses:
+        "201":
+          description: Exito al añadir
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -45,8 +58,11 @@ definitions:
       - nombre
       - precio
       - tipo
+      - id
     properties:
       nombre:
+        type: string
+      id:
         type: string
       precio:
         type: integer
@@ -56,6 +72,17 @@ definitions:
           - plato
           - bebida
           - menu
+  NuevoPedido:
+    required:
+      - mesa
+      - items
+    properties:
+      mesa:
+        type: integer
+      items:
+        type: array
+        items:
+         $ref: "#/definitions/cartaResponse"
   ErrorResponse:
     required:
       - message
