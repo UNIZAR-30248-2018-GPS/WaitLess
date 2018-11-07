@@ -1,5 +1,6 @@
 const express = require('express');
 const swaggerUI = require('swagger-ui-express');
+const expressVue = require('express-vue');
 const YAML = require('yamljs');
 const swaggerDoc = YAML.load('./WaitLess-swagger/api/swagger/swagger.yaml');
 const app = express();
