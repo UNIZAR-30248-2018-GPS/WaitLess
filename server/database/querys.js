@@ -20,6 +20,11 @@ const getAllCarta = function () {
     }];
 };
 
+const addPedido = function(pedido){
+    //De momento no hago nada
+    return true;
+};
 module.exports = {
-    getAllCarta: getAllCarta
+    getAllCarta: getAllCarta,
+    addPedido: addPedido
 };

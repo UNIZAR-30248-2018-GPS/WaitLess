@@ -5,7 +5,7 @@ info:
 # during dev, should point to your local machine
 host: localhost:3030
 # basePath prefixes all resource paths 
-basePath: /
+basePath: /api
 # 
 schemes:
   # tip: remove http to make production-grade
@@ -36,11 +36,17 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /pedido:
+  /pedido/{mesa}:
     post:
       description: Añade un nuevo pedido al sistema tras confirmarlo
       parameters:
-        - name: pedido
+        - name: mesa 
+          in: path
+          description: Mesa que realiza el pedido
+          required: true
+          type: string
+
+        - name: pedidos
           in: body
           description: Pedido a añadir
           required: true
@@ -74,15 +80,26 @@ definitions:
           - menu
   NuevoPedido:
     required:
-      - mesa
       - items
     properties:
-      mesa:
+      comensales:
         type: integer
       items:
         type: array
         items:
-         $ref: "#/definitions/cartaResponse"
+         $ref: "#/definitions/ItemPedido"
+  ItemPedido:
+    required:
+      - nombre
+      - cantidad
+      - id
+    properties:
+      nombre:
+        type: string
+      cantidad:
+        type: integer
+      id:
+        type: string
   ErrorResponse:
     required:
       - message

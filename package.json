@@ -5,6 +5,7 @@
   "author": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prestart": "redis-server &",
     "start": "nodemon",
     "swagger_edit": "swagger project edit WaitLess-swagger"
   },
@@ -14,6 +15,7 @@
     "express": "^4.16.4",
     "express-vue": "^5.8.2",
     "npm": "^6.4.1",
+    "redis": "^2.8.0",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {

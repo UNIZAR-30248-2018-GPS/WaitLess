@@ -7,9 +7,11 @@ const app = express();
 const port = 3030;
 
 const routerCarta = require('./server/routes/carta');
+const routerPedido = require('./server/routes/pedido');
 app.use('/docs',swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 app.use('/swagger-raw',express.static('WaitLess-swagger/api/swagger/swagger.yaml'));
-app.use('/carta',routerCarta);
+app.use('/api/carta',routerCarta);
+app.use('/api/pedido}',routerPedido);
 
 //Lanzamos el servidor
 app.listen(port, function () {
