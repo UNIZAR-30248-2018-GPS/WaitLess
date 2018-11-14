@@ -10,6 +10,7 @@
     "swagger_edit": "swagger project edit WaitLess-swagger"
   },
   "dependencies": {
+    "angular-material": "^1.1.10",
     "ansi-color-table": "^1.0.1",
     "enum": "^2.5.0",
     "express": "^4.16.4",

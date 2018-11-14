@@ -1,25 +1,26 @@
 <!doctype html>
-<html lang="en" ng-app="angularCarta" ng-controller="mainController">
+<html lang="en" ng-app="angularCarta" >
     <head>
         <meta charset="UTF-8">
+        <base href="/">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>WaitLess</title>
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+        <link rel = "stylesheet" href = "https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
     </head>
     <body >
-        <div class="container">
-            <div class="jumbotron text-center">
-                <h1>Carta con <span class="label label-info">{{ platos.length }}</span> platos</h1>
-            </div>
-            <div  ng-repeat="plato in platos">
-                <h3>{{ plato.nombre }}</h3>
-                Id: {{ plato.id }}
-                Precio: {{ plato.precio }}
-                Tipo: {{ plato.tipo }}
-            </div>
+        <div ng-view>
+
+
         </div>
+
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+        <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+        <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+        <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+        <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+        <script src = "https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
         <script src="js/main.js"></script>
     </body>
 </html>

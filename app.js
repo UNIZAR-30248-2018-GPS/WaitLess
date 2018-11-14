@@ -23,6 +23,6 @@ app.listen(port, function () {
 
 // Carga una vista HTML simple donde irá nuestra Single App Page
 // Angular Manejará el Frontend
-app.get('/', function(req, res) {
+app.get('*', function(req, res) {
     res.sendfile('./public/index.html');
 });

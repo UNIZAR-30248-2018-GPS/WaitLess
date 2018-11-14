@@ -1,0 +1,9 @@
+<div class="jumbotron text-center">
+    <h1>Carta con <span class="label label-info">{{ platos.length }}</span> platos</h1>
+</div>
+<div  ng-repeat="plato in platos">
+    <h3>{{ plato.nombre }}</h3>
+    Id: {{ plato.id }}
+    Precio: {{ plato.precio }}
+    Tipo: {{ plato.tipo }}
+</div>

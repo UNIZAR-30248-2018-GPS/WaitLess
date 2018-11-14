@@ -1,6 +1,21 @@
 (function() {
 
-    var app = angular.module('angularCarta', []);
+    var app = angular.module('angularCarta', ['ngMaterial','ngRoute']);
+
+    app.config(function($routeProvider, $locationProvider) {
+        $routeProvider
+            .when("/", {
+                templateUrl : "carta.html",
+                controller : "mainController"
+            })
+            .when("/prueba", {
+                templateUrl : "prueba.html",
+                controller : "pruebaController"
+            });
+
+        // use the HTML5 History API
+        $locationProvider.html5Mode(true);
+    });
 
     var mainController = function ($scope, $http) {
 
@@ -14,10 +29,17 @@
 
         });
 
+    };
+
+    var pruebaController = function ($scope, $http) {
+
+        $scope.msg = "I love Paris";
+
+    };
 
 
-    }
 
 
     app.controller('mainController',  ['$scope','$http',mainController]);
+    app.controller('pruebaController',  ['$scope','$http',pruebaController]);
 })();
