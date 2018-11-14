@@ -19,6 +19,8 @@
 
     var mainController = function ($scope, $http) {
 
+
+
         $http({
             method: 'GET',
             url: '/api/carta'
@@ -29,13 +31,14 @@
 
         });
 
-    };
+    }
 
     var pruebaController = function ($scope, $http) {
 
         $scope.msg = "I love Paris";
 
-    };
+    }
+
 
 
 

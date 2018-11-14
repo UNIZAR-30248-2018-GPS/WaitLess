@@ -9,10 +9,46 @@
         <link rel = "stylesheet" href = "https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
     </head>
     <body >
-        <div ng-view>
+
+        <section layout="row" flex="">
+
+            <md-content flex="" layout-padding="">
 
 
-        </div>
+
+                <div layout="column" layout-align="top">
+
+                    <div ng-view>
+
+
+                    </div>
+
+                </div>
+
+                <div flex=""></div>
+
+            </md-content>
+
+            <md-sidenav class="md-sidenav-right" md-component-id="right" md-is-locked-open="true" md-whiteframe="4">
+
+                <md-toolbar class="md-theme-indigo">
+                    <h1 class="md-toolbar-tools">Mi pedido</h1>
+                </md-toolbar>
+                <md-content layout-padding">
+
+                    <p>
+                        Aqui va tu pedido
+                    </p>
+                </md-content>
+
+            </md-sidenav>
+
+        </section>
+
+
+
+
+
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
