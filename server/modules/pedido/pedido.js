@@ -4,10 +4,10 @@ const bd = require('../../database/querys');
 
 const pedido_post = function (req,res) {
     var pedido = {
-        mesa: req.params.mesa,
+        mesa: req.params.mesaId,
         ...req.body
     };
-    client.publish("pedidos",pedido);
+    client.publish("pedidos",JSON.stringify(pedido),redis.print);
     bd.addPedido(pedido);
     res.sendStatus("201");
 
