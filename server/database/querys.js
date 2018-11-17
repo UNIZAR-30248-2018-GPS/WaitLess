@@ -2,38 +2,51 @@
 const getAllCarta = function (tipoItem) {
     if(!tipoItem) {
       return [{
-        "nombre": 'Plato 1',
-        "id": 'id1',
-        "precio": 0.1,
-        "tipo": 0
-      },
-        {
-          "nombre": 'Plato 2',
-          "id": 'id2',
-          "precio": 2,
-          "tipo": 1
-        },
-        {
-          "nombre": 'Plato 3',
-          "id": 'id3',
-          "precio": 0.1,
-          "tipo": 2
-        }];
-    }else if(tipoItem===1){
-        //Busqueda con parametros, por ahora devuelvo algo distinto
-      return [{
-        "nombre": 'Bravas',
-        "id": 'id1',
-        "precio": 0.1,
-        "tipo": 1
-        }];
-    }else if(tipoItem===2){
-      //Busqueda con parametros, por ahora devuelvo algo distinto
-      return [{
-        "nombre": 'Vino',
+        "nombre": 'Sopa de marisco',
         "id": 'id1',
         "precio": 0.1,
         "tipo": 2
+      },
+      {
+        "nombre": 'Macarrones a la boloñesa',
+        "id": 'id2',
+        "precio": 2,
+        "tipo": 2
+      },
+      {
+        "nombre": 'Salmón a la plancha',
+        "id": 'id3',
+        "precio": 0.1,
+        "tipo": 3
+      }];
+    }else if(tipoItem===1){
+        //Busqueda con parametros, por ahora devuelvo algo distinto
+      return [{
+        "nombre": 'CocaCola',
+        "id": 'id1',
+        "precio": 0.1,
+        "tipo": 1
+        },
+        {
+        "nombre": 'Vino',
+        "id": 'id2',
+        "precio": 0.1,
+        "tipo": 1
+        }
+      ];
+    }else if(tipoItem===2){
+      //Busqueda con parametros, por ahora devuelvo algo distinto
+      return [{
+        "nombre": 'Macarrones a la boloñesa',
+        "id": 'id1',
+        "precio": 0.1,
+        "tipo": 2
+      },
+      {
+      "nombre": 'Sopa de marisco',
+      "id": 'id9',
+      "precio": 0.1,
+      "tipo": 2
       }];
     }else if(tipoItem===3){
       //Busqueda con parametros, por ahora devuelvo algo distinto
@@ -42,11 +55,18 @@ const getAllCarta = function (tipoItem) {
         "id": 'id1',
         "precio": 0.1,
         "tipo": 3
-      }];
+      },
+      {
+      "nombre": 'Ternera guisada',
+      "id": 'id3',
+      "precio": 0.1,
+      "tipo": 3
+      }
+      ];
     }else if(tipoItem===4){
       //Busqueda con parametros, por ahora devuelvo algo distinto
       return [{
-        "nombre": 'Guisado de ternera',
+        "nombre": 'Helado de chocolate',
         "id": 'id1',
         "precio": 0.1,
         "tipo": 4

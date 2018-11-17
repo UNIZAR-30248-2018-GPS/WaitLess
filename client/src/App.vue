@@ -7,7 +7,7 @@
             <el-menu-item index="primeros" >Primeros</el-menu-item>
             <el-menu-item index="segundos" >Segundos</el-menu-item>
             <el-menu-item index="postres">Postres</el-menu-item>
-            <el-menu-item index="bebidas" disabled>Bebidas</el-menu-item>
+            <el-menu-item index="bebidas">Bebidas</el-menu-item>
           </el-menu>
 
 
@@ -17,7 +17,11 @@
         </el-main>
       </el-container>
       <el-aside width="250px">
-        Barra lateral
+
+        <h3>
+          <v-icon name="utensils"/>
+          Mi pedido
+        </h3>
 
 
       </el-aside>
@@ -46,7 +50,7 @@ export default {
 }
 
   .el-aside {
-    background: cornflowerblue;
+    background: lightgrey;
     color: white;
   }
 </style>
