@@ -22,6 +22,12 @@ paths:
     get:
       description: Obtiene un listado de todos los productos del menú, junto con su precio
       # used as the method name of the controller
+      parameters:
+        - name: tipo
+          in: query
+          description: Filtra la carta por tipo de elemento, vacio si se quieren mostrar todos
+          required: false
+          type: string
       operationId: carta
       responses:
         "200":
@@ -77,7 +83,9 @@ definitions:
         enum:
           - plato
           - bebida
-          - menu
+          - menu1
+          - menu2
+          - postre
   NuevoPedido:
     required:
       - items
