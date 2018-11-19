@@ -22,12 +22,6 @@ paths:
     get:
       description: Obtiene un listado de todos los productos del menú, junto con su precio
       # used as the method name of the controller
-      parameters:
-        - name: tipo
-          in: query
-          description: Filtra la carta por tipo de elemento, vacio si se quieren mostrar todos
-          required: false
-          type: string
       operationId: carta
       responses:
         "200":
@@ -61,6 +55,143 @@ paths:
       responses:
         "201":
           description: Exito al añadir
+  /pedido/pedidopreparado/{numPedido}/{itemId}:
+    post:
+      description: actualiza el estado del pedido para cada item a preparado
+      parameters:
+        - name: numPedido 
+          in: path
+          description: número del pedido que se desea actualizar
+          required: true
+          type: integer
+
+        - name: itemId
+          in: path
+          description: número del item que se desea actualizar
+          required: true
+          type: integer
+      responses:
+        "201":
+          description: Exito al modificar el estado
+  /pedido/pedidoservido/{numPedido}/{itemId}:
+    post:
+      description: actualiza el estado del pedido para cada item a servido
+      parameters:
+        - name: numPedido 
+          in: path
+          description: número del pedido que se desea actualizar
+          required: true
+          type: integer
+
+        - name: itemId
+          in: path
+          description: número del item que se desea actualizar
+          required: true
+          type: integer
+      responses:
+        "201":
+          description: Exito al modificar el estado
+  /bebida/nuevaBebida/{nombre}/{precio}:
+    post:
+      description: Añade una nueva bebida
+      parameters:
+        - name: nombre
+          in: path
+          description: nombre de la bebida a añadir
+          required: true
+          type: string 
+
+        - name: precio
+          in: path
+          description: precio de la bebida a añadir
+          required: true
+          type: string 
+      responses:
+        "201":
+          description: Exito al añadir bebida
+  /bebida/borrarBebida/{nombre}:
+    post:
+      description: borra una bebida
+      parameters:
+        - name: nombre
+          in: path
+          description: nombre de la bebida a borrar
+          required: true
+          type: string 
+      responses:
+        "201":
+          description: Exito al eliminar bebida
+  /plato/nuevoPlato/{nombre}/{descripcion}/{precio}/{tipo}:
+    post:
+      description: inserta un plato
+      parameters:
+        - name: nombre
+          in: path
+          description: nombre del plato
+          required: true
+          type: string
+        - name: descripcion
+          in: path
+          description: Descripcion del nuevo plato
+          required: true
+          type: string 
+        - name: precio
+          in: path
+          description: Precio del nuevo plato
+          required: true
+          type: double 
+        - name: tipo
+          in: path
+          description: tipo del plato introducido
+          required: true
+          type: string 
+      responses:
+        "201":
+          description: Exito al introducir nuevo plato
+  /plato/modificarPlato/{nombre}/{descripcion}/{precio}/{tipo}/{id}:
+    post:
+      description: modifica un plato
+      parameters:
+        - name: nombre
+          in: path
+          description: nuevo nombre del plato
+          required: true
+          type: string
+        - name: descripcion
+          in: path
+          description: Descripcion del plato a modificar
+          required: true
+          type: string 
+        - name: precio
+          in: path
+          description: Precio del plato a modificar
+          required: true
+          type: double 
+        - name: tipo
+          in: path
+          description: tipo del plato a modificar
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: id del plato a modificar
+          required: true
+          type: integer
+      responses:
+        "201":
+          description: Exito al modificar plato
+  /plato/borrarPlato/{nombre}:
+    post:
+      description: borrar un plato
+      parameters:
+        - name: nombre
+          in: path
+          description: nombre del plato a borrar
+          required: true
+          type: string
+      responses:
+        "201":
+          description: Exito al borrar plato
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -83,9 +214,7 @@ definitions:
         enum:
           - plato
           - bebida
-          - menu1
-          - menu2
-          - postre
+          - menu
   NuevoPedido:
     required:
       - items
