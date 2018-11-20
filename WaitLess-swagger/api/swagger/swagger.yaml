@@ -1,0 +1,128 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: WaitLess
+# during dev, should point to your local machine
+host: localhost:3030
+# basePath prefixes all resource paths 
+basePath: /api
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /carta:
+    get:
+      description: Obtiene un listado de todos los productos del menú, junto con su precio
+      # used as the method name of the controller
+      parameters:
+        - name: tipo
+          in: query
+          description: Filtra la carta por tipo de elemento, vacio si se quieren mostrar todos
+          required: false
+          type: string
+      operationId: carta
+      responses:
+        "200":
+          description: Exito
+          schema:
+            type: array
+            items: 
+            # a pointer to a definition
+              $ref: "#/definitions/cartaResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /pedido:
+    get:
+      description: Abre un stream para recibir pedidos que se van incluyendo desde las mesas
+      produces: ["text/event-stream","application/json"]
+      responses:
+        '200':
+          description: Stream abierto
+          x-produces: ["text/event-stream"]
+          headers:
+            'Content-Type':
+              type: string
+              enum: ["text/event-stream"]
+  /pedido/{mesa}:
+    post:
+      description: Añade un nuevo pedido al sistema tras confirmarlo
+      parameters:
+        - name: mesa 
+          in: path
+          description: Mesa que realiza el pedido
+          required: true
+          type: string
+
+        - name: pedidos
+          in: body
+          description: Pedido a añadir
+          required: true
+          schema:
+            $ref: '#/definitions/NuevoPedido'
+      responses:
+        "201":
+          description: Exito al añadir
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  cartaResponse:
+    required:
+      - nombre
+      - precio
+      - tipo
+      - id
+    properties:
+      nombre:
+        type: string
+      id:
+        type: string
+      precio:
+        type: integer
+      tipo:
+        type: string
+        enum:
+          - plato
+          - bebida
+          - menu1
+          - menu2
+          - postre
+  NuevoPedido:
+    required:
+      - items
+    properties:
+      comensales:
+        type: integer
+      items:
+        type: array
+        items:
+         $ref: "#/definitions/ItemPedido"
+  ItemPedido:
+    required:
+      - nombre
+      - cantidad
+      - id
+    properties:
+      nombre:
+        type: string
+      cantidad:
+        type: integer
+      id:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
