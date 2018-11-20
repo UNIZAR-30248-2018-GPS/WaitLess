@@ -91,6 +91,31 @@ const plato_modify = function (data, res) {
   })
 };
 
+const plato_alergenos = function (data, res) {
+    let sql = 'SELECT b.nombre FROM alergenos_carta a, alergenos b WHERE a.id_carta = ? and b.id= a.id_alergeno'
+    connection.query(sql,data, function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined) {
+        res.status(204).send()
+      } else {
+        res.status(200).send(result)
+      }
+  })
+};
+
+const plato_ingredientes = function (data, res) {
+    let sql = 'SELECT c.nombre FROM ingredientes_carta a, ingrediente c WHERE c.id= a.id_ingrediente and a.id_carta = ? '
+    connection.query(sql,data, function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined) {
+        res.status(204).send()
+      } else {
+        res.status(200).send(result)
+      }
+  })
+};
+
+
 // pedidos
 const addPedido = function(pedido){
     //De momento no hago nada
@@ -108,6 +133,8 @@ const actualizar_pedido = function (data, res) {
       }
   })
 };
+
+
 
 // Servicios
 const get_avisos = function (data, res) {    
@@ -130,6 +157,8 @@ module.exports = {
     plato_insert: plato_insert,
     plato_delete: plato_delete,
     plato_modify: plato_modify,
+    plato_ingredientes: plato_ingredientes,
+    plato_alergenos: plato_alergenos,
     actualizar_pedido: actualizar_pedido,
     get_avisos: get_avisos
 
