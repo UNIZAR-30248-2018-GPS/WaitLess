@@ -26,8 +26,24 @@ const plato_delete = function (req,res) {
     ] 
     bd.plato_delete(data, res);
 };
+
+const plato_alergenos = function (req,res) {
+    let data = [
+        req.params.id
+    ] 
+    bd.plato_alergenos(data, res);
+};
+const plato_ingredientes = function (req,res) {
+    let data = [
+        req.params.id
+    ] 
+    bd.plato_ingredientes(data, res);
+};
+
 module.exports = {
     plato_insert: plato_insert,
     plato_delete: plato_delete,
-    plato_modificar: plato_modificar
+    plato_modificar: plato_modificar,    
+    plato_alergenos: plato_alergenos,
+    plato_ingredientes: plato_ingredientes
 };
