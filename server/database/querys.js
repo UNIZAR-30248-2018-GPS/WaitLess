@@ -10,7 +10,7 @@ connection.connect(function (err) {
     console.log('MySql caido, se reconectara en query');
 });
 const getAllCarta = function (tipoItem, callback) {
-        if(!tipoItem) {
+        if(tipoItem==='undefined' || tipoItem===null) {
             let sql ='SELECT * FROM carta';
             connection.query(sql,'',function (err,result) {
                 if(err){
@@ -21,9 +21,8 @@ const getAllCarta = function (tipoItem, callback) {
             });
         }else {
             //Busqueda con parametros, por ahora devuelvo algo distinto
-            let sql = 'SELECT * FROM carta WHERE tipo = 0';
+            let sql = 'SELECT * FROM carta WHERE tipo = ?';
             connection.query(sql, [tipoItem], function (err, result) {
-                console.log(result);
                 if (err) {
                     callback(err);
                 } else {
