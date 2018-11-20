@@ -11,10 +11,10 @@ schemes:
   # tip: remove http to make production-grade
   - http
   - https
-# format of bodies a client can send (Content-Type)
+# format of bodies a cocina can send (Content-Type)
 consumes:
   - application/json
-# format of the responses to the client (Accepts)
+# format of the responses to the cocina (Accepts)
 produces:
   - application/json
 paths:

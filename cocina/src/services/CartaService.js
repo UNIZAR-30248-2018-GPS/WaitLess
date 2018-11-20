@@ -8,10 +8,10 @@ export default {
     return Api().get('carta?tipo=menu2')
   },
   postres() {
-    return Api().get('carta?tipo=bebida')
+    return Api().get('carta?tipo=postre')
   },
   bebidas() {
-    return Api().get('carta?tipo=postre')
+    return Api().get('carta?tipo=bebidas')
   }
 
 }

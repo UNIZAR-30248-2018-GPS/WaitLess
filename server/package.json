@@ -1,5 +1,5 @@
 {
-  "name": "waitless",
+  "name": "server",
   "version": "0.1.0",
   "description": "",
   "author": "",
@@ -18,12 +18,12 @@
     "mysql": "^2.16.0",
     "npm": "^6.4.1",
     "redis": "^2.8.0",
-    "yamljs": "^0.3.0"
-  },
-  "devDependencies": {
-    "nodemon": "^1.18.5",
+    "yamljs": "^0.3.0",
     "swagger-ui-dist": "^3.19.4",
     "swagger-ui-express": "^4.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.5"
   },
   "bugs": {
     "url": "https://github.com/UNIZAR-30248-2018-GPS/WaitLess/issues"

@@ -16,15 +16,7 @@
           <router-view/>
         </el-main>
       </el-container>
-      <el-aside width="250px">
 
-        <h3>
-          <v-icon name="utensils"/>
-          Mi pedido
-        </h3>
-
-
-      </el-aside>
     </el-container>
   </div>
 </template>

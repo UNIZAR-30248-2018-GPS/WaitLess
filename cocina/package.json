@@ -1,7 +1,7 @@
 {
-  "name": "client",
+  "name": "cocina",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "Interfaz gráfica de cocina del proyecto WaitLess",
   "author": "WaitLess team",
   "private": true,
   "scripts": {
@@ -18,7 +18,11 @@
     "nodemon": "^1.18.6",
     "vue": "^2.5.2",
     "vue-awesome": "^3.2.0",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "webpack": "^3.6.0",
+    "webpack-bundle-analyzer": "^2.9.0",
+    "webpack-dev-server": "^2.9.1",
+    "webpack-merge": "^4.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

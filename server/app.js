@@ -9,11 +9,11 @@ var bodyParser = require('body-parser')
 const app = express();
 const port = 3030;
 
-const routerCarta = require('./server/routes/carta');
-const routerPedido = require('./server/routes/pedido');
-const routerBebida = require('./server/routes/bebida');
-const routerPlato = require('./server/routes/plato');
-const routerServicio = require('./server/routes/servicio');
+const routerCarta = require('./routes/carta');
+const routerPedido = require('./routes/pedido');
+const routerBebida = require('./routes/bebida');
+const routerPlato = require('./routes/plato');
+const routerServicio = require('./routes/servicio');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
