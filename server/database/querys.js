@@ -28,26 +28,26 @@ function connectionHandler(){
 }
 connectionHandler();
 const getAllCarta = function (tipoItem, callback) {
-        if(tipoItem==='undefined' || tipoItem===null) {
-            let sql ='SELECT * FROM carta';
-            connection.query(sql,'',function (err,result) {
-                if(err){
-                    callback(err);
-                }else{
-                    callback(0,result);
-                }
-            });
-        }else {
-            //Busqueda con parametros, por ahora devuelvo algo distinto
-            let sql = 'SELECT * FROM carta WHERE tipo = ?';
-            connection.query(sql, [tipoItem], function (err, result) {
-                if (err) {
-                    callback(err);
-                } else {
-                    callback(0, result);
-                }
-            });
-        }
+    if(tipoItem===undefined || tipoItem===null) {
+        let sql ='SELECT * FROM carta';
+        connection.query(sql,'',function (err,result) {
+            if(err){
+                callback(err);
+            }else{
+                callback(0,result);
+            }
+        });
+    }else {
+        //Busqueda con parametros, por ahora devuelvo algo distinto
+        let sql = 'SELECT * FROM carta WHERE tipo = ?';
+        connection.query(sql, [tipoItem], function (err, result) {
+            if (err) {
+                callback(err);
+            } else {
+                callback(0, result);
+            }
+        });
+    }
 };
 
 // añadir a la carta
