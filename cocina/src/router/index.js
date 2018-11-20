@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Primeros from '@/components/Primeros'
-import Segundos from '@/components/Segundos'
-import Postres from '@/components/Postres'
-import Bebidas from '@/components/Bebidas'
+import Pedidos from '@/components/Pedidos'
+import Modificar from '@/components/Modificar'
+import Disponibilidad from '@/components/Disponibilidad'
 
 
 Vue.use(Router)
@@ -13,27 +12,22 @@ export default new Router({
     {
       path: '/',
       name: 'Inicio',
-      component: Primeros
+      component: Pedidos
     },
     {
-      path: '/primeros',
-      name: 'primeros',
-      component: Primeros
+      path: '/pedidos',
+      name: 'pedidos',
+      component: Pedidos
     },
     {
-      path: '/segundos',
-      name: 'segundos',
-      component: Segundos
+      path: '/disponibilidad',
+      name: 'disponibilidad',
+      component: Disponibilidad
     },
     {
-      path: '/postres',
-      name: 'postres',
-      component: Postres
-    },
-    {
-      path: '/bebidas',
-      name: 'bebidas',
-      component: Bebidas
+      path: '/modificar',
+      name: 'modificar',
+      component: Modificar
     }
   ]
 })

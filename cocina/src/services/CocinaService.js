@@ -1,7 +1,7 @@
 import Api from '@/services/Api'
 
 export default {
-  primeros() {
+  pedidos() {
     return Api().get('carta?tipo=menu1')
   },
   segundos() {
@@ -9,9 +9,6 @@ export default {
   },
   postres() {
     return Api().get('carta?tipo=postre')
-  },
-  bebidas() {
-    return Api().get('carta?tipo=bebidas')
   }
 
 }

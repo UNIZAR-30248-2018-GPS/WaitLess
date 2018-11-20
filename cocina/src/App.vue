@@ -4,10 +4,9 @@
       <el-container>
         <el-header>
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal"  router>
-            <el-menu-item index="primeros" >Primeros</el-menu-item>
-            <el-menu-item index="segundos" >Segundos</el-menu-item>
-            <el-menu-item index="postres">Postres</el-menu-item>
-            <el-menu-item index="bebidas">Bebidas</el-menu-item>
+            <el-menu-item index="pedidos" >Pedidos</el-menu-item>
+            <el-menu-item index="disponibilidad" >Disponibilidad de carta</el-menu-item>
+            <el-menu-item index="modificar">Modificar carta</el-menu-item>
           </el-menu>
 
 
@@ -26,7 +25,7 @@ export default {
   name: 'App',
   data() {
     return {
-      activeIndex: 'primeros'
+      activeIndex: 'pedidos'
     };
   }
 }
