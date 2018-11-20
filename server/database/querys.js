@@ -1,14 +1,32 @@
 //TODO: Interaccion con la base de datos, por ahora las funciones sirven de mock
 var mysql = require('mysql');
-var connection = mysql.createConnection({
+var connection_cfg = {
     host : 'eu-cdbr-west-02.cleardb.net',
     user: 'b4abd6312e0613',
     password: 'b9415534',
     database: 'heroku_de42e77cc297366'
-});
-connection.connect(function (err) {
-    console.log('MySql caido, se reconectara en query');
-});
+};
+
+var connection;
+
+function connectionHandler(){
+    connection = mysql.createConnection(connection_cfg);
+    connection.connect(function (err) {
+        if(err){
+            console.log('Error al conectar a MySql');
+        }
+
+    });
+    connection.on('error', function(err) {
+        if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+            console.log('Reconectando a bd...');
+            connectionHandler();
+        } else {
+            throw err;
+        }
+    });
+}
+connectionHandler();
 const getAllCarta = function (tipoItem, callback) {
         if(tipoItem==='undefined' || tipoItem===null) {
             let sql ='SELECT * FROM carta';
@@ -116,7 +134,7 @@ const plato_ingredientes = function (data, res) {
 
 
 // pedidos
-const addPedido = function(pedido){
+const addPedido = function(pedido,callback){
     //De momento no hago nada
     return true;
 };
