@@ -1,5 +1,5 @@
-const redis = require('redis');
-const client = redis.createClient();
+const redis = process.env.NODE_ENV==='test' ? require('redis-mock') : require('redis');
+const sub = redis.createClient(), pub = redis.createClient();
 const bd = require('../../database/querys');
 const Enum = require('enum');
 const tipo = new Enum({'pendiente':0,'preparado':1,'servido':2},{ignoreCase: true});
@@ -9,14 +9,22 @@ const pedido_post = function (req,res) {
         mesa: req.params.mesaId,
         ...req.body
     };
-    bd.addPedido(pedido,function (err) {
+    bd.addPedido(pedido,function (err,pedidoId) {
+        var response='';
         if(err){
             console.log(err);
             res.statusCode=500;
+            bd.borrar_pedido(pedidoId,function () {
+                console.log('Pedido no añadido');
+            });
         }else {
             pub.publish("pedidos", JSON.stringify(pedido), redis.print);
             res.statusCode=201;
+            res.setHeader('Content-Type', 'application/json');
+            response={pedidoId:pedidoId};
         }
+
+        res.send(response);
         res.end();
     });
 
@@ -25,13 +33,20 @@ const pedido_post = function (req,res) {
 const pedido_get = function(req,res){
     sub.subscribe("pedidos");
     //TODO: Websockets mejor
-    sub.on("message",function (channel,message) {
+/*    sub.on("message",function (channel,message) {
         console.log(message);
         request.on('error',function (err) {
             sub.unsubscribe();
             sub.quit();
             res.send('500',err);
         }).pipe(message);
+    })*/
+    bd.getPedido(function (err,pedidos) {
+        if(err){
+            res.sendStatus('500');
+        }else{
+            res.send(pedidos);
+        }
     })
 };
 

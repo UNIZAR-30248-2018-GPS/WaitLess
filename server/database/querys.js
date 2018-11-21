@@ -141,21 +141,31 @@ const addPedido = function(pedido,callback){
         if(error){
             callback(error);
         }else {
-            let sql_item = 'INSERT INTO item SET nombre = ?, cantidad = ? , num_pedido = ?, estado=0';
+            let sql_item = 'INSERT INTO item (nombre,cantidad,num_pedido,estado) VALUES ?';
+            var values=[];
             pedido.items.forEach(function (item) {
-                connection.query(sql_item,[item.nombre,item.cantidad,results.insertId],function (err,results,fields) {
-                    if(err){
-                        callback(err);
-                    }else {
-                        callback(0);
-                    }
-                })
+                values.push([item.nombre,item.cantidad,results.insertId,0]);
             });
+            connection.query(sql_item,[values],function (err) {
+                if(err){
+                    callback(err,results.insertId);
+                }else {
+                    callback(false,results.insertId);
+                }
+            })
         }
     });
-    return true;
 };
-
+const getPedido = function (callback) {
+    let sql = 'SELECT * FROM pedido'
+    connection.query(sql,'',function (error,results,fields) {
+        if(error){
+            callback(error);
+        }else {
+            callback(false,results);
+        }
+    })
+};
 const actualizar_pedido = function (data, res) {
     let sql = 'UPDATE item SET estado = ? WHERE id_item = ? AND num_pedido = ? AND estado = ?'
     connection.query(sql,data, function (err, result) {
@@ -166,6 +176,25 @@ const actualizar_pedido = function (data, res) {
         res.status(200).send()
       }
   })
+};
+
+const borrar_pedido = function (idPedido,callback) {
+
+    let sql_item = 'DELETE FROM item WHERE num_pedido = ?';
+    connection.query(sql_item,idPedido,function (err_item,result) {
+        if(err_item){
+            callback(err_item);
+        }else{
+            let sql ='DELETE FROM pedido WHERE num_pedido = ?';
+            connection.query(sql,idPedido,function (err) {
+                if(err){
+                    callback(err);
+                }else {
+                    callback(false);
+                }
+            })
+        }
+    })
 };
 
 
@@ -186,6 +215,8 @@ const get_avisos = function (data, res) {
 module.exports = {
     getAllCarta: getAllCarta,
     addPedido: addPedido,
+    getPedido: getPedido,
+    borrar_pedido:borrar_pedido,
     bebida_delete: bebida_delete,
     bebida_insert: bebida_insert,
     plato_insert: plato_insert,
