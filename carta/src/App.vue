@@ -98,7 +98,7 @@
 
       <v-flex xs12 sm50 text-xs-center>
         <div>
-          <v-btn depressed small>Finalizar Pedido</v-btn>
+          <v-btn depressed small @click="enviarPedido">Finalizar Pedido</v-btn>
         </div>
       </v-flex>
 
@@ -164,19 +164,22 @@ export default {
         this.value[5]=this.value[2]*this.value[4];
         this.pedido.push(this.value);
         this.modelo.push('');
-        console.log('modelo',this.modelo[0],this.modelo[1])
         this.cuenta.push(this.value[5]);
+        this.pedido_total.push({"nombre": this.value[1],"cantidad":this.value[4],"id": this.value[0]})
       }else {
         if (this.value[4]===0){
           Vue.delete(this.pedido,existe);
           Vue.delete(this.cuenta,existe);
+          Vue.delete(this.pedido_total,existe);
         }else{
           this.value[5]=this.value[2]*this.value[4];
           Vue.set(this.pedido, existe, this.value)
           Vue.set(this.cuenta,existe,this.value[5])
+          Vue.set(this.cuenta,exite,{ nombre: this.value[1],cantidad:this.value[4],id: this.value[0]})
         }
       }
       this.mostrarCuenta()
+      console.log('pedido_total',this.pedido_total);
     });
 
   },
@@ -190,6 +193,20 @@ export default {
     addComentario(id,nombre,precio,cantidad,message){
       this.pedido_total.push({id: id, nombre: nombre, precio:precio, cantidad:cantidad,comentario:message})
       console.log('comentario',this.pedido_total);
+    },
+    enviarPedido(){
+      this.axios({
+        method: 'post',
+        url: 'http://localhost:3030/api/pedido/10',
+        data:
+            {
+              "comensales" : 7,
+              "items" : this.pedido_total
+            }
+        }
+      ).then(response =>{
+         console.log('respuesta',response);
+      });
     }
   },
 

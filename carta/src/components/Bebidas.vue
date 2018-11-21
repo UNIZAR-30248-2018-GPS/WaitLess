@@ -40,7 +40,7 @@
 <script>
   import Carta from '../layouts/card_carta'
   export default {
-    name:"Primeros",
+    name:"Bebidas",
     data(){
       return{
         items: [],

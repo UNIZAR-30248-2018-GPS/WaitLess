@@ -35,8 +35,14 @@
 
           <v-card-text>
             <p  v-for="(item,index1) in name[4][name[5]]">-{{item.nombre}}</p>
+
           </v-card-text>
+        Alergenos:
+        <v-card-text>
+          <p  v-for="(item,index1) in name[6][name[5]]">-{{item.nombre}}</p>
         </v-card-text>
+        </v-card-text>
+
 
     </v-slide-y-transition>
   </v-card>
