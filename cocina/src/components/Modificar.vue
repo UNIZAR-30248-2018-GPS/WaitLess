@@ -1,74 +1,30 @@
 <template>
   <div>
     <h1>Modificar carta</h1>
-
     <el-row :gutter="20">
-      <el-col :span="8"><div >
+      <el-col v-for="plato in platos" :key="plato.id" :span="8"><div >
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <el-tag class="etiquetaPlato">Primero</el-tag><span><strong>Macarrones con tomate</strong></span>
+            <el-tag v-if="plato.tipo==='plato'" class="etiquetaPlato">Plato</el-tag>
+            <el-tag v-if="plato.tipo==='bebida'" type="success" class="etiquetaPlato">Bebida</el-tag>
+            <span><strong>{{plato.nombre}}</strong></span>
             <el-button class="botonModificar" type="text">Modificar</el-button>
           </div>
           <el-row :gutter="20">
+            <el-col :span="4">
+              <el-tag type="info">{{plato.precio}}€</el-tag>
+            </el-col>
             <el-col :span="20">
               <div>
-                Descripción bla bla bla
-              </div>
-              <div>
-                Ingredientes bla bla bla
+                {{plato.descripcion}}
               </div>
             </el-col>
-            <el-col :span="4">
-              <el-tag type="info">7€</el-tag>
-            </el-col>
+
           </el-row>
 
         </el-card>
       </div></el-col>
-      <el-col :span="8"><div >
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <el-tag type="success" class="etiquetaPlato">Segundo</el-tag><span><strong>Ternera a la plancha</strong></span>
-            <el-button class="botonModificar" type="text">Modificar</el-button>
-          </div>
-          <el-row :gutter="20">
-            <el-col :span="20">
-              <div>
-                Descripción bla bla bla
-              </div>
-              <div>
-                Ingredientes bla bla bla
-              </div>
-            </el-col>
-            <el-col :span="4">
-              <el-tag type="info">7€</el-tag>
-            </el-col>
-          </el-row>
 
-        </el-card>
-      </div></el-col>
-      <el-col :span="8"><div >
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <el-tag type="warning" class="etiquetaPlato">Postre</el-tag><span><strong>Crema catalana</strong></span>
-            <el-button class="botonModificar" type="text">Modificar</el-button>
-          </div>
-          <el-row :gutter="20">
-            <el-col :span="20">
-              <div>
-                Descripción bla bla bla
-              </div>
-              <div>
-                Ingredientes bla bla bla
-              </div>
-            </el-col>
-            <el-col :span="4">
-              <el-tag type="info">7€</el-tag>
-            </el-col>
-          </el-row>
-
-        </el-card>
-      </div></el-col>
     </el-row>
 
 
@@ -81,9 +37,20 @@
   export default {
     data () {
       return {
-        pedidos: null
+        platos: null
       }
+    },
+    methods: {
+      async cargarPlatos(){
+        const response = await CocinaService.carta()
+        this.platos = response.data
+        console.log(response.data)
+      }
+    },
+    beforeMount() {
+      this.cargarPlatos()
     }
+
   }
 </script>
 
