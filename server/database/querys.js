@@ -135,7 +135,24 @@ const plato_ingredientes = function (data, res) {
 
 // pedidos
 const addPedido = function(pedido,callback){
-    //De momento no hago nada
+    let sql='INSERT INTO pedido SET mesa = ?, num_comensales = ?';
+    console.log(pedido.mesa);
+    connection.query(sql,[pedido.mesa,pedido.comensales],function (error,results,fields) {
+        if(error){
+            callback(error);
+        }else {
+            let sql_item = 'INSERT INTO item SET nombre = ?, cantidad = ? , num_pedido = ?, estado=0';
+            pedido.items.forEach(function (item) {
+                connection.query(sql_item,[item.nombre,item.cantidad,results.insertId],function (err,results,fields) {
+                    if(err){
+                        callback(err);
+                    }else {
+                        callback(0);
+                    }
+                })
+            });
+        }
+    });
     return true;
 };
 

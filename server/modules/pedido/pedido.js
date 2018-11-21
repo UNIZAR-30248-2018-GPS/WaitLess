@@ -10,9 +10,16 @@ const pedido_post = function (req,res) {
         mesa: req.params.mesaId,
         ...req.body
     };
-    pub.publish("pedidos",JSON.stringify(pedido),redis.print);
-    bd.addPedido(pedido);
-    res.sendStatus("201");
+    bd.addPedido(pedido,function (err) {
+        if(err){
+            console.log(err);
+            res.statusCode=500;
+        }else {
+            pub.publish("pedidos", JSON.stringify(pedido), redis.print);
+            res.statusCode=201;
+        }
+        res.end();
+    });
 
 };
 
