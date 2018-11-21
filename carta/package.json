@@ -5,8 +5,7 @@
   "author": "",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "node ./server/app.js",
+    "start": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "test": "npm run unit",
     "build": "node build/build.js",
     "swagger_edit": "swagger project edit WaitLess-swagger"

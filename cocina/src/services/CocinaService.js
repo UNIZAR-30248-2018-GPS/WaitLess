@@ -9,6 +9,9 @@ export default {
   },
   postres() {
     return Api().get('carta?tipo=postre')
+  },
+  nuevoPlato(nombre, descripcion, precio, tipo) {
+    return Api().post('plato/nuevoPlato/'+nombre+'/'+descripcion+'/'+precio+'/'+tipo)
   }
 
 }

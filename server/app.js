@@ -2,6 +2,7 @@ const express = require('express');
 const swaggerUI = require('swagger-ui-express');
 const expressVue = require('express-vue');
 const YAML = require('yamljs');
+var cors = require('cors');
 const swaggerDoc = YAML.load('./WaitLess-swagger/api/swagger/swagger.yaml');
 var bodyParser = require('body-parser')
 
@@ -14,6 +15,8 @@ const routerPedido = require('./routes/pedido');
 const routerBebida = require('./routes/bebida');
 const routerPlato = require('./routes/plato');
 const routerServicio = require('./routes/servicio');
+
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

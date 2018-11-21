@@ -1,7 +1,8 @@
 <template>
   <div>
     <h1>Añadir a carta</h1>
-    <el-form ref="form" :model="form" label-width="160px">
+
+    <el-form ref="form"class="anchura" :model="form" label-width="160px">
       <el-form-item label="Nombre del plato">
         <el-input v-model="form.nombre"></el-input>
       </el-form-item>
@@ -9,10 +10,10 @@
         <el-input type="textarea" v-model="form.descripcion"></el-input>
       </el-form-item>
       <el-form-item label="Tipo de plato">
-        <el-select v-model="form.region" placeholder="selecciona el tipo de plato">
-          <el-option label="Primero" value="primero"></el-option>
-          <el-option label="Segundo" value="segundo"></el-option>
-          <el-option label="Postre" value="postre"></el-option>
+        <el-select v-model="form.tipo" placeholder="selecciona el tipo de plato">
+          <el-option label="Primero" value="0"></el-option>
+          <el-option label="Segundo" value="1"></el-option>
+          <el-option label="Postre" value="2"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="Precio">
@@ -33,25 +34,25 @@
     data () {
       return {
         form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+          nombre: '',
+          descripcion: '    ',
+          tipo: '',
+          precio: ''
         }
       }
     },
     methods: {
       onSubmit() {
-        console.log('submit!');
+        console.log(this.form);
+        CocinaService.nuevoPlato(this.form.nombre,this.form.descripcion,
+                              this.form.precio,this.form.tipo)
       }
     }
   }
 </script>
 
 <style>
-
+  .anchura {
+    width: 600px;
+  }
 </style>
