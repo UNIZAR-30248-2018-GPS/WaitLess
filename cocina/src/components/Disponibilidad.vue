@@ -2,16 +2,13 @@
   <div>
     <h1>Disponibilidad de la carta</h1>
     <el-table
+      v-loading="loading"
       :row-class-name="tableRowClassName"
-      :data="tableData.filter(data => !search || data.plato.toLowerCase().includes(search.toLowerCase()))"
+      :data="platos.filter(data => !search || data.nombre.toLowerCase().includes(search.toLowerCase()))"
       style="width: 100%">
       <el-table-column
-        label="Disponibilidad"
-        prop="disponibilidad">
-      </el-table-column>
-      <el-table-column
         label="Plato o bebida"
-        prop="plato">
+        prop="nombre">
       </el-table-column>
       <el-table-column
         align="right">
@@ -24,7 +21,7 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+            @click="handleEdit(scope.$index, scope.row)">Cambiar disponibilidad</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -32,6 +29,8 @@
 </template>
 
 <script>
+  import CocinaService from '@/services/CocinaService'
+
   export default {
     data() {
       return {
@@ -48,10 +47,18 @@
           disponibilidad: true,
           plato: 'Crema catalana',
         }],
-        search: ''
+        platos: [],
+        search: '',
+        loading: true
       }
     },
     methods: {
+      async cargarPlatos(){
+        const response = await CocinaService.carta()
+        this.platos = response.data
+        this.loading = false
+        console.log(response.data)
+      },
       handleEdit(index, row) {
         console.log(index, row);
       },
@@ -64,6 +71,9 @@
         }
         return ''
       },
+    },
+    beforeMount() {
+      this.cargarPlatos()
     }
   }
 </script>

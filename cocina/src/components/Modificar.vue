@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Modificar carta</h1>
-    <el-row :gutter="20">
+    <el-row v-loading="loading" :gutter="20">
       <el-col v-for="plato in platos" :key="plato.id" :span="8"><div >
         <el-card class="box-card">
           <div slot="header" class="clearfix">
@@ -37,13 +37,15 @@
   export default {
     data () {
       return {
-        platos: null
+        platos: null,
+        loading: true
       }
     },
     methods: {
       async cargarPlatos(){
         const response = await CocinaService.carta()
         this.platos = response.data
+        this.loading = false
         console.log(response.data)
       }
     },
