@@ -1,29 +1,104 @@
 <template>
   <div>
-    <h1>Pedidos</h1>
+    <el-row :gutter="20">
+      <el-col :span="12"><div >
+        <el-card class="box-card">
+          <el-button type="primary" class="botonCamarero">Avisar camarero</el-button>
+          <strong>Mesa 1</strong>
+          <el-tag type="info" class="label">14:17</el-tag>
+          <el-table
+            ref="multipleTable"
+            :data="tableData2"
+            style="width: 100%"
+            @selection-change="handleSelectionChange"
+            :row-class-name="tableRowClassName">
+            <el-table-column
+              type="selection"
+              width="50%">
+            </el-table-column>
+            <el-table-column
+              prop="producto"
+              label="Producto">
+            </el-table-column>
+            <el-table-column
+              prop="cantidad"
+              label="Can"
+              width="50%">
+            </el-table-column>
+            <el-table-column
+              prop="comentario"
+              label="Comentario">
+            </el-table-column>
+          </el-table>
+      </el-card>
+      </div></el-col>
+      <el-col :span="12"><div >
+        <el-card class="box-card">
+          <el-button type="primary" class="botonCamarero">Avisar camarero</el-button>
+          Mesa 1
+          <el-tag type="info" class="label">14:17</el-tag>
+          <el-table
+            ref="multipleTable"
+            :data="tableData2"
+            style="width: 100%"
+            @selection-change="handleSelectionChange"
+            :row-class-name="tableRowClassName">
+            <el-table-column
+              type="selection"
+              width="50%">
+            </el-table-column>
+            <el-table-column
+              prop="producto"
+              label="Producto">
+            </el-table-column>
+            <el-table-column
+              prop="cantidad"
+              label="Can"
+              width="50%">
+            </el-table-column>
+            <el-table-column
+              prop="comentario"
+              label="Comentario">
+            </el-table-column>
+          </el-table>
+        </el-card>
+      </div></el-col>
 
-    <el-card class="box-card">
-        Mesa 1
-        <el-table
-                :data="tableData2"
-                style="width: 100%"
-                :row-class-name="tableRowClassName">
+    </el-row>
+    <el-row :gutter="20">
+      <el-col :span="12"><div >
+        <el-card class="box-card">
+          <el-button type="primary" class="botonCamarero">Avisar camarero</el-button>
+          Mesa 1
+          <el-tag type="info" class="label">14:17</el-tag>
+          <el-table
+            ref="multipleTable"
+            :data="tableData2"
+            style="width: 100%"
+            @selection-change="handleSelectionChange"
+            :row-class-name="tableRowClassName">
             <el-table-column
-                    prop="producto"
-                    label="Producto"
-                    width="180">
+              type="selection"
+              width="50%">
             </el-table-column>
             <el-table-column
-                    prop="cantidad"
-                    label="Cantidad"
-                    width="80">
+              prop="producto"
+              label="Producto">
             </el-table-column>
             <el-table-column
-                    prop="comentario"
-                    label="Comentario">
+              prop="cantidad"
+              label="Can"
+              width="50%">
             </el-table-column>
-        </el-table>
-    </el-card>
+            <el-table-column
+              prop="comentario"
+              label="Comentario">
+            </el-table-column>
+          </el-table>
+        </el-card>
+      </div></el-col>
+    </el-row>
+
 
   </div>
 
@@ -35,10 +110,22 @@
   export default {
     methods: {
       tableRowClassName({row, rowIndex}) {
-          if (rowIndex === 0) {
-              return 'success-row';
-          }
-          return '';
+        if (rowIndex === 1) {
+          return 'success-row';
+        }
+        return '';
+      },
+      toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
       }
     },
     data () {
@@ -52,27 +139,27 @@
               cantidad: '1',
               comentario: 'Muy hecha'
           }, {
-              producto: '2016-05-04',
+              producto: 'Crema catalana',
               cantidad: '1',
-              comentario: 'No. 189, Grove St, Los Angeles'
-          }]
+              comentario: ''
+          }],
+        multipleSelection: []
       }
     }
+
+
   }
 </script>
 
 <style>
-    .text {
-        font-size: 14px;
+    .label {
+      float: right;
     }
 
-    .item {
-        padding: 18px 0;
+    .botonCamarero {
+      float: left;
     }
 
-    .box-card {
-        width: 480px;
-    }
     .el-table .warning-row {
       background: oldlace;
     }
@@ -80,6 +167,8 @@
     .el-table .success-row {
       background: #f0f9eb;
     }
+
+
 
 </style>
 

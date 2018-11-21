@@ -1,30 +1,79 @@
 <template>
   <div>
-    <h1>Disponibilidad de los platos y bebidas</h1>
-
+    <h1>Disponibilidad de la carta</h1>
+    <el-table
+      :row-class-name="tableRowClassName"
+      :data="tableData.filter(data => !search || data.plato.toLowerCase().includes(search.toLowerCase()))"
+      style="width: 100%">
+      <el-table-column
+        label="Disponibilidad"
+        prop="disponibilidad">
+      </el-table-column>
+      <el-table-column
+        label="Plato o bebida"
+        prop="plato">
+      </el-table-column>
+      <el-table-column
+        align="right">
+        <template slot="header" slot-scope="scope">
+          <el-input
+            v-model="search"
+            size="mini"
+            placeholder="Buscar en la carta"/>
+        </template>
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
-  import CocinaService from '@/services/CocinaService'
-
   export default {
-    data () {
+    data() {
       return {
-        pedidos: null
+        tableData: [{
+          disponibilidad: true,
+          plato: 'Tom',
+        }, {
+          disponibilidad: true,
+          plato: 'John',
+        }, {
+          disponibilidad: false,
+          plato: 'Morgan',
+        }, {
+          disponibilidad: true,
+          plato: 'Jessy',
+        }],
+        search: ''
       }
+    },
+    methods: {
+      handleEdit(index, row) {
+        console.log(index, row);
+      },
+      tableRowClassName({ row }) {
+
+        if (row.disponibilidad === true) {
+          return 'success-row'
+        } else if (row.disponibilidad === false) {
+          return 'warning-row'
+        }
+        return ''
+      },
     }
   }
 </script>
 
 <style>
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
+  .el-table .warning-row .disponible td:last-child {
+  background: red;
   }
 
-  .izq {
-    text-align: left;
+  .el-table .success-row .disponible td:last-child {
+    background: green;
   }
-
 </style>
