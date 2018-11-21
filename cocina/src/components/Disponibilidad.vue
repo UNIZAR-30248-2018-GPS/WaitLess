@@ -37,16 +37,16 @@
       return {
         tableData: [{
           disponibilidad: true,
-          plato: 'Tom',
+          plato: 'Macarrones con tomate',
         }, {
           disponibilidad: true,
-          plato: 'John',
+          plato: 'Ternera a la plancha',
         }, {
           disponibilidad: false,
-          plato: 'Morgan',
+          plato: 'Lubina al horno',
         }, {
           disponibilidad: true,
-          plato: 'Jessy',
+          plato: 'Crema catalana',
         }],
         search: ''
       }

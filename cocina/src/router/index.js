@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Pedidos from '@/components/Pedidos'
 import Modificar from '@/components/Modificar'
 import Disponibilidad from '@/components/Disponibilidad'
+import Anadir from '@/components/Anadir'
 
 
 Vue.use(Router)
@@ -28,6 +29,11 @@ export default new Router({
       path: '/modificar',
       name: 'modificar',
       component: Modificar
+    },
+    {
+      path: '/anadir',
+      name: 'anadir',
+      component: Anadir
     }
   ]
 })

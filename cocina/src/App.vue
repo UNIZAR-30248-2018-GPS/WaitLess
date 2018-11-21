@@ -7,6 +7,7 @@
             <el-menu-item index="pedidos" >Pedidos</el-menu-item>
             <el-menu-item index="disponibilidad" >Disponibilidad de carta</el-menu-item>
             <el-menu-item index="modificar">Modificar carta</el-menu-item>
+            <el-menu-item index="anadir">Añadir a carta</el-menu-item>
           </el-menu>
 
 
