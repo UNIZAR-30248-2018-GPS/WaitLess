@@ -84,7 +84,7 @@
             label="Añade tu comentario"
             rows="1"
             v-model="modelo[index]"
-            v-on:keyup.enter="addComentario(p[0],p[1],p[2],p[4],modelo[index])"
+            v-on:keyup.enter="addComentario(p[0],p[1],p[2],p[4],index)"
           ></v-textarea>
         </v-flex>
 
@@ -101,6 +101,10 @@
           <v-btn depressed small @click="enviarPedido">Finalizar Pedido</v-btn>
         </div>
       </v-flex>
+
+      <v-list-tile class="text--darken-1" color="cyan">
+        <v-list-tile-content style="align-content: center;margin-left: 20px; margin-top: 10px;">{{message}}</v-list-tile-content>
+      </v-list-tile>
 
 
     </v-navigation-drawer>
@@ -145,9 +149,9 @@ export default {
       show: false,
       cuenta:[],
       total:0,
-      comentario:'',
       pedido_total:[],
       modelo:[],
+      message:''
     }
   },
   mounted() {
@@ -165,7 +169,7 @@ export default {
         this.pedido.push(this.value);
         this.modelo.push('');
         this.cuenta.push(this.value[5]);
-        this.pedido_total.push({"nombre": this.value[1],"cantidad":this.value[4],"id": this.value[0]})
+        this.pedido_total.push({"nombre": this.value[1],"cantidad":this.value[4],"id": this.value[0],"comentario":''})
       }else {
         if (this.value[4]===0){
           Vue.delete(this.pedido,existe);
@@ -190,22 +194,24 @@ export default {
         this.total=this.total+this.cuenta[index];
       }
     },
-    addComentario(id,nombre,precio,cantidad,message){
-      this.pedido_total.push({id: id, nombre: nombre, precio:precio, cantidad:cantidad,comentario:message})
+    addComentario(id,nombre,precio,cantidad,index){
+      Vue.set(this.pedido_total,index,{"nombre": this.value[1],"cantidad":this.value[4],"id": this.value[0],"comentario":this.modelo[index]})
       console.log('comentario',this.pedido_total);
     },
     enviarPedido(){
       this.axios({
         method: 'post',
-        url: 'http://localhost:3030/api/pedido/10',
+        url: 'http://localhost:3030/api/pedido/5',
         data:
             {
-              "comensales" : 7,
+              "comensales" : 3,
               "items" : this.pedido_total
             }
         }
       ).then(response =>{
          console.log('respuesta',response);
+         this.message='Tu pedido ha sido realizado.'
+
       });
     }
   },

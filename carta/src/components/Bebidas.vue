@@ -9,7 +9,7 @@
           mr-5
           my-3
         >
-          <Carta v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,ingredientes,index]></Carta>
+          <Carta v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,ingredientes,index,alergenos]></Carta>
 
         </v-flex>
       </v-layout>
@@ -46,6 +46,7 @@
         items: [],
         count: 0,
         ingredientes:[],
+        alergenos:[],
       }
     },
 
@@ -64,6 +65,7 @@
           for(item in this.items){
             console.log(this.items[item]);
             this.fetchIngredientes(this.items[item].id);
+            this.fetchAlergenos(this.items[item].id);
           }
         }).catch(function (error) {
           console.log('Error: ' + error);
@@ -78,6 +80,15 @@
         }).catch(function (error) {
           console.log('Error: ' + error);
         });
+      },
+      fetchAlergenos(id) {
+        this.axios.get('http://localhost:3030/api/plato/alergenos/'+id).then((response) => {
+          this.alergenos[this.count] = response.data;
+          this.count++;
+          console.log(this.alergenos,'data', response.data);
+        }).catch(function (error) {
+          console.log('Error: ' + error);
+        });
       }
     },
     components: {
@@ -85,3 +96,4 @@
     }
   }
 </script>
+
