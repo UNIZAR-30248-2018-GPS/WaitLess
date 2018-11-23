@@ -1,0 +1,50 @@
+{
+  "name": "waitless",
+  "version": "0.1.0",
+  "description": "",
+  "author": "",
+  "scripts": {
+    "test": "nyc mocha ./tests/server-test.js",
+    "prestart": "redis-server &",
+    "start": "nodemon",
+    "swagger_edit": "swagger project edit WaitLess-swagger"
+  },
+  "dependencies": {
+    "ansi-color-table": "^1.0.1",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "enum": "^2.5.0",
+    "express": "^4.16.4",
+    "express-vue": "^5.8.2",
+    "mysql": "^2.16.0",
+    "npm": "^6.4.1",
+    "redis": "^2.8.0",
+    "swagger-ui-dist": "^3.19.4",
+    "swagger-ui-express": "^4.0.1",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "chai-http": "^1.0.0",
+    "mocha": "^2.3.1",
+    "nodemon": "^1.18.5",
+    "nyc": "^13.1.0",
+    "redis-mock": "^0.39.0"
+  },
+  "bugs": {
+    "url": "https://github.com/UNIZAR-30248-2018-GPS/WaitLess/issues"
+  },
+  "nodemonConfig": {
+    "verbose": true,
+    "env": {
+      "VUE_DEV": true
+    }
+  },
+  "homepage": "https://github.com/UNIZAR-30248-2018-GPS/WaitLess#readme",
+  "license": "ISC",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UNIZAR-30248-2018-GPS/WaitLess.git"
+  }
+}

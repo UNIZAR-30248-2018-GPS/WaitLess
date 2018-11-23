@@ -5,7 +5,7 @@ info:
 # during dev, should point to your local machine
 host: localhost:3030
 # basePath prefixes all resource paths 
-basePath: /
+basePath: /api
 # 
 schemes:
   # tip: remove http to make production-grade
@@ -22,6 +22,12 @@ paths:
     get:
       description: Obtiene un listado de todos los productos del menú, junto con su precio
       # used as the method name of the controller
+      parameters:
+        - name: tipo
+          in: query
+          description: Filtra la carta por tipo de elemento, vacio si se quieren mostrar todos
+          required: false
+          type: string
       operationId: carta
       responses:
         "200":
@@ -37,10 +43,28 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
   /pedido:
+    get:
+      description: Abre un stream para recibir pedidos que se van incluyendo desde las mesas
+      produces: ["text/event-stream","application/json"]
+      responses:
+        '200':
+          description: Stream abierto
+          x-produces: ["text/event-stream"]
+          headers:
+            'Content-Type':
+              type: string
+              enum: ["text/event-stream"]
+  /pedido/{mesa}:
     post:
       description: Añade un nuevo pedido al sistema tras confirmarlo
       parameters:
-        - name: pedido
+        - name: mesa 
+          in: path
+          description: Mesa que realiza el pedido
+          required: true
+          type: string
+
+        - name: pedidos
           in: body
           description: Pedido a añadir
           required: true
@@ -71,18 +95,31 @@ definitions:
         enum:
           - plato
           - bebida
-          - menu
+          - menu1
+          - menu2
+          - postre
   NuevoPedido:
     required:
-      - mesa
       - items
     properties:
-      mesa:
+      comensales:
         type: integer
       items:
         type: array
         items:
-         $ref: "#/definitions/cartaResponse"
+         $ref: "#/definitions/ItemPedido"
+  ItemPedido:
+    required:
+      - nombre
+      - cantidad
+      - id
+    properties:
+      nombre:
+        type: string
+      cantidad:
+        type: integer
+      id:
+        type: string
   ErrorResponse:
     required:
       - message

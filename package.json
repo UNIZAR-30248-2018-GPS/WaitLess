@@ -1,40 +1,34 @@
 {
-  "name": "waitless",
-  "version": "0.1.0",
-  "description": "",
-  "author": "",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon",
-    "swagger_edit": "swagger project edit WaitLess-swagger"
-  },
+  "name": "main",
+  "version": "1.0.0",
+  "description": "Main scripts",
   "dependencies": {
-    "ansi-color-table": "^1.0.1",
-    "enum": "^2.5.0",
-    "express": "^4.16.4",
-    "express-vue": "^5.8.2",
-    "npm": "^6.4.1",
-    "yamljs": "^0.3.0"
+    "body-parser": "^1.18.3",
+    "mysql": "^2.16.0",
+    "redis": "^2.8.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.5",
-    "swagger-ui-dist": "^3.19.4",
-    "swagger-ui-express": "^4.0.1"
+    "concurrently": "^4.1.0"
   },
-  "bugs": {
-    "url": "https://github.com/UNIZAR-30248-2018-GPS/WaitLess/issues"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently --kill-others \"npm:carta\" \"npm:cocina\" \"npm:server\"",
+    "postinstall": "concurrently \"npm:carta-install\" \"npm:cocina-install\" \"npm:server-install\"",
+    "server": "npm start --prefix server",
+    "server-install": "npm install --prefix server",
+    "cocina": "npm start --prefix cocina",
+    "cocina-install": "npm install --prefix cocina",
+    "carta": "npm start --prefix carta",
+    "carta-install": "npm install --prefix carta"
   },
-  "nodemonConfig": {
-    "verbose": true,
-    "env": {
-      "VUE_DEV": true
-    }
-  },
-  "homepage": "https://github.com/UNIZAR-30248-2018-GPS/WaitLess#readme",
-  "license": "ISC",
-  "main": "app.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/UNIZAR-30248-2018-GPS/WaitLess.git"
-  }
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UNIZAR-30248-2018-GPS/WaitLess/issues"
+  },
+  "homepage": "https://github.com/UNIZAR-30248-2018-GPS/WaitLess#readme"
 }
