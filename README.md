@@ -1,14 +1,20 @@
 # WaitLess
-**Para iniciar el servidor y el cliente es necesario ejecutar los siguientes comandos desde el directorio raíz del proyecto /WaitLess en varias terminales**
+
+**Para iniciar el servidor y el cliente en conjunto, tanto instalacion como puesta en marcha es necesario ejecutar desde la raíz del proyecto**
 ````
-npm install --prefix server
-npm start --prefix server
+npm install
+npm start
+````
+**O para iniciar el servidor y el cliente por separado, ejecutar los siguientes comandos desde el directorio raíz del proyecto /WaitLess en varias terminales**
+````
+npm run server-install
+npm run server
 
-npm install --prefix cocina
-npm start --prefix cocina
+npm run cocina-install
+npm run cocina
 
-npm install --prefix carta
-npm start --prefix carta
+npm run carta-install
+npm run carta
 ````
 
 server: `localhost:3030`
