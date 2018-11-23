@@ -157,7 +157,7 @@ const addPedido = function(pedido,callback){
     });
 };
 const getPedido = function (callback) {
-    let sql = 'SELECT * FROM pedido'
+    let sql = 'SELECT * FROM pedido';
     connection.query(sql,'',function (error,results,fields) {
         if(error){
             callback(error);
