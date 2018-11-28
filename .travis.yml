@@ -1,8 +1,12 @@
-
-languaje: node_js
+language: node_js
 node_js:
-  - "node"
+  - "stable"
 branches:
   only:
   - master
   - test
+cache:
+  directories:
+  - /server/node_modules
+  - /cocina/node_modules
+  - /carta/node_modules
