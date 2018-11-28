@@ -1,4 +1,9 @@
-# WaitLess
+# WaitLess 
+
+### Master: [![Master](https://travis-ci.com/UNIZAR-30248-2018-GPS/WaitLess.svg?branch=master)](https://travis-ci.com/UNIZAR-30248-2018-GPS/WaitLess)
+### Test: [![Test](https://travis-ci.com/UNIZAR-30248-2018-GPS/WaitLess.svg?branch=test)](https://travis-ci.com/UNIZAR-30248-2018-GPS/WaitLess)
+
+
 **Para iniciar el servidor y el cliente es necesario ejecutar los siguientes comandos desde el directorio raíz del proyecto /WaitLess en varias terminales**
 ````
 npm install --prefix server
