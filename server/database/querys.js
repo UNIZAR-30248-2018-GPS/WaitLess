@@ -141,10 +141,10 @@ const addPedido = function(pedido,callback){
         if(error){
             callback(error);
         }else {
-            let sql_item = 'INSERT INTO item (nombre,cantidad,num_pedido,estado) VALUES ?';
+            let sql_item = 'INSERT INTO item (nombre,cantidad,num_pedido,estado,comentario) VALUES ?';
             var values=[];
             pedido.items.forEach(function (item) {
-                values.push([item.nombre,item.cantidad,results.insertId,0]);
+                values.push([item.nombre,item.cantidad,results.insertId,0,item.comentario]);
             });
             connection.query(sql_item,[values],function (err) {
                 if(err){

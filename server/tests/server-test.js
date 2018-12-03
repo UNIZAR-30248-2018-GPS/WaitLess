@@ -148,7 +148,13 @@ describe('Pedidos',function () {
                 "items" : [{
                     "nombre" : "Chuletón de buey",
                     "cantidad" : 2,
-                    "id": "91"
+                    "id": "91",
+                    "comentario": "Con queso"
+                },{
+                    "nombre" : "Queso fresco",
+                    "cantidad" : 3,
+                    "id": "92",
+                    "comentario": "Con  mas queso"
                 }]
             })
             .end(function (err,res) {
