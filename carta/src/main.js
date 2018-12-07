@@ -22,6 +22,7 @@ import {
   VIcon,
   VCard,
   VTextarea,
+  VDialog,
   VGrid,
   VToolbar,
   transitions
@@ -38,6 +39,7 @@ Vue.use(Vuetify, {
     VIcon,
     VCard,
     VTextarea,
+    VDialog,
     VGrid,
     VToolbar,
     transitions

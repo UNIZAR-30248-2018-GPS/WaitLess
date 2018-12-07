@@ -66,19 +66,19 @@
     methods: {
       increment () {
         this.quantity++
-        this.clickMe();
+        this.clickMe(1);
       },
       decrement () {
         if(this.quantity === 0) {
           alert('Negative quantity not allowed')
         } else {
           this.quantity--
-          this.clickMe();
+          this.clickMe(0);
         }
 
       },
-      clickMe() {
-        bus.$emit('emittedEvent', [this.name[0],this.name[1],this.name[2],this.name[3],this.quantity,0]);
+      clickMe(num) {
+        bus.$emit('emittedEvent', [this.name[0],this.name[1],this.name[2],this.name[3],1,num]);
       }
 
     }

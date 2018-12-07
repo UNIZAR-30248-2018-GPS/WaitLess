@@ -67,7 +67,7 @@
       </v-toolbar>
 
       <v-list class="elevation-{20};"  v-for="(p,index) in pedido"
-              :key="p[0]"
+              :key="index"
       >
 
         <v-list-tile>
@@ -96,11 +96,30 @@
         </v-list-tile>
 
 
-      <v-flex xs12 sm50 text-xs-center>
-        <div>
-          <v-btn depressed small @click="enviarPedido">Finalizar Pedido</v-btn>
+
+        <div class="text-xs-center">
+
+            <v-dialog v-model="dialog" width="500px"  v-if="pedido.length > 0">
+              <v-btn slot="activator" color="blue lighten-2" dark >Finalizar Pedido</v-btn>
+
+              <v-card>
+                <v-card-title>
+                  <span class="headline">Finalizar Pedido</span>
+                </v-card-title>
+                <v-card-text>
+                  ¿Esta seguro que quiere finalizar su pedido?
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" flat="flat" @click="dialog = false">No</v-btn>
+                  <v-btn color="blue darken-1" flat="flat" @click="enviarPedido">Si</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
+
         </div>
-      </v-flex>
+
 
       <v-list-tile class="text--darken-1" color="cyan">
         <v-list-tile-content style="align-content: center;margin-left: 20px; margin-top: 10px;">{{message}}</v-list-tile-content>
@@ -111,7 +130,11 @@
 
     <v-content>
 
-      <router-view></router-view>
+
+      <router-view>
+      </router-view>
+
+
 
     </v-content>
 
@@ -151,35 +174,30 @@ export default {
       total:0,
       pedido_total:[],
       modelo:[],
-      message:''
+      message:'',
+      dialog: false
     }
   },
   mounted() {
 
     bus.$on('emittedEvent', data => {
       this.value = data;
-      var existe=null;
-      for (let index = 0; index < this.pedido.length; index++) {
-        if (this.pedido[index][0] === this.value[0]) {
-          existe = index;
-        }
-      }
-      if (existe==null){
-        this.value[5]=this.value[2]*this.value[4];
+      var existe = null;
+      if (this.value[5] === 1){ //incrementar cantidad
         this.pedido.push(this.value);
         this.modelo.push('');
-        this.cuenta.push(this.value[5]);
+        this.cuenta.push(this.value[2]);
         this.pedido_total.push({"nombre": this.value[1],"cantidad":this.value[4],"id": this.value[0],"comentario":''})
-      }else {
-        if (this.value[4]===0){
-          Vue.delete(this.pedido,existe);
-          Vue.delete(this.cuenta,existe);
-          Vue.delete(this.pedido_total,existe);
-        }else{
-          this.value[5]=this.value[2]*this.value[4];
-          Vue.set(this.pedido, existe, this.value)
-          Vue.set(this.cuenta,existe,this.value[5])
-          Vue.set(this.cuenta,exite,{ nombre: this.value[1],cantidad:this.value[4],id: this.value[0]})
+      }else{ //decrementar cantidad
+        for (let index = 0; index < this.pedido.length; index++) {
+          if (this.pedido[index][0] === this.value[0]) {
+            existe = index;
+          }
+        }
+        if (existe!=null) {
+          Vue.delete(this.pedido, existe);
+          Vue.delete(this.cuenta, existe);
+          Vue.delete(this.pedido_total, existe);
         }
       }
       this.mostrarCuenta()
@@ -199,6 +217,7 @@ export default {
       console.log('comentario',this.pedido_total);
     },
     enviarPedido(){
+      this.dialog = false;
       this.axios({
         method: 'post',
         url: 'http://localhost:3030/api/pedido/5',
