@@ -23,6 +23,10 @@ import {
   VCard,
   VTextarea,
   VDialog,
+  VAlert,
+  VParallax,
+  VDataTable,
+  VDivider,
   VGrid,
   VToolbar,
   transitions
@@ -40,6 +44,10 @@ Vue.use(Vuetify, {
     VCard,
     VTextarea,
     VDialog,
+    VAlert,
+    VParallax,
+    VDataTable,
+    VDivider,
     VGrid,
     VToolbar,
     transitions
@@ -63,7 +71,7 @@ import Bebidas from './components/Bebidas'
 import Primeros from './components/Primeros'
 import Segundos from './components/Segundos'
 import Postres from './components/Postres'
-
+import Pedido from './components/PedidoFinalizado'
 
 const routes = [
   {
@@ -90,7 +98,13 @@ const routes = [
     name: 'Postres y otros',
     path: '/postres',
     component: Postres
+  },
+  {
+    name: 'Pedido',
+    path: '/pedido',
+    component: Pedido
   }
+
 ];
 
 const router = new VueRouter

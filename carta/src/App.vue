@@ -23,27 +23,26 @@
               </v-list>
 
        </v-toolbar>
-      <v-list>
+       <v-list>
 
               <v-list-tile
                 v-for="item in items"
                 :key="item.title"
                 @click=""
-
               >
 
                 <v-list-tile-action>
                   <v-icon>{{ item.icon }}</v-icon>
                 </v-list-tile-action>
 
-                <router-link :to="{ name: item.title }">
+                <router-link :to="{ name: item.title }" >
                   <v-list-tile-content class="grey--text">
                     <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                   </v-list-tile-content>
                 </router-link>
               </v-list-tile>
 
-            </v-list>
+       </v-list>
     </v-navigation-drawer>
 
     <v-navigation-drawer
@@ -99,7 +98,7 @@
 
         <div class="text-xs-center">
 
-            <v-dialog v-model="dialog" width="500px"  v-if="pedido.length > 0">
+            <v-dialog v-model="dialog" width="500px"  v-if="pedido.length > 0 && dialog_finalizar==true">
               <v-btn slot="activator" color="blue lighten-2" dark >Finalizar Pedido</v-btn>
 
               <v-card>
@@ -113,6 +112,7 @@
                   <v-spacer></v-spacer>
                   <v-btn color="blue darken-1" flat="flat" @click="dialog = false">No</v-btn>
                   <v-btn color="blue darken-1" flat="flat" @click="enviarPedido">Si</v-btn>
+
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -120,18 +120,34 @@
 
         </div>
 
-
-      <v-list-tile class="text--darken-1" color="cyan">
-        <v-list-tile-content style="align-content: center;margin-left: 20px; margin-top: 10px;">{{message}}</v-list-tile-content>
-      </v-list-tile>
-
-
     </v-navigation-drawer>
 
     <v-content>
+      <div class="text-xs-center">
+
+        <v-dialog v-model="dialog_failed" width="500px">
+
+          <v-card>
+            <v-card-title>
+              <span class="headline">Finalizar Pedido</span>
+            </v-card-title>
+
+            <v-card-text>
+              Tu pedido no ha podido ser realizado.<br>
+              Vuelva a intentarlo, disculpe las molestias.
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat="flat" @click="dialog_failed = false">Aceptar</v-btn>
+
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
 
+      </div>
       <router-view>
+
       </router-view>
 
 
@@ -175,7 +191,11 @@ export default {
       pedido_total:[],
       modelo:[],
       message:'',
-      dialog: false
+      dialog_finalizar: false,
+      dialog_failed: false,
+      dialog: false,
+      disable_menu:true
+
     }
   },
   mounted() {
@@ -183,6 +203,7 @@ export default {
     bus.$on('emittedEvent', data => {
       this.value = data;
       var existe = null;
+      this.dialog_finalizar=true;
       if (this.value[5] === 1){ //incrementar cantidad
         this.pedido.push(this.value);
         this.modelo.push('');
@@ -229,9 +250,11 @@ export default {
         }
       ).then(response =>{
          console.log('respuesta',response);
-         this.message='Tu pedido ha sido realizado.'
-
-      });
+         this.$router.push({name: 'Pedido'});
+         this.dialog_finalizar = false;
+         this.disable_menu = false;
+        },(error) => { console.log(error); this.dialog_failed=true;}
+        );
     }
   },
 
