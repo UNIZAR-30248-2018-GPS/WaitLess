@@ -50,6 +50,20 @@ const pedido_get = function(req,res){
     })
 };
 
+const pedido_get_ws = function (ws,req) {
+    console.log("websockets connection");
+    ws.on('message',function (msg) {
+        ws.send(msg);
+    });
+    sub.subscribe("pedidos");
+    sub.on("message",function (channel,message) {
+        console.log(message);
+        ws.send(message);
+    });
+    //TODO:Comprobar pedidos pendientes en la base de datos y enviarlos a cocina
+    //TODO: Añadir ping para quitar conexiones
+};
+
 const pedido_preparado = function (req,res) {
     let data = [
         tipo.get('preparado').value,
@@ -72,6 +86,7 @@ const pedido_servido = function (req,res) {
 module.exports = {
     pedido_post : pedido_post,
     pedido_get : pedido_get,
+    pedido_get_ws : pedido_get_ws,
     pedido_servido: pedido_servido,
     pedido_preparado: pedido_preparado
 };

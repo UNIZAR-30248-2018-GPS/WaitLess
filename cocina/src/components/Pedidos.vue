@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <el-col :span="12"><div >
         <el-card class="box-card">
-          <el-button type="primary" class="botonCamarero">Avisar camarero</el-button>
+          <el-button type="primary" class="botonCamarero" @click="callWs">Avisar camarero</el-button>
           <strong>Mesa 1</strong>
           <el-tag type="info" class="label">14:17</el-tag>
           <el-table
@@ -97,6 +97,13 @@
           </el-table>
         </el-card>
       </div></el-col>
+      <el-col :span="12"><div >
+        <el-card class="box-card">
+          <el-button type="primary" class="botonCamarero">Avisar camarero</el-button>
+          {{wsData}}
+          <el-tag type="info" class="label">14:17</el-tag>
+        </el-card>
+      </div></el-col>
     </el-row>
 
 
@@ -106,7 +113,6 @@
 
 <script>
   import CocinaService from '@/services/CocinaService'
-
   export default {
     methods: {
       tableRowClassName({row, rowIndex}) {
@@ -126,24 +132,36 @@
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
+      },
+      callWs(){
+        CocinaService.pedidos_ws(this.newPedido);
+      },
+      newPedido(data){
+        this.wsData.push(data);
       }
+    },
+    mounted: function(){
+      this.$nextTick(function () {
+        this.callWs();
+      })
     },
     data () {
       return {
-          tableData2:  [{
-              producto: 'Macarrones con tomate',
-              cantidad: '2',
-              comentario: 'Con poco tomate'
-          }, {
-              producto: 'Ternera a la plancha',
-              cantidad: '1',
-              comentario: 'Muy hecha'
-          }, {
-              producto: 'Crema catalana',
-              cantidad: '1',
-              comentario: ''
-          }],
-        multipleSelection: []
+        tableData2:  [{
+          producto: 'Macarrones con tomate',
+          cantidad: '2',
+          comentario: 'Con poco tomate'
+        }, {
+          producto: 'Ternera a la plancha',
+          cantidad: '1',
+          comentario: 'Muy hecha'
+        }, {
+          producto: 'Crema catalana',
+          cantidad: '1',
+          comentario: ''
+        }],
+        multipleSelection: [],
+        wsData : ['hoi']
       }
     }
 

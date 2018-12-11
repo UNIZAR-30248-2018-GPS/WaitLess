@@ -8,6 +8,7 @@ var bodyParser = require('body-parser')
 
 
 const app = express();
+const expressWs = require('express-ws')(app);
 const port = 3030;
 
 const routerCarta = require('./routes/carta');
