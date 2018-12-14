@@ -1,0 +1,22 @@
+Cambios BBDD GPS 14-12-2018
+
+Carta:
+	Añadido campo disponible. True = 1; false = 0
+Tiene:
+	Eliminada
+Bebida: 
+	Eliminada
+Aviso:
+	Eliminada
+Pedido:
+	Añadido campo estado_aviso. Sin_aviso, aviso, visto
+	Añadido campo estado_aviso_cuenta. Sin pagar, quiere pagar, pagado
+Item:
+	Modificado campo num_pedido para que esté relacionado con el campo num_pedido de la tabla pedido
+	Añadido campo id_carta relacionado con el id de la tabla carta
+	Eliminados campos nombre y cantidad
+
+
+Dudas:
+	Pedido:
+		?¿?¿ Añadir campo estado_pedido con opciones de “no finalizado” y “finalizado” para indicar cuándo esté la mesa vacía?¿?¿?¿
