@@ -2,8 +2,18 @@ const redis = process.env.NODE_ENV==='test' ? require('redis-mock') : require('r
 const sub = redis.createClient(), pub = redis.createClient();
 const bd = require('../../database/querys');
 const Enum = require('enum');
-const tipo = new Enum({'pendiente':0,'preparado':1,'servido':2},{ignoreCase: true});
 
+/** @var estado_pedido Variable que guarda los estados disponibles para un pedido
+ * @type {Enum}
+ */
+const estado_pedido = new Enum({'pendiente':0,'preparado':1,'servido':2},{ignoreCase: true});
+
+/**
+ * Funcion que trata los nuevos pedidos que entran en la aplicacion
+ * @param req request http, contiene:
+ *          -body
+ * @param res
+ */
 const pedido_post = function (req,res) {
     var pedido = {
         mesa: req.params.mesaId,
@@ -30,6 +40,11 @@ const pedido_post = function (req,res) {
 
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ */
 const pedido_get = function(req,res){
     sub.subscribe("pedidos");
     //TODO: Websockets mejor
@@ -66,19 +81,19 @@ const pedido_get_ws = function (ws,req) {
 
 const pedido_preparado = function (req,res) {
     let data = [
-        tipo.get('preparado').value,
+        estado_pedido.get('preparado').value,
         req.params.itemId,
         req.params.numPedido, 
-        tipo.get('pendiente').value
+        estado_pedido.get('pendiente').value
     ]
     bd.actualizar_pedido(data, res);
 };
 const pedido_servido = function (req,res) {
     let data = [
-        tipo.get('servido').value,
+        estado_pedido.get('servido').value,
         req.params.itemId,
         req.params.numPedido,
-        tipo.get('preparado').value
+        estado_pedido.get('preparado').value
     ]
     bd.actualizar_pedido(data, res);
 };
