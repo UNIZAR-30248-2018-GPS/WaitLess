@@ -27,23 +27,55 @@ function connectionHandler(){
     });
 }
 connectionHandler();
+
+const getSyncAlergenos = async function (sql,item) {
+    connection.query(sql, [item.id], async function (err, result_alergenos) {
+        console.log(result_alergenos);
+        return result_alergenos;
+    });
+};
+    
+
 const getAllCarta = function (tipoItem, callback) {
     if(tipoItem===undefined || tipoItem===null) {
-        let sql ='SELECT * FROM carta';
-        connection.query(sql,'',function (err,result) {
-            if(err){
+
+        let sql ='SELECT carta.id,carta.nombre,carta.precio,carta.tipo,carta.descripcion,carta.disponible, ' +
+            'GROUP_CONCAT( DISTINCT alergeno.nombre ) AS nombres_alergenos,GROUP_CONCAT( DISTINCT ingrediente.nombre ) AS nombres_ingredientes FROM carta ' +
+            'LEFT JOIN (SELECT alergenos.nombre,alergenos_carta.id_carta FROM alergenos LEFT JOIN alergenos_carta ON alergenos.id=alergenos_carta.id_alergeno) AS alergeno' +
+            ' ON carta.id=alergeno.id_carta ' +
+            'LEFT JOIN (SELECT ingrediente.nombre,ingredientes_carta.id_carta FROM ingrediente LEFT JOIN ingredientes_carta ON ingrediente.id=ingredientes_carta.id_ingrediente) AS ingrediente' +
+            ' ON carta.id=ingrediente.id_carta ' +
+            'GROUP BY carta.id';
+        connection.query(sql,'',function (err, result) {
+            if (err) {
+                console.log(err);
                 callback(err);
-            }else{
-                callback(0,result);
+            } else {
+                for (const item of result){
+                    item.nombres_alergenos=item.nombres_alergenos ? item.nombres_alergenos.split(',') : [];
+                    item.nombres_ingredientes=item.nombres_ingredientes ? item.nombres_ingredientes.split(',') : [];
+                }
+                callback(0,result)
             }
         });
     }else {
         //Busqueda con parametros, por ahora devuelvo algo distinto
-        let sql = 'SELECT * FROM carta WHERE tipo = ?';
+        let sql ='SELECT carta.id,carta.nombre,carta.precio,carta.tipo,carta.descripcion,carta.disponible, ' +
+            'GROUP_CONCAT( DISTINCT alergeno.nombre ) AS nombres_alergenos,GROUP_CONCAT( DISTINCT ingrediente.nombre ) AS nombres_ingredientes FROM carta ' +
+            'LEFT JOIN (SELECT alergenos.nombre,alergenos_carta.id_carta FROM alergenos LEFT JOIN alergenos_carta ON alergenos.id=alergenos_carta.id_alergeno) AS alergeno' +
+            ' ON carta.id=alergeno.id_carta ' +
+            'LEFT JOIN (SELECT ingrediente.nombre,ingredientes_carta.id_carta FROM ingrediente LEFT JOIN ingredientes_carta ON ingrediente.id=ingredientes_carta.id_ingrediente) AS ingrediente' +
+            ' ON carta.id=ingrediente.id_carta ' +
+            'WHERE carta.tipo = ? GROUP BY carta.id';
         connection.query(sql, [tipoItem], function (err, result) {
             if (err) {
+                console.log(err);
                 callback(err);
             } else {
+                for (const item of result){
+                    item.nombres_alergenos=item.nombres_alergenos ? item.nombres_alergenos.split(',') : [];
+                    item.nombres_ingredientes=item.nombres_ingredientes ? item.nombres_ingredientes.split(',') : [];
+                }
                 callback(0, result);
             }
         });
@@ -141,10 +173,10 @@ const addPedido = function(pedido,callback){
         if(error){
             callback(error);
         }else {
-            let sql_item = 'INSERT INTO item (nombre,cantidad,num_pedido,estado) VALUES ?';
+            let sql_item = 'INSERT INTO item (nombre,cantidad,num_pedido,estado,comentario) VALUES ?';
             var values=[];
             pedido.items.forEach(function (item) {
-                values.push([item.nombre,item.cantidad,results.insertId,0]);
+                values.push([item.nombre,item.cantidad,results.insertId,0,item.comentario]);
             });
             connection.query(sql_item,[values],function (err) {
                 if(err){
@@ -235,7 +267,6 @@ const pedir_cuenta = function (data, res) {
       }
   })
 };
-
 module.exports = {
     getAllCarta: getAllCarta,
     addPedido: addPedido,

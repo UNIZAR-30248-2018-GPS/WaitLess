@@ -1,6 +1,7 @@
 const bd = require('../../database/querys');
 const Enum = require('enum');
 const aviso = new Enum({'sinaviso':0, 'pendiente':1,'visto':2},{ignoreCase: true});
+const estado_cuenta = new Enum({'pendiente':0, 'pedida':1,'pagado':2},{ignoreCase: true});
 
 const get_all_avisos = function (req,res) {
     bd.get_avisos(res);
