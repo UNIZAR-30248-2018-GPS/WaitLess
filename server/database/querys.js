@@ -27,55 +27,23 @@ function connectionHandler(){
     });
 }
 connectionHandler();
-
-const getSyncAlergenos = async function (sql,item) {
-    connection.query(sql, [item.id], async function (err, result_alergenos) {
-        console.log(result_alergenos);
-        return result_alergenos;
-    });
-};
-    
-
 const getAllCarta = function (tipoItem, callback) {
     if(tipoItem===undefined || tipoItem===null) {
-
-        let sql ='SELECT carta.id,carta.nombre,carta.precio,carta.tipo,carta.descripcion,carta.disponible, ' +
-            'GROUP_CONCAT( DISTINCT alergeno.nombre ) AS nombres_alergenos,GROUP_CONCAT( DISTINCT ingrediente.nombre ) AS nombres_ingredientes FROM carta ' +
-            'LEFT JOIN (SELECT alergenos.nombre,alergenos_carta.id_carta FROM alergenos LEFT JOIN alergenos_carta ON alergenos.id=alergenos_carta.id_alergeno) AS alergeno' +
-            ' ON carta.id=alergeno.id_carta ' +
-            'LEFT JOIN (SELECT ingrediente.nombre,ingredientes_carta.id_carta FROM ingrediente LEFT JOIN ingredientes_carta ON ingrediente.id=ingredientes_carta.id_ingrediente) AS ingrediente' +
-            ' ON carta.id=ingrediente.id_carta ' +
-            'GROUP BY carta.id';
-        connection.query(sql,'',function (err, result) {
-            if (err) {
-                console.log(err);
+        let sql ='SELECT * FROM carta';
+        connection.query(sql,'',function (err,result) {
+            if(err){
                 callback(err);
-            } else {
-                for (const item of result){
-                    item.nombres_alergenos=item.nombres_alergenos ? item.nombres_alergenos.split(',') : [];
-                    item.nombres_ingredientes=item.nombres_ingredientes ? item.nombres_ingredientes.split(',') : [];
-                }
-                callback(0,result)
+            }else{
+                callback(0,result);
             }
         });
     }else {
         //Busqueda con parametros, por ahora devuelvo algo distinto
-        let sql ='SELECT carta.id,carta.nombre,carta.precio,carta.tipo,carta.descripcion,carta.disponible, ' +
-            'GROUP_CONCAT( DISTINCT alergeno.nombre ) AS nombres_alergenos,GROUP_CONCAT( DISTINCT ingrediente.nombre ) AS nombres_ingredientes FROM carta ' +
-            'LEFT JOIN (SELECT alergenos.nombre,alergenos_carta.id_carta FROM alergenos LEFT JOIN alergenos_carta ON alergenos.id=alergenos_carta.id_alergeno) AS alergeno' +
-            ' ON carta.id=alergeno.id_carta ' +
-            'LEFT JOIN (SELECT ingrediente.nombre,ingredientes_carta.id_carta FROM ingrediente LEFT JOIN ingredientes_carta ON ingrediente.id=ingredientes_carta.id_ingrediente) AS ingrediente' +
-            ' ON carta.id=ingrediente.id_carta ' +
-            'WHERE carta.tipo = ? GROUP BY carta.id';
+        let sql = 'SELECT * FROM carta WHERE tipo = ?';
         connection.query(sql, [tipoItem], function (err, result) {
             if (err) {
-                console.log(err);
                 callback(err);
             } else {
-                for (const item of result){
-                    item.nombres_alergenos=item.nombres_alergenos ? item.nombres_alergenos.split(',') : [];
-                    item.nombres_ingredientes=item.nombres_ingredientes ? item.nombres_ingredientes.split(',') : [];
-                }
                 callback(0, result);
             }
         });
@@ -173,10 +141,10 @@ const addPedido = function(pedido,callback){
         if(error){
             callback(error);
         }else {
-            let sql_item = 'INSERT INTO item (nombre,cantidad,num_pedido,estado,comentario) VALUES ?';
+            let sql_item = 'INSERT INTO item (nombre,cantidad,num_pedido,estado) VALUES ?';
             var values=[];
             pedido.items.forEach(function (item) {
-                values.push([item.nombre,item.cantidad,results.insertId,0,item.comentario]);
+                values.push([item.nombre,item.cantidad,results.insertId,0]);
             });
             connection.query(sql_item,[values],function (err) {
                 if(err){
@@ -232,14 +200,38 @@ const borrar_pedido = function (idPedido,callback) {
 
 
 // Servicios
-const get_avisos = function (data, res) {
-    let sql = 'SELECT * FROM aviso WHERE estado = ?'
-    connection.query(sql,data, function (err, result) {
+const get_avisos = function (res) {
+    let sql = 'SELECT mesa, estado_aviso FROM pedido WHERE estado_aviso = 1'
+    connection.query(sql, function (err, result) {
     if (err) throw err
     if (result[0] === undefined) {
         res.status(204).send()
       } else {
         res.status(200).send(result)
+      }
+  })
+};
+const call_camarero_avisos = function (data, res) {
+    let sql = 'update pedido set estado_aviso = ? where mesa=? and estado_aviso_cuenta=0'
+    connection.query(sql,data, function (err, result) {
+    if (err) throw err
+    if (result.affectedRows === 0) {
+        res.status(201).send()
+      } else {
+        res.status(200).send()
+      }
+  })
+};
+
+const pedir_cuenta = function (data, res) {
+    let sql = 'update pedido set estado_aviso_cuenta = 1 WHERE num_pedido=(select j.num_pedido from item i, item j where i.estado <> 2 and i.num_pedido=j.num_pedido = 0) and num_pedido = ?'
+    connection.query(sql,data, function (err, result) {
+    if (err) throw err
+    if (result.affectedRows === 0) {
+        // no se puede pedir la cuenta porque no todo el pedido esta terminado
+        res.status(500).send()
+      } else {
+        res.status(200).send()
       }
   })
 };
@@ -257,6 +249,8 @@ module.exports = {
     plato_ingredientes: plato_ingredientes,
     plato_alergenos: plato_alergenos,
     actualizar_pedido: actualizar_pedido,
-    get_avisos: get_avisos
+    get_avisos: get_avisos,
+    call_camarero_avisos: call_camarero_avisos,
+    pedir_cuenta: pedir_cuenta
 
 };
