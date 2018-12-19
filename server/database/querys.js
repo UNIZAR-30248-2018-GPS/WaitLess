@@ -224,9 +224,9 @@ const borrar_pedido = function (idPedido,callback) {
 
 
 // Servicios
-const get_avisos = function (data, res) {
-    let sql = 'SELECT * FROM aviso WHERE estado = ?'
-    connection.query(sql,data, function (err, result) {
+const get_avisos = function (res) {
+    let sql = 'SELECT mesa, estado_aviso FROM pedido WHERE estado_aviso = 1'
+    connection.query(sql, function (err, result) {
     if (err) throw err
     if (result[0] === undefined) {
         res.status(204).send()
@@ -235,7 +235,30 @@ const get_avisos = function (data, res) {
       }
   })
 };
+const call_camarero_avisos = function (data, res) {
+    let sql = 'update pedido set estado_aviso = ? where mesa=? and estado_aviso_cuenta=0'
+    connection.query(sql,data, function (err, result) {
+    if (err) throw err
+    if (result.affectedRows === 0) {
+        res.status(201).send()
+      } else {
+        res.status(200).send()
+      }
+  })
+};
 
+const pedir_cuenta = function (data, res) {
+    let sql = 'update pedido set estado_aviso_cuenta = 1 WHERE num_pedido=(select j.num_pedido from item i, item j where i.estado <> 2 and i.num_pedido=j.num_pedido = 0) and num_pedido = ?'
+    connection.query(sql,data, function (err, result) {
+    if (err) throw err
+    if (result.affectedRows === 0) {
+        // no se puede pedir la cuenta porque no todo el pedido esta terminado
+        res.status(500).send()
+      } else {
+        res.status(200).send()
+      }
+  })
+};
 module.exports = {
     getAllCarta: getAllCarta,
     addPedido: addPedido,
@@ -249,6 +272,8 @@ module.exports = {
     plato_ingredientes: plato_ingredientes,
     plato_alergenos: plato_alergenos,
     actualizar_pedido: actualizar_pedido,
-    get_avisos: get_avisos
+    get_avisos: get_avisos,
+    call_camarero_avisos: call_camarero_avisos,
+    pedir_cuenta: pedir_cuenta
 
 };
