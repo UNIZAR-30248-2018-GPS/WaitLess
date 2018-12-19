@@ -5,8 +5,9 @@ const plato_insert = function (req,res) {
         req.params.nombre,
         req.params.precio,
         req.params.tipo,
-        req.params.descripcion
-    ]      
+        req.params.descripcion,
+        true
+    ];
     bd.plato_insert(data, res);
 };
 
@@ -16,8 +17,9 @@ const plato_modificar = function (req,res) {
         req.params.precio,
         req.params.tipo,
         req.params.descripcion,
+        req.params.disponible,
         req.params.id
-    ] 
+    ];
     bd.plato_modify(data, res);
 };
 const plato_delete = function (req,res) {

@@ -98,7 +98,7 @@ describe('Platos', function() {
 
     it('Deberia modificar un plato  /modificarPlato/<nuevonombre>/<descripcion>/<precio>/<tipo>/<id> POST', function(done) {
         chai.request(server)
-            .post('/api/plato/modificarPlato/Pimientos del piquillo/unos pican otros no/4/0/81')
+            .post('/api/plato/modificarPlato/Pimientos del piquillo/unos pican otros no/4/0/1/81')
             .end(function(err, res){
                 res.should.have.status(200);
                 done();
@@ -108,7 +108,7 @@ describe('Platos', function() {
 
     it('NO deberia modificar un plato  /modificarPlato/<nuevonombre>/<descripcion>/<precio>/<tipo>/<id> POST', function(done) {
         chai.request(server)
-            .post('/api/plato/modificarPlato/No deberia modificar/ No se modifica/4/0/12')
+            .post('/api/plato/modificarPlato/No deberia modificar/ No se modifica/4/0/1/12')
             .end(function(err, res){
                 res.should.have.status(201);
                 done();
@@ -147,14 +147,16 @@ describe('Pedidos',function () {
                 "comensales" : 1,
                 "items" : [{
                     "nombre" : "Chuletón de buey",
-                    "cantidad" : 2,
                     "id": "91",
                     "comentario": "Con queso"
                 },{
-                    "nombre" : "Queso fresco",
-                    "cantidad" : 3,
-                    "id": "92",
-                    "comentario": "Con  mas queso"
+                    "nombre" : "Chuletón de buey",
+                    "id": "91",
+                    "comentario": ""
+                },{
+                    "nombre" : "Huevos fritos",
+                    "id": "611",
+                    "comentario": "Con puntillas"
                 }]
             })
             .end(function (err,res) {

@@ -28,14 +28,6 @@ function connectionHandler(){
 }
 connectionHandler();
 
-const getSyncAlergenos = async function (sql,item) {
-    connection.query(sql, [item.id], async function (err, result_alergenos) {
-        console.log(result_alergenos);
-        return result_alergenos;
-    });
-};
-    
-
 const getAllCarta = function (tipoItem, callback) {
     if(tipoItem===undefined || tipoItem===null) {
 
@@ -84,9 +76,9 @@ const getAllCarta = function (tipoItem, callback) {
 
 // añadir a la carta
 const bebida_insert = function (data, res) {
-    let sql = 'INSERT INTO carta (nombre, precio, tipo) VALUES (?)'
+    let sql = 'INSERT INTO carta (nombre, precio, tipo, descripcion, disponible) VALUES (?)';
     connection.query(sql,[data], function (err, result) {
-    if (err) throw err
+    if (err) throw err;
     if (result.affectedRows === 0) {
         res.status(201).send()
       } else {
@@ -95,9 +87,9 @@ const bebida_insert = function (data, res) {
   })
 };
 const bebida_delete = function (data, res) {
-    let sql = 'DELETE FROM carta WHERE nombre = ?'
+    let sql = 'DELETE FROM carta WHERE nombre = ?';
     connection.query(sql,data, function (err, result) {
-    if (err) throw err
+    if (err) throw err;
     if (result.affectedRows === 0) {
         res.status(201).send()
       } else {
@@ -107,9 +99,9 @@ const bebida_delete = function (data, res) {
 };
 
 const plato_insert = function (data, res) {
-    let sql = 'INSERT INTO carta (nombre, precio, tipo, descripcion) VALUES (?)'
+    let sql = 'INSERT INTO carta (nombre, precio, tipo, descripcion,disponible) VALUES (?)';
     connection.query(sql,[data], function (err, result) {
-    if (err) throw err
+    if (err) throw err;
     if (result.affectedRows === 0) {
         res.status(201).send()
       } else {
@@ -118,9 +110,9 @@ const plato_insert = function (data, res) {
   })
 };
 const plato_delete = function (data, res) {
-    let sql = 'DELETE FROM carta WHERE nombre = ?'
+    let sql = 'DELETE FROM carta WHERE nombre = ?';
     connection.query(sql,data, function (err, result) {
-    if (err) throw err
+    if (err) throw err;
     if (result.affectedRows === 0) {
         res.status(201).send()
       } else {
@@ -129,9 +121,9 @@ const plato_delete = function (data, res) {
   })
 };
 const plato_modify = function (data, res) {
-    let sql = 'UPDATE carta SET nombre = ?, precio = ?, tipo = ?, descripcion = ? WHERE id = ?'
+    let sql = 'UPDATE carta SET nombre = ?, precio = ?, tipo = ?, descripcion = ?, disponible = ? WHERE id = ?';
     connection.query(sql,data, function (err, result) {
-    if (err) throw err
+    if (err) throw err;
     if (result.affectedRows === 0) {
         res.status(201).send()
       } else {
@@ -141,9 +133,9 @@ const plato_modify = function (data, res) {
 };
 
 const plato_alergenos = function (data, res) {
-    let sql = 'SELECT b.nombre FROM alergenos_carta a, alergenos b WHERE a.id_carta = ? and b.id= a.id_alergeno'
+    let sql = 'SELECT b.nombre FROM alergenos_carta a, alergenos b WHERE a.id_carta = ? and b.id= a.id_alergeno';
     connection.query(sql,data, function (err, result) {
-    if (err) throw err
+    if (err) throw err;
     if (result[0] === undefined) {
         res.status(204).send()
       } else {
@@ -167,16 +159,16 @@ const plato_ingredientes = function (data, res) {
 
 // pedidos
 const addPedido = function(pedido,callback){
-    let sql='INSERT INTO pedido SET mesa = ?, num_comensales = ?';
+    let sql='INSERT INTO pedido SET mesa = ?, num_comensales = ?,estado_aviso = ?,estado_aviso_cuenta = ?';
     console.log(pedido.mesa);
-    connection.query(sql,[pedido.mesa,pedido.comensales],function (error,results,fields) {
+    connection.query(sql,[pedido.mesa,pedido.comensales,0,0],function (error,results,fields) {
         if(error){
             callback(error);
         }else {
-            let sql_item = 'INSERT INTO item (nombre,cantidad,num_pedido,estado,comentario) VALUES ?';
+            let sql_item = 'INSERT INTO item (id_carta,num_pedido,estado,comentario) VALUES ?';
             var values=[];
             pedido.items.forEach(function (item) {
-                values.push([item.nombre,item.cantidad,results.insertId,0,item.comentario]);
+                values.push([item.id,results.insertId,0,item.comentario]);
             });
             connection.query(sql_item,[values],function (err) {
                 if(err){
