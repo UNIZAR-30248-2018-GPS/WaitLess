@@ -155,8 +155,28 @@ const plato_ingredientes = function (data, res) {
       }
   })
 };
-
-
+const plato_disponible= function(data,res){
+    let sql = 'UPDATE carta SET disponible = 1 WHERE id = ?';
+    connection.query(sql,data, function (err, result) {
+    if (err) throw err;
+    if (result.affectedRows === 0) {
+        res.status(201).send()
+      } else {
+        res.status(200).send()
+      }
+  })
+}
+const plato_nodisponible= function(data,res){
+    let sql = 'UPDATE carta SET disponible = 0 WHERE id = ?';
+    connection.query(sql,data, function (err, result) {
+    if (err) throw err;
+    if (result.affectedRows === 0) {
+        res.status(201).send()
+      } else {
+        res.status(200).send()
+      }
+  })    
+}
 // pedidos
 const addPedido = function(pedido,callback){
     let sql='INSERT INTO pedido SET mesa = ?, num_comensales = ?,estado_aviso = ?,estado_aviso_cuenta = ?';
@@ -271,6 +291,8 @@ module.exports = {
     plato_modify: plato_modify,
     plato_ingredientes: plato_ingredientes,
     plato_alergenos: plato_alergenos,
+    plato_disponible: plato_disponible,
+    plato_nodisponible: plato_nodisponible,
     actualizar_pedido: actualizar_pedido,
     get_avisos: get_avisos,
     call_camarero_avisos: call_camarero_avisos,

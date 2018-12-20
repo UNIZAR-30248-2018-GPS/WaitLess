@@ -41,11 +41,24 @@ const plato_ingredientes = function (req,res) {
     ] 
     bd.plato_ingredientes(data, res);
 };
-
+const plato_nodisponible = function(req,res){
+    let data = [
+        req.params.id_plato
+    ]
+    bd.plato_nodisponible(data,res)
+}
+const plato_disponible = function(req,res){
+    let data = [
+        req.params.id_plato
+    ]
+    bd.plato_disponible(data,res)
+}
 module.exports = {
     plato_insert: plato_insert,
     plato_delete: plato_delete,
     plato_modificar: plato_modificar,    
     plato_alergenos: plato_alergenos,
-    plato_ingredientes: plato_ingredientes
+    plato_ingredientes: plato_ingredientes,
+    plato_nodisponible: plato_nodisponible,
+    plato_disponible: plato_disponible
 };
