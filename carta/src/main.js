@@ -27,10 +27,17 @@ import {
   VParallax,
   VDataTable,
   VDivider,
-  VGrid,
+  VSelect,
   VToolbar,
-  transitions
+  VGrid,
+  transitions,
 } from 'vuetify'
+import{
+  VLayout,
+  VCardText,
+  VSlideYTransition,
+
+} from 'vuetify/lib'
 import '../node_modules/vuetify/src/stylus/app.styl'
 
 Vue.use(Vuetify, {
@@ -48,6 +55,10 @@ Vue.use(Vuetify, {
     VParallax,
     VDataTable,
     VDivider,
+    VSelect,
+    VLayout,
+    VCardText,
+    VSlideYTransition,
     VGrid,
     VToolbar,
     transitions
@@ -61,9 +72,9 @@ Vue.use(Vuetify, {
     success: '#4CAF50',
     warning: '#FFC107'
   }
-})
+});
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 
 import Home from './components/Home'
@@ -111,7 +122,7 @@ const router = new VueRouter
 ({
   mode: 'history',
   routes
-})
+});
 
 
 window.app = new Vue({

@@ -2,7 +2,7 @@
   <v-card class="elevation-{10}; mx-5;">
     <v-card-title class="grey" >
       <div>
-          <v-list-tile-title>{{name[1]}}</v-list-tile-title>
+          <v-list-tile-title> {{name[1]}} </v-list-tile-title>
       </div>
     </v-card-title>
 
@@ -17,11 +17,11 @@
 
 
     <v-card-actions>
-      <v-btn fab  small color="grey lighten-1" @click="decrement">
+      <v-btn fab  small color="grey lighten-1" id="decrement" @click="decrement">
         <v-icon dark>remove</v-icon>
       </v-btn>
-      <span class="px-3">{{ quantity }}</span>
-      <v-btn fab small color="grey lighten-1" @click="increment" >
+      <span class="px-3" id="cantidad">{{ quantity }}</span>
+      <v-btn fab small color="grey lighten-1" id="increment" @click="increment" >
         <v-icon dark>add</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
@@ -34,12 +34,12 @@
         Ingredientes:
 
           <v-card-text>
-            <p  v-for="(item,index1) in name[4][name[5]]">-{{item.nombre}}</p>
+            <p  v-for="(item) in name[4]">-{{item}}</p>
 
           </v-card-text>
         Alergenos:
         <v-card-text>
-          <p  v-for="(item,index1) in name[6][name[5]]">-{{item.nombre}}</p>
+          <p  v-for="(item) in name[6]">-{{item}}</p>
         </v-card-text>
         </v-card-text>
 
@@ -51,13 +51,13 @@
 
 <script>
   import bus from '../EventBus'
-
+  import swal from 'sweetalert';
   export default {
     name:"Carta",
     data(){
       return{
         show: false,
-        quantity: 0
+        quantity: 0,
       }
     },
     props: [
@@ -65,14 +65,14 @@
     ],
     methods: {
       increment () {
-        this.quantity++
+        this.quantity++;
         this.clickMe(1);
       },
       decrement () {
         if(this.quantity === 0) {
-          alert('Negative quantity not allowed')
+          swal ( "Error" ,  "No se permite elegir un producto con cantidad negativa" ,  "error" )
         } else {
-          this.quantity--
+          this.quantity--;
           this.clickMe(0);
         }
 

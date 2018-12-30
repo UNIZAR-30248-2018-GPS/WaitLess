@@ -1,6 +1,5 @@
 <template>
   <v-app>
-
     <v-navigation-drawer
       persistent
       :mini-variant="miniVariant"
@@ -35,11 +34,14 @@
                   <v-icon>{{ item.icon }}</v-icon>
                 </v-list-tile-action>
 
-                <router-link :to="{ name: item.title }" >
+                <router-link :to="{ name: item.title }" v-if ="disable_menu==true">
                   <v-list-tile-content class="grey--text">
                     <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                   </v-list-tile-content>
                 </router-link>
+                <v-list-tile-content class="grey--text" v-else>
+                  <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                </v-list-tile-content>
               </v-list-tile>
 
        </v-list>
@@ -71,7 +73,7 @@
 
         <v-list-tile>
           <v-list-tile-avatar>{{p[4]}} </v-list-tile-avatar>
-          <v-list-tile-content>{{p[1]}}</v-list-tile-content>
+          <v-list-tile-content id=index>{{p[1]}}</v-list-tile-content>
           <v-list-tile-avatar>{{p[2]*p[4]}}€</v-list-tile-avatar>
 
         </v-list-tile>
@@ -95,10 +97,9 @@
         </v-list-tile>
 
 
-
         <div class="text-xs-center">
 
-            <v-dialog v-model="dialog" width="500px"  v-if="pedido.length > 0 && dialog_finalizar==true">
+            <v-dialog v-model="dialog" width="500px"  v-if="pedido.length > 0 && dialog_finalizar===true">
               <v-btn slot="activator" color="blue lighten-2" dark >Finalizar Pedido</v-btn>
 
               <v-card>
@@ -143,14 +144,48 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-
-
       </div>
-      <router-view>
 
-      </router-view>
+      <v-dialog v-model="card_comensales" width="500px">
+        <v-card>
+          <v-card-title
+            class="headline grey lighten-2"
+            primary-title
+          >
+            Configuración Mesa y Comensales
+          </v-card-title>
+
+          <v-card-text style="font-size: 18px">
+            Numero de mesa: {{mesa}} <br>
+            <br>
+
+            <v-flex xs16 sm26 d-flex>
+              Selecciona el numero de comenales
+              <v-select
+                :items="comensales"
+                label="Comensales"
+                solo
+              ></v-select>
+            </v-flex>
+          </v-card-text>
+
+          <v-card-actions style="">
+            <v-card-text>
+            </v-card-text>
+            <v-btn
+              to="/bebidas"
+              color="info"
+              flat="flat"
+              @click="card_comensales = false"
+            >
+              Aceptar
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
 
+      <router-view></router-view>
 
     </v-content>
 
@@ -166,6 +201,8 @@ import Postres from './components/Postres'
 import Carta from './layouts/card_carta'
 import bus from './EventBus'
 import Vue from 'vue';
+import swal from 'sweetalert';
+
 export default {
   data() {
     return {
@@ -179,6 +216,7 @@ export default {
         {title: 'Postres y otros', icon: 'cake'}
 
       ],
+      comensales:['1','2','3','4','5'],
       miniVariant: false,
       right: true,
       rightDrawer: true,
@@ -194,48 +232,61 @@ export default {
       dialog_finalizar: false,
       dialog_failed: false,
       dialog: false,
-      disable_menu:true
+      disable_menu:true,
+      card_comensales: true,
+      mesa: 3,
 
     }
   },
-  mounted() {
+  mounted: function () {
 
     bus.$on('emittedEvent', data => {
       this.value = data;
       var existe = null;
-      this.dialog_finalizar=true;
-      if (this.value[5] === 1){ //incrementar cantidad
+      this.dialog_finalizar = true;
+      if (this.value[5] === 1) { //incrementar cantidad
         this.pedido.push(this.value);
         this.modelo.push('');
         this.cuenta.push(this.value[2]);
-        this.pedido_total.push({"nombre": this.value[1],"cantidad":this.value[4],"id": this.value[0],"comentario":''})
-      }else{ //decrementar cantidad
+        this.pedido_total.push({
+          "nombre": this.value[1],
+          "cantidad": this.value[4],
+          "id": this.value[0],
+          "comentario": ''
+        })
+      }
+      else { //decrementar cantidad
         for (let index = 0; index < this.pedido.length; index++) {
           if (this.pedido[index][0] === this.value[0]) {
             existe = index;
           }
         }
-        if (existe!=null) {
+        if (existe != null) {
           Vue.delete(this.pedido, existe);
           Vue.delete(this.cuenta, existe);
           Vue.delete(this.pedido_total, existe);
         }
       }
-      this.mostrarCuenta()
-      console.log('pedido_total',this.pedido_total);
+      this.mostrarCuenta();
+      console.log('pedido_total', this.pedido_total);
     });
 
   },
   methods: {
     mostrarCuenta(){
-      this.total=0
+      this.total=0;
       for (let index = 0; index < this.cuenta.length; index++) {
         this.total=this.total+this.cuenta[index];
       }
     },
-    addComentario(id,nombre,precio,cantidad,index){
-      Vue.set(this.pedido_total,index,{"nombre": this.value[1],"cantidad":this.value[4],"id": this.value[0],"comentario":this.modelo[index]})
-      console.log('comentario',this.pedido_total);
+    addComentario: function (id, nombre, precio, cantidad, index) {
+      Vue.set(this.pedido_total, index, {
+        "nombre": this.value[1],
+        "cantidad": this.value[4],
+        "id": this.value[0],
+        "comentario": this.modelo[index]
+      });
+      console.log('comentario', this.pedido_total);
     },
     enviarPedido(){
       this.dialog = false;
@@ -253,7 +304,9 @@ export default {
          this.$router.push({name: 'Pedido'});
          this.dialog_finalizar = false;
          this.disable_menu = false;
-        },(error) => { console.log(error); this.dialog_failed=true;}
+         //this.dialog_failed
+        },(error) => { console.log(error); swal ( "Pedido" ,  "Tu pedido no ha podido ser realizado.\n" +
+        "              Vuelva a intentarlo, disculpe las molestias." ,  "error" );}
         );
     }
   },

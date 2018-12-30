@@ -9,7 +9,7 @@
           mr-5
           my-3
         >
-          <Carta v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,ingredientes,index,alergenos]></Carta>
+          <Carta v-if ="item.disponible >0" v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,item.nombres_ingredientes,index,item.nombres_alergenos]></Carta>
 
         </v-flex>
       </v-layout>
@@ -43,10 +43,7 @@
     name:"Bebidas",
     data(){
       return{
-        items: [],
-        count: 0,
-        ingredientes:[],
-        alergenos:[],
+        items: []
       }
     },
 
@@ -61,34 +58,10 @@
 
         this.axios.get(uri).then((response) => {
           this.items = response.data;
-          let item;
-          for(item in this.items){
-            console.log(this.items[item]);
-            this.fetchIngredientes(this.items[item].id);
-            this.fetchAlergenos(this.items[item].id);
-          }
         }).catch(function (error) {
           console.log('Error: ' + error);
         });
 
-      },
-      fetchIngredientes(id) {
-        this.axios.get('http://localhost:3030/api/plato/ingredientes/'+id).then((response) => {
-          this.ingredientes[this.count] = response.data;
-          this.count++;
-          console.log(this.ingredientes,'data', response.data);
-        }).catch(function (error) {
-          console.log('Error: ' + error);
-        });
-      },
-      fetchAlergenos(id) {
-        this.axios.get('http://localhost:3030/api/plato/alergenos/'+id).then((response) => {
-          this.alergenos[this.count] = response.data;
-          this.count++;
-          console.log(this.alergenos,'data', response.data);
-        }).catch(function (error) {
-          console.log('Error: ' + error);
-        });
       }
     },
     components: {
