@@ -4,7 +4,6 @@ const pedido = require('../modules/pedido/pedido');
 
 router.post('/',pedido.pedido_post);
 
-router.post('/pedidopreparado/:numPedido/:itemId',pedido.pedido_preparado);
 router.post('/pedidoservido/:numPedido/:itemId',pedido.pedido_servido);
 router.get('/',pedido.pedido_get);
 router.ws('/ws',pedido.pedido_get_ws);
