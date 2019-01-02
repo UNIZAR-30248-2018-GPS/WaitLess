@@ -7,6 +7,8 @@ router.post('/modificarPlato/:nuevonombre/:descripcion/:precio/:tipo/:disponible
 router.post('/borrarPlato/:nombre',plato.plato_delete);
 router.get('/alergenos/:id',plato.plato_alergenos);
 router.get('/ingredientes/:id',plato.plato_ingredientes);
+router.post('/borrarDisponibilidad/:id_plato',plato.plato_nodisponible)
+router.post('/darDisponibilidad/:id_plato',plato.plato_disponible)
 
 
 
