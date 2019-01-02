@@ -6,7 +6,7 @@ const Enum = require('enum');
 /** @var estado_pedido Variable que guarda los estados disponibles para un pedido
  * @type {Enum}
  */
-const estado_pedido = new Enum({'pendiente':0,'preparado':1,'servido':2},{ignoreCase: true});
+const estado_item = new Enum({'pendiente':0,'servido':1},{ignoreCase: true});
 
 /**
  * Funcion que trata los nuevos pedidos que entran en la aplicacion
@@ -16,7 +16,7 @@ const estado_pedido = new Enum({'pendiente':0,'preparado':1,'servido':2},{ignore
  */
 const pedido_post = function (req,res) {
     var pedido = {
-        mesa: req.params.mesaId,
+        mesa: req.query.mesaId,
         ...req.body
     };
     bd.addPedido(pedido,function (err,pedidoId) {
@@ -28,6 +28,7 @@ const pedido_post = function (req,res) {
                 console.log('Pedido no añadido');
             });
         }else {
+            console.log(pedido);
             pub.publish("pedidos", JSON.stringify(pedido), redis.print);
             res.statusCode=201;
             res.setHeader('Content-Type', 'application/json');
@@ -77,24 +78,23 @@ const pedido_get_ws = function (ws,req) {
     });
     //TODO:Comprobar pedidos pendientes en la base de datos y enviarlos a cocina
     //TODO: Añadir ping para quitar conexiones
+
+    bd.getPedidoSinTerminar(function (err,pedidos){
+        if(err){
+            console.log(err);
+        }else{
+            pedidos.forEach(function (pedido) {
+                pub.publish("pedidos", JSON.stringify(pedido), redis.print);
+            });
+        }
+    });
 };
 
-const pedido_preparado = function (req,res) {
-    let data = [
-        estado_pedido.get('preparado').value,
-        req.params.itemId,
-        req.params.numPedido, 
-        estado_pedido.get('pendiente').value
-    ]
-    bd.actualizar_pedido(data, res);
-};
 const pedido_servido = function (req,res) {
     let data = [
-        estado_pedido.get('servido').value,
-        req.params.itemId,
+        estado_item.get('servido').value,
         req.params.numPedido,
-        estado_pedido.get('preparado').value
-    ]
+    ];
     bd.actualizar_pedido(data, res);
 };
 
@@ -103,5 +103,4 @@ module.exports = {
     pedido_get : pedido_get,
     pedido_get_ws : pedido_get_ws,
     pedido_servido: pedido_servido,
-    pedido_preparado: pedido_preparado
 };

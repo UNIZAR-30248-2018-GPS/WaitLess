@@ -46,6 +46,7 @@ const getAllCarta = function (tipoItem, callback) {
                 for (const item of result){
                     item.nombres_alergenos=item.nombres_alergenos ? item.nombres_alergenos.split(',') : [];
                     item.nombres_ingredientes=item.nombres_ingredientes ? item.nombres_ingredientes.split(',') : [];
+                    item.disponible=!!+item.disponible;
                 }
                 callback(0,result)
             }
@@ -67,6 +68,7 @@ const getAllCarta = function (tipoItem, callback) {
                 for (const item of result){
                     item.nombres_alergenos=item.nombres_alergenos ? item.nombres_alergenos.split(',') : [];
                     item.nombres_ingredientes=item.nombres_ingredientes ? item.nombres_ingredientes.split(',') : [];
+                    item.disponible=!!+item.disponible;
                 }
                 callback(0, result);
             }
@@ -162,6 +164,7 @@ const addPedido = function(pedido,callback){
     let sql='INSERT INTO pedido SET mesa = ?, num_comensales = ?,estado_aviso = ?,estado_aviso_cuenta = ?';
     console.log(pedido.mesa);
     connection.query(sql,[pedido.mesa,pedido.comensales,0,0],function (error,results,fields) {
+        console.log(results);
         if(error){
             callback(error);
         }else {
@@ -170,10 +173,15 @@ const addPedido = function(pedido,callback){
             pedido.items.forEach(function (item) {
                 values.push([item.id,results.insertId,0,item.comentario]);
             });
-            connection.query(sql_item,[values],function (err) {
+            connection.query(sql_item,[values],function (err,results_item) {
                 if(err){
                     callback(err,results.insertId);
                 }else {
+                    var rowIds = [];
+                    for(var i = results_item.insertId; i < results_item.insertId + results_item.affectedRows*10;i=i+10){
+                        rowIds.push(i);
+                    }
+                    console.log(rowIds);
                     callback(false,results.insertId);
                 }
             })
@@ -191,7 +199,7 @@ const getPedido = function (callback) {
     })
 };
 const actualizar_pedido = function (data, res) {
-    let sql = 'UPDATE item SET estado = ? WHERE id_item = ? AND num_pedido = ? AND estado = ?'
+    let sql = 'UPDATE item SET estado = ? WHERE id_item = ? AND num_pedido = ? ';
     connection.query(sql,data, function (err, result) {
     if (err) throw err
     if (result.affectedRows === 0) {
@@ -221,6 +229,9 @@ const borrar_pedido = function (idPedido,callback) {
     })
 };
 
+const getPedidoSinTerminar =function () {
+    let sql = '';
+};
 
 
 // Servicios
@@ -263,6 +274,7 @@ module.exports = {
     getAllCarta: getAllCarta,
     addPedido: addPedido,
     getPedido: getPedido,
+    getPedidoSinTerminar: getPedidoSinTerminar,
     borrar_pedido:borrar_pedido,
     bebida_delete: bebida_delete,
     bebida_insert: bebida_insert,

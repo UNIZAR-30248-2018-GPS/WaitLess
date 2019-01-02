@@ -140,9 +140,9 @@ describe('Platos', function() {
 //PEDIDOS
 describe('Pedidos',function () {
 
-    it('Deberia añadir un pedido /pedido/<idMesa> POST',function (done) {
+    it('Deberia añadir un pedido /pedido?mesaId=<idMesa> POST',function (done) {
         chai.request(server)
-            .post('/api/pedido/5')
+            .post('/api/pedido?mesaId=5')
             .send({
                 "comensales" : 1,
                 "items" : [{

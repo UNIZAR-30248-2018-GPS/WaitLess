@@ -241,7 +241,7 @@ export default {
       this.dialog = false;
       this.axios({
         method: 'post',
-        url: 'http://localhost:3030/api/pedido/5',
+        url: 'http://localhost:3030/api/pedido?mesaId=5',
         data:
             {
               "comensales" : 3,
