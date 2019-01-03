@@ -45,6 +45,12 @@
               </v-list-tile>
 
        </v-list>
+
+      <v-btn color="blue lighten-2" dark  @click="llamarCamarero" style="margin-top: 470px; margin-left: 8%">
+        <v-icon>{{'call'}}</v-icon>
+        Llamar al camarero
+      </v-btn>
+
     </v-navigation-drawer>
 
     <v-navigation-drawer
@@ -93,7 +99,7 @@
 
 
         <v-list-tile class="text--darken-1">
-          <v-list-tile-content style="margin-left: 120px;">Pago Total:  {{total}}€ </v-list-tile-content>
+          <v-list-tile-content style="margin-left:40%;">Pago Total: {{total}}€ </v-list-tile-content>
         </v-list-tile>
 
 
@@ -198,6 +204,7 @@ import Bebidas from './components/Bebidas'
 import Primeros from './components/Primeros'
 import Segundos from './components/Segundos'
 import Postres from './components/Postres'
+import Pedido from './components/PedidoFinalizado'
 import Carta from './layouts/card_carta'
 import bus from './EventBus'
 import Vue from 'vue';
@@ -275,8 +282,10 @@ export default {
   methods: {
     mostrarCuenta(){
       this.total=0;
+      var total_cuenta=0.00;
       for (let index = 0; index < this.cuenta.length; index++) {
-        this.total=this.total+this.cuenta[index];
+        total_cuenta = parseFloat(this.total) + parseFloat(this.cuenta[index]);
+        this.total=total_cuenta.toFixed(2);
       }
     },
     addComentario: function (id, nombre, precio, cantidad, index) {
@@ -292,7 +301,7 @@ export default {
       this.dialog = false;
       this.axios({
         method: 'post',
-        url: 'http://localhost:3030/api/pedido?mesaId=5',
+        url: 'http://localhost:3030/api/pedido?mesaId='+this.mesa,
         data:
             {
               "comensales" : 3,
@@ -301,13 +310,28 @@ export default {
         }
       ).then(response =>{
          console.log('respuesta',response);
-         this.$router.push({name: 'Pedido'});
+         var idPedido = response.data.pedidoId;
+         console.log("idPedido",idPedido);
+          //this.$router.push({name: 'Pedido',props:{name: idPedido}});
+
          this.dialog_finalizar = false;
          this.disable_menu = false;
          //this.dialog_failed
         },(error) => { console.log(error); swal ( "Pedido" ,  "Tu pedido no ha podido ser realizado.\n" +
         "              Vuelva a intentarlo, disculpe las molestias." ,  "error" );}
         );
+    },
+    llamarCamarero(){
+      this.axios({
+          method: 'post',
+          url: 'http://localhost:3030/api/servicio/llamarCamarero/'+this.mesa,
+        }
+      ).then(response =>{
+          console.log('respuesta',response);
+
+        },(error) => { console.log(error); swal ( "Llamar al Camarero" ,  "No se ha podido realizar la llamada " +
+        "al camarero.\n" + "Vuelva a intentarlo, disculpe las molestias." ,  "error" );}
+      );
     }
   },
 
@@ -318,6 +342,7 @@ export default {
     Primeros,
     Segundos,
     Postres,
+    Pedido,
     Carta
   }
 }

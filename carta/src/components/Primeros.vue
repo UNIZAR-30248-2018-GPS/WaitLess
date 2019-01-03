@@ -1,6 +1,6 @@
 <template>
   <v-container fluid style="margin-left: 60px">
-  <v-slide-y-transition >
+  <v-slide-y-transition>
     <v-layout row wrap>
       <v-flex
         v-for="(item,index) in items"
@@ -9,7 +9,7 @@
         mr-5
         my-3
       >
-        <Carta v-if ="item.disponible > 0" v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,item.nombres_ingredientes,index,item.nombres_alergenos]></Carta>
+        <Carta v-if ="item.disponible==true" v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,item.nombres_ingredientes,index,item.nombres_alergenos]></Carta>
 
       </v-flex>
     </v-layout>
