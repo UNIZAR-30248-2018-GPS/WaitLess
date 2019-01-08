@@ -279,7 +279,7 @@ const call_camarero_avisos = function (data, res) {
 };
 
 const pedir_cuenta = function (data, res) {
-    let sql = 'update pedido set estado_aviso_cuenta = 1 WHERE num_pedido=(select j.num_pedido from item i, item j where i.estado <> 2 and i.num_pedido=j.num_pedido = 0) and num_pedido = ?'
+    let sql = 'UPDATE pedido SET estado_aviso_cuenta = 1 WHERE num_pedido=(SELECT num_pedido FROM item i WHERE num_pedido= ? AND NOT EXISTS (SELECT * FROM item j WHERE i.num_pedido=j.num_pedido AND j.estado <> 2) LIMIT 1)'
     connection.query(sql,data, function (err, result) {
     if (err) throw err
     if (result.affectedRows === 0) {
