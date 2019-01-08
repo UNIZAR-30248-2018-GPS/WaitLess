@@ -44,14 +44,13 @@
     name:"Primeros",
     data(){
       return{
-        items: [],
+        items: this.$session.get('platos'),
       }
     },
 
     created: function()
     {
       this.fetchItems();
-
     },
     methods: {
       fetchItems() {
@@ -60,7 +59,14 @@
             method: 'get',
             url: 'http://localhost:3030/api/carta?tipo=plato'}
         ).then(response => {
-          this.items = response.data;
+          this.$session.set('platos',response.data);
+          this.items = this.$session.get('platos');
+
+          for (let index = 0; index < this.items.length; index++) {
+            if (!this.$session.has(this.items[index].id)){
+              this.$session.set(this.items[index].id,'0');
+            }
+          }
           }
         ).catch(function (error) {
           console.log('Error: ' + error);

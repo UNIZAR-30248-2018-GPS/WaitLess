@@ -9,7 +9,7 @@
           mr-5
           my-3
         >
-          <Carta v-if ="item.disponible >0" v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,item.nombres_ingredientes,index,item.nombres_alergenos]></Carta>
+          <Carta v-if ="item.disponible==true" v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,item.nombres_ingredientes,index,item.nombres_alergenos]></Carta>
 
         </v-flex>
       </v-layout>
@@ -43,7 +43,7 @@
     name:"Bebidas",
     data(){
       return{
-        items: []
+        items: this.$session.get('bebidas')
       }
     },
 
@@ -57,7 +57,14 @@
         let uri = 'http://localhost:3030/api/carta?tipo=bebida';
 
         this.axios.get(uri).then((response) => {
-          this.items = response.data;
+          this.$session.set('bebidas',response.data);
+          this.items = this.$session.get('bebidas');
+
+          for (let index = 0; index < this.items.length; index++) {
+            if (!this.$session.has(this.items[index].id)){
+              this.$session.set(this.items[index].id,'0');
+            }
+          }
         }).catch(function (error) {
           console.log('Error: ' + error);
         });
