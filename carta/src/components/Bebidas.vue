@@ -9,7 +9,7 @@
           mr-5
           my-3
         >
-          <Carta v-if ="item.disponible==true" v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,item.nombres_ingredientes,index,item.nombres_alergenos]></Carta>
+          <Carta v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,item.nombres_ingredientes,index,item.nombres_alergenos]></Carta>
 
         </v-flex>
       </v-layout>

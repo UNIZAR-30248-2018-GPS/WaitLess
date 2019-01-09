@@ -31,6 +31,7 @@ import {
   VDataTable,
   VDivider,
   VSelect,
+  VTextField,
   VToolbar,
   VGrid,
   transitions,
@@ -62,6 +63,7 @@ Vue.use(Vuetify, {
     VLayout,
     VCardText,
     VSlideYTransition,
+    VTextField,
     VGrid,
     VToolbar,
     transitions

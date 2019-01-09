@@ -1,34 +1,39 @@
 <template>
-  <div style="margin-top:10%; margin-left:5%; margin-right:10% ">
-  <v-card>
-      <v-card-title
-        class="headline grey lighten-2"
-        primary-title
-      >
-        Confirmación del Pedido {{$session.get('idPedido')}}
-      </v-card-title>
 
-      <v-card-text style="font-size: 18px">
-        <v-icon style="size: 70px;">{{icon="check_circle"}}</v-icon>
-        Tu pedido ha sido realizado correctamente.
-        En unos minutos te serviremos tu pedido.
-      </v-card-text>
+  <div>
 
-      <v-card-actions style="">
-        <v-card-text style="font-size: 14px">
-          <v-icon>{{icon="info"}}</v-icon>
-          Para consultar mas informacion haz click en llamar al camarero. Si simplemente quiere pedir la
-          cuenta haz click en pedir la cuenta.
-        </v-card-text>
-        <v-btn
-          color="info"
-          flat
-          @click="pedirCuenta"
+    <div style="margin-top:10%; margin-left:5%; margin-right:10% ">
+      <v-card>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
         >
-          Pedir La Cuenta
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+          Confirmación del Pedido {{$session.get('idPedido')}}
+        </v-card-title>
+
+        <v-card-text style="font-size: 18px">
+          <v-icon style="size: 70px;">{{icon="check_circle"}}</v-icon>
+          Tu pedido ha sido realizado correctamente.
+          En unos minutos te serviremos tu pedido.
+        </v-card-text>
+
+        <v-card-actions style="">
+          <v-card-text style="font-size: 14px">
+            <v-icon>{{icon="info"}}</v-icon>
+            Para consultar mas informacion haz click en llamar al camarero. Si simplemente quiere pedir la
+            cuenta haz click en pedir la cuenta.
+          </v-card-text>
+          <v-btn
+            color="info"
+            flat
+            @click="pedirCuenta"
+          >
+            Pedir La Cuenta
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </div>
+
   </div>
 </template>
 
@@ -61,8 +66,7 @@ div{
       return{
 
       }
-    }
-    ,
+    },
     methods: {
       pedirCuenta(){
         this.axios({
@@ -76,7 +80,8 @@ div{
           },(error) => { console.log("erro pedircuenta",error); swal ( "Pedir la cuenta" ,  "No se ha podido realizar la llamada " +
           "a pedir cuenta.\n" + "Vuelva a intentarlo, disculpe las molestias." ,  "error" );}
         );
-      }
+      },
+
     }
   }
 </script>

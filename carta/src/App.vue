@@ -15,7 +15,7 @@
                 <v-list-tile>
 
                   <v-list-tile-content>
-                    <v-list-tile-title>CARTA WAITLESS</v-list-tile-title>
+                      <v-list-tile-title>CARTA WAITLESS</v-list-tile-title>
 
                   </v-list-tile-content>
                 </v-list-tile>
@@ -43,10 +43,20 @@
                   <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
+             <v-list-tile
+
+             >
+             <v-list-tile-action>
+               <v-icon @click="dialog_settings=true">settings</v-icon>
+             </v-list-tile-action>
+             <v-list-tile-content class="grey--text">
+               <v-list-tile-title>Ajustes</v-list-tile-title>
+             </v-list-tile-content>
+            </v-list-tile>
 
        </v-list>
 
-      <v-btn color="blue lighten-2" dark  @click="llamarCamarero" style="margin-top: 470px; margin-left: 8%">
+      <v-btn color="blue lighten-2" dark  @click="llamarCamarero" style="margin-top: 170%; margin-left: 8%">
         <v-icon>{{'call'}}</v-icon>
         Llamar al camarero
       </v-btn>
@@ -105,7 +115,7 @@
 
         <div class="text-xs-center">
 
-            <v-dialog v-model="dialog" width="500px"  v-if="pedido.length > 0 && $session.get('dialog_finalizar')===true">
+          <v-dialog v-model="dialog" width="500px"  v-if="pedido && $session.get('dialog_finalizar')===true">
               <v-btn slot="activator" color="blue lighten-2" dark >Finalizar Pedido</v-btn>
 
               <v-card>
@@ -180,7 +190,6 @@
             <v-card-text>
             </v-card-text>
             <v-btn
-              to="/bebidas"
               color="info"
               flat="flat"
               @click="guardarDatos"
@@ -188,6 +197,38 @@
               Aceptar
             </v-btn>
           </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="dialog_settings" width="500px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Resetear Sesión del Cliente</span>
+          </v-card-title>
+          <v-card-text>
+            <v-flex xs16 sm16 d-flex>
+              <v-text-field
+                name="input-10-2"
+                label="Introduce aqui la contraseña"
+                :type="show1 ? 'text' : 'password'"
+                v-model="password"
+                @click:append="show1 = !show1"
+              ></v-text-field>
+            </v-flex>
+
+          </v-card-text>
+
+          <v-card-actions>
+            <v-card-text v-show="show2">
+              La contraseña no es correcta
+            </v-card-text>
+            <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat="flat" @click="dialog_settings = false">Cancelar</v-btn>
+            <v-btn color="blue darken-1" flat="flat" @click="comprobarPwd">Aceptar</v-btn>
+
+          </v-card-actions>
+
         </v-card>
       </v-dialog>
 
@@ -242,6 +283,11 @@ export default {
       mesa: 3,
       selected:0,
       pedido: [],
+      dialog_settings: false,
+      show2:false,
+      show1: false,
+      password: '',
+      pwd: 'WaitLess',
 
     }
   },
@@ -249,14 +295,21 @@ export default {
     if (!this.$session.exists()){
       this.$session.start();
       this.$session.set('card_comensales',true);
+      this.$session.set('dialog_menu',true);
+      this.$session.set('pedido',this.pedido);
+      this.$session.set('pedido_total',this.pedido_total);
+      this.$session.set('cuenta',this.cuenta);
     }else{
       this.pedido = this.$session.get('pedido');
       this.pedido_total = this.$session.get('pedido_total');
       this.cuenta = this.$session.get('cuenta');
       this.total = this.$session.get('precio_total');
+      this.disable_menu = this.$session.get('dialog_menu');
 
-      for (let index = 0; index < this.modelo.length; index++) {
-          this.modelo[index] = this.$session.get('coment'+index);
+      if(this.pedido_total) {
+        for (let index = 0; index < this.pedido_total.length; index++) {
+          this.modelo[index] = this.pedido_total[index].comentario
+        }
       }
     }
 
@@ -340,7 +393,7 @@ export default {
          this.$router.push({name: 'Pedido'});
          this.$session.set('dialog_finalizar',false);
          this.disable_menu = false;
-         //this.dialog_failed
+         this.$session.set('dialog_menu',false);
         },(error) => { console.log(error); swal ( "Pedido" ,  "Tu pedido no ha podido ser realizado.\n" +
         "              Vuelva a intentarlo, disculpe las molestias." ,  "error" );}
         );
@@ -360,10 +413,32 @@ export default {
       );
     },
     guardarDatos(){
+      this.disable_menu=this.$session.get('dialog_menu');
       this.$session.set('mesa',this.mesa);
       this.$session.set('comensales',this.selected);
       this.$session.set('card_comensales',false);
       this.$session.set('dialog_finalizar',false);
+      this.$router.push({name: 'Bebidas'});
+    },
+    comprobarPwd(){
+
+      if (this.password=this.pwd){
+        this.$session.clear();
+        this.selected=0;
+        this.total=0;
+        this.pedido=[];
+        this.pedido_total=[];
+        this.cuenta=[];
+        this.modelo=[];
+        this.$session.set('comensales',this.selected);
+        this.$session.set('card_comensales',true);
+        this.$session.set('dialog_menu',true);
+        this.$router.push({name: 'Home'});
+        this.dialog_settings=false;
+      }
+      else{
+        this.show2=true;
+      }
     }
   },
 

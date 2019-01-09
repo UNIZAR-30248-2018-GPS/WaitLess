@@ -9,7 +9,7 @@
         mr-5
         my-3
       >
-        <Carta v-if ="item.disponible==true" v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,item.nombres_ingredientes,index,item.nombres_alergenos]></Carta>
+        <Carta v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,item.nombres_ingredientes,index,item.nombres_alergenos]></Carta>
 
       </v-flex>
     </v-layout>
@@ -44,7 +44,7 @@
     name:"Primeros",
     data(){
       return{
-        items: this.$session.get('platos'),
+        items: this.$session.get('primeros'),
       }
     },
 
@@ -59,8 +59,8 @@
             method: 'get',
             url: 'http://localhost:3030/api/carta?tipo=plato'}
         ).then(response => {
-          this.$session.set('platos',response.data);
-          this.items = this.$session.get('platos');
+          this.$session.set('primeros',response.data);
+          this.items = this.$session.get('primeros');
 
           for (let index = 0; index < this.items.length; index++) {
             if (!this.$session.has(this.items[index].id)){
