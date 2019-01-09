@@ -1,6 +1,6 @@
 <template>
   <v-container fluid style="margin-left: 60px">
-  <v-slide-y-transition >
+  <v-slide-y-transition>
     <v-layout row wrap>
       <v-flex
         v-for="(item,index) in items"
@@ -9,7 +9,7 @@
         mr-5
         my-3
       >
-        <Carta v-if ="item.disponible > 0" v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,item.nombres_ingredientes,index,item.nombres_alergenos]></Carta>
+        <Carta v-if ="item.disponible==true" v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,item.nombres_ingredientes,index,item.nombres_alergenos]></Carta>
 
       </v-flex>
     </v-layout>
@@ -44,14 +44,13 @@
     name:"Primeros",
     data(){
       return{
-        items: [],
+        items: this.$session.get('platos'),
       }
     },
 
     created: function()
     {
       this.fetchItems();
-
     },
     methods: {
       fetchItems() {
@@ -60,7 +59,14 @@
             method: 'get',
             url: 'http://localhost:3030/api/carta?tipo=plato'}
         ).then(response => {
-          this.items = response.data;
+          this.$session.set('platos',response.data);
+          this.items = this.$session.get('platos');
+
+          for (let index = 0; index < this.items.length; index++) {
+            if (!this.$session.has(this.items[index].id)){
+              this.$session.set(this.items[index].id,'0');
+            }
+          }
           }
         ).catch(function (error) {
           console.log('Error: ' + error);

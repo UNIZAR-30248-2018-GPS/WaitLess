@@ -10,6 +10,9 @@ import VueAxios from 'vue-axios';
 import axios from 'axios';
 Vue.use(VueAxios, axios);
 
+import VueSession from 'vue-session';
+Vue.use(VueSession);
+
 import App from './App.vue';
 
 import {

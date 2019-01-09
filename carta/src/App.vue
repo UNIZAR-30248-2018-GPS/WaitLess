@@ -45,6 +45,12 @@
               </v-list-tile>
 
        </v-list>
+
+      <v-btn color="blue lighten-2" dark  @click="llamarCamarero" style="margin-top: 470px; margin-left: 8%">
+        <v-icon>{{'call'}}</v-icon>
+        Llamar al camarero
+      </v-btn>
+
     </v-navigation-drawer>
 
     <v-navigation-drawer
@@ -74,7 +80,7 @@
         <v-list-tile>
           <v-list-tile-avatar>{{p[4]}} </v-list-tile-avatar>
           <v-list-tile-content id=index>{{p[1]}}</v-list-tile-content>
-          <v-list-tile-avatar>{{p[2]*p[4]}}€</v-list-tile-avatar>
+          <v-list-tile-avatar>{{p[2]}}€</v-list-tile-avatar>
 
         </v-list-tile>
         <v-flex xs15 style="margin-left: 20px;margin-right: 20px">
@@ -85,7 +91,7 @@
             label="Añade tu comentario"
             rows="1"
             v-model="modelo[index]"
-            v-on:keyup.enter="addComentario(p[0],p[1],p[2],p[4],index)"
+            v-on:keyup.enter="addComentario(p[0],p[1],p[4],index)"
           ></v-textarea>
         </v-flex>
 
@@ -93,13 +99,13 @@
 
 
         <v-list-tile class="text--darken-1">
-          <v-list-tile-content style="margin-left: 120px;">Pago Total:  {{total}}€ </v-list-tile-content>
+          <v-list-tile-content style="margin-left:40%;">Pago Total: {{total}}€ </v-list-tile-content>
         </v-list-tile>
 
 
         <div class="text-xs-center">
 
-            <v-dialog v-model="dialog" width="500px"  v-if="pedido.length > 0 && dialog_finalizar===true">
+            <v-dialog v-model="dialog" width="500px"  v-if="pedido.length > 0 && $session.get('dialog_finalizar')===true">
               <v-btn slot="activator" color="blue lighten-2" dark >Finalizar Pedido</v-btn>
 
               <v-card>
@@ -146,7 +152,7 @@
         </v-dialog>
       </div>
 
-      <v-dialog v-model="card_comensales" width="500px">
+      <v-dialog v-model="$session.get('card_comensales')" width="500px">
         <v-card>
           <v-card-title
             class="headline grey lighten-2"
@@ -164,6 +170,7 @@
               <v-select
                 :items="comensales"
                 label="Comensales"
+                v-model="selected"
                 solo
               ></v-select>
             </v-flex>
@@ -176,7 +183,7 @@
               to="/bebidas"
               color="info"
               flat="flat"
-              @click="card_comensales = false"
+              @click="guardarDatos"
             >
               Aceptar
             </v-btn>
@@ -198,6 +205,7 @@ import Bebidas from './components/Bebidas'
 import Primeros from './components/Primeros'
 import Segundos from './components/Segundos'
 import Postres from './components/Postres'
+import Pedido from './components/PedidoFinalizado'
 import Carta from './layouts/card_carta'
 import bus from './EventBus'
 import Vue from 'vue';
@@ -222,38 +230,56 @@ export default {
       rightDrawer: true,
       title: 'WaitLess',
       value:[],
-      pedido:[],
       show: false,
       cuenta:[],
       total:0,
       pedido_total:[],
       modelo:[],
       message:'',
-      dialog_finalizar: false,
       dialog_failed: false,
       dialog: false,
       disable_menu:true,
-      card_comensales: true,
       mesa: 3,
+      selected:0,
+      pedido: [],
 
     }
   },
-  mounted: function () {
+  created: function(){
+    if (!this.$session.exists()){
+      this.$session.start();
+      this.$session.set('card_comensales',true);
+    }else{
+      this.pedido = this.$session.get('pedido');
+      this.pedido_total = this.$session.get('pedido_total');
+      this.cuenta = this.$session.get('cuenta');
+      this.total = this.$session.get('precio_total');
 
+      for (let index = 0; index < this.modelo.length; index++) {
+          this.modelo[index] = this.$session.get('coment'+index);
+      }
+    }
+
+  },
+  mounted: function () {
     bus.$on('emittedEvent', data => {
       this.value = data;
       var existe = null;
-      this.dialog_finalizar = true;
+      this.$session.set('dialog_finalizar',true);
       if (this.value[5] === 1) { //incrementar cantidad
         this.pedido.push(this.value);
+        this.$session.set('pedido',this.pedido);
         this.modelo.push('');
+        this.$session.set('coment'+(this.pedido.length-1),'');
         this.cuenta.push(this.value[2]);
+        this.$session.set('cuenta',this.cuenta);
         this.pedido_total.push({
           "nombre": this.value[1],
           "cantidad": this.value[4],
           "id": this.value[0],
           "comentario": ''
-        })
+        });
+        this.$session.set('pedido_total', this.pedido_total);
       }
       else { //decrementar cantidad
         for (let index = 0; index < this.pedido.length; index++) {
@@ -263,8 +289,11 @@ export default {
         }
         if (existe != null) {
           Vue.delete(this.pedido, existe);
+          this.$session.set('pedido',this.pedido);
           Vue.delete(this.cuenta, existe);
+          this.$session.set('cuenta');
           Vue.delete(this.pedido_total, existe);
+          this.$session.set('pedido_total', this.pedido_total);
         }
       }
       this.mostrarCuenta();
@@ -275,39 +304,66 @@ export default {
   methods: {
     mostrarCuenta(){
       this.total=0;
+      var total_cuenta=0.00;
       for (let index = 0; index < this.cuenta.length; index++) {
-        this.total=this.total+this.cuenta[index];
+        total_cuenta = parseFloat(this.total) + parseFloat(this.cuenta[index]);
+        this.total=total_cuenta.toFixed(2);
+        this.$session.set('precio_total',this.total);
       }
     },
-    addComentario: function (id, nombre, precio, cantidad, index) {
+    addComentario: function (id, nombre, cantidad, index) {
       Vue.set(this.pedido_total, index, {
-        "nombre": this.value[1],
-        "cantidad": this.value[4],
-        "id": this.value[0],
+        "nombre": nombre,
+        "cantidad": cantidad,
+        "id": id,
         "comentario": this.modelo[index]
       });
-      console.log('comentario', this.pedido_total);
+      this.$session.set('coment'+index,this.modelo[index]);
+      this.$session.set('pedido_total', this.pedido_total);
+      console.log("comentario", this.pedido_total);
     },
     enviarPedido(){
       this.dialog = false;
       this.axios({
         method: 'post',
-        url: 'http://localhost:3030/api/pedido?mesaId=5',
+        url: 'http://localhost:3030/api/pedido?mesaId='+this.mesa,
         data:
             {
-              "comensales" : 3,
+              "comensales" : this.selected,
               "items" : this.pedido_total
             }
         }
       ).then(response =>{
          console.log('respuesta',response);
+         var idPedido = response.data.pedidoId;
+         this.$session.set('idPedido',idPedido);
          this.$router.push({name: 'Pedido'});
-         this.dialog_finalizar = false;
+         this.$session.set('dialog_finalizar',false);
          this.disable_menu = false;
          //this.dialog_failed
         },(error) => { console.log(error); swal ( "Pedido" ,  "Tu pedido no ha podido ser realizado.\n" +
         "              Vuelva a intentarlo, disculpe las molestias." ,  "error" );}
         );
+    },
+    llamarCamarero(){
+      this.axios({
+          method: 'post',
+          url: 'http://localhost:3030/api/servicio/llamarCamarero/'+this.mesa,
+        }
+      ).then(response =>{
+          console.log('respuesta',response);
+          swal ( "Llamar al Camarero" ,  "Se ha avisado al camarero. \n" +
+            "En unos minutos le atenderan." ,  "success" );
+
+        },(error) => { console.log(error); swal ( "Llamar al Camarero" ,  "No se ha podido realizar la llamada " +
+        "al camarero.\n" + "Vuelva a intentarlo, disculpe las molestias." ,  "error" );}
+      );
+    },
+    guardarDatos(){
+      this.$session.set('mesa',this.mesa);
+      this.$session.set('comensales',this.selected);
+      this.$session.set('card_comensales',false);
+      this.$session.set('dialog_finalizar',false);
     }
   },
 
@@ -318,6 +374,7 @@ export default {
     Primeros,
     Segundos,
     Postres,
+    Pedido,
     Carta
   }
 }

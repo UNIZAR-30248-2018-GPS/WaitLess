@@ -5,7 +5,7 @@
         class="headline grey lighten-2"
         primary-title
       >
-        Confirmación del Pedido
+        Confirmación del Pedido {{$session.get('idPedido')}}
       </v-card-title>
 
       <v-card-text style="font-size: 18px">
@@ -17,13 +17,15 @@
       <v-card-actions style="">
         <v-card-text style="font-size: 14px">
           <v-icon>{{icon="info"}}</v-icon>
-          Para pedir consultar mas informacion o pedir la cuenta haz click en llamar al camarero
+          Para consultar mas informacion haz click en llamar al camarero. Si simplemente quiere pedir la
+          cuenta haz click en pedir la cuenta.
         </v-card-text>
         <v-btn
           color="info"
           flat
+          @click="pedirCuenta"
         >
-          Llamar al camarero
+          Pedir La Cuenta
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -59,7 +61,23 @@ div{
       return{
 
       }
-    },
+    }
+    ,
+    methods: {
+      pedirCuenta(){
+        this.axios({
+            method: 'post',
+            url: 'http://localhost:3030/api/servicio/pedirCuenta/'+ this.$session.get('idPedido'),
+          }
+        ).then(response =>{
+            console.log('respuesta',response);
+            swal ( "Pedir la cuenta" ,  "Se ha realizado la solicitud de la cuenta.\n" +
+              "En unos segundos se la entregará el camarero." ,  "success" );
+          },(error) => { console.log("erro pedircuenta",error); swal ( "Pedir la cuenta" ,  "No se ha podido realizar la llamada " +
+          "a pedir cuenta.\n" + "Vuelva a intentarlo, disculpe las molestias." ,  "error" );}
+        );
+      }
+    }
   }
 </script>
 

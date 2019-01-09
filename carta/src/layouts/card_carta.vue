@@ -57,7 +57,7 @@
     data(){
       return{
         show: false,
-        quantity: 0,
+        quantity: this.$session.get(this.name[0]),
       }
     },
     props: [
@@ -66,6 +66,7 @@
     methods: {
       increment () {
         this.quantity++;
+        this.$session.set(this.name[0],this.quantity);
         this.clickMe(1);
       },
       decrement () {
@@ -73,6 +74,7 @@
           swal ( "Error" ,  "No se permite elegir un producto con cantidad negativa" ,  "error" )
         } else {
           this.quantity--;
+          this.$session.set(this.name[0],this.quantity);
           this.clickMe(0);
         }
 
