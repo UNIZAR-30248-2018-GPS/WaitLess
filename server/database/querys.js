@@ -28,6 +28,14 @@ function connectionHandler(){
 }
 connectionHandler();
 
+/**
+* Función que realiza una búsqueda en la BD y devuelve un JSON
+* con los datos de carta, ingredientes y alergenos. En call_camarero_avisos
+* de error lanzan un código de error
+* @params tipoItem
+* @params callback
+* @returns result
+*/
 const getAllCarta = function (tipoItem, callback) {
     if(tipoItem===undefined || tipoItem===null) {
 
@@ -76,7 +84,15 @@ const getAllCarta = function (tipoItem, callback) {
     }
 };
 
-// añadir a la carta
+/**
+* Función que realiza una inserción en la tabla carta de la BD
+* de un producto de la carta (nombre->string, precio->double,
+*  tipo-> 0 PLATO /1 BEBIDA /2 menu, descripción->string, disponible->boolean)
+* En de error lanzan un código de error
+* @params data
+* @params res
+* @returns res.status
+*/
 const bebida_insert = function (data, res) {
     let sql = 'INSERT INTO carta (nombre, precio, tipo, descripcion, disponible) VALUES (?)';
     connection.query(sql,[data], function (err, result) {
@@ -88,6 +104,16 @@ const bebida_insert = function (data, res) {
       }
   })
 };
+
+
+/**
+* Función que realiza un borrado de bebidas  en la tabla carta de la BD
+* de un producto de la carta cuyo nombre el dado.
+* En de error lanzan un código de error
+* @params data
+* @params res
+* @returns res.status
+*/
 const bebida_delete = function (data, res) {
     let sql = 'DELETE FROM carta WHERE nombre = ?';
     connection.query(sql,data, function (err, result) {
@@ -100,6 +126,15 @@ const bebida_delete = function (data, res) {
   })
 };
 
+/**
+* Función que realiza una inserción en la tabla carta de la BD
+* de un producto de la carta (nombre->string, precio->double,
+*  tipo-> 0 PLATO /1 BEBIDA /2 menu, descripción->string, disponible->boolean)
+* En de error lanzan un código de error
+* @params data
+* @params res
+* @returns res.status
+*/
 const plato_insert = function (data, res) {
     let sql = 'INSERT INTO carta (nombre, precio, tipo, descripcion,disponible) VALUES (?)';
     connection.query(sql,[data], function (err, result) {
@@ -111,6 +146,14 @@ const plato_insert = function (data, res) {
       }
   })
 };
+
+/**
+* Función que realiza el borrado de un plato de la tabla carta. En caso de
+* error lanza un código de error 201
+* @params data
+* @params res
+* @returns res.status
+*/
 const plato_delete = function (data, res) {
     let sql = 'DELETE FROM carta WHERE nombre = ?';
     connection.query(sql,data, function (err, result) {
@@ -122,6 +165,14 @@ const plato_delete = function (data, res) {
       }
   })
 };
+
+/**
+* Función que realiza la modificación de un plato de la tabla carta. En caso de
+* error lanza un código de error 201
+* @params data
+* @params res
+* @returns res.status
+*/
 const plato_modify = function (data, res) {
     let sql = 'UPDATE carta SET nombre = ?, precio = ?, tipo = ?, descripcion = ?, disponible = ? WHERE id = ?';
     connection.query(sql,data, function (err, result) {
@@ -134,6 +185,13 @@ const plato_modify = function (data, res) {
   })
 };
 
+/**
+* Función que muestra los alergenos de un plato. En caso de error
+* lanza un código de error 201
+* @params data
+* @params res
+* @returns result
+*/
 const plato_alergenos = function (data, res) {
     let sql = 'SELECT b.nombre FROM alergenos_carta a, alergenos b WHERE a.id_carta = ? and b.id= a.id_alergeno';
     connection.query(sql,data, function (err, result) {
@@ -146,6 +204,13 @@ const plato_alergenos = function (data, res) {
   })
 };
 
+/**
+* Función que muestra los ingredientes de un plato. En caso de error
+* lanza un código de error 201
+* @params data
+* @params res
+* @returns result
+*/
 const plato_ingredientes = function (data, res) {
     let sql = 'SELECT c.nombre FROM ingredientes_carta a, ingrediente c WHERE c.id= a.id_ingrediente and a.id_carta = ? '
     connection.query(sql,data, function (err, result) {
@@ -157,6 +222,14 @@ const plato_ingredientes = function (data, res) {
       }
   })
 };
+
+/**
+* Función que activa la disponibilidad de un plato. En caso de
+* lanza un código de error 201
+* @params data
+* @params res
+* @returns res.status
+*/
 const plato_disponible= function(data,res){
     let sql = 'UPDATE carta SET disponible = 1 WHERE id = ?';
     connection.query(sql,data, function (err, result) {
@@ -168,6 +241,14 @@ const plato_disponible= function(data,res){
       }
   })
 }
+
+/**
+* Función que desactiva la disponibilidad de un plato. En caso de
+* lanza un código de error 201
+* @params data
+* @params res
+* @returns res.status
+*/
 const plato_nodisponible= function(data,res){
     let sql = 'UPDATE carta SET disponible = 0 WHERE id = ?';
     connection.query(sql,data, function (err, result) {
@@ -177,9 +258,15 @@ const plato_nodisponible= function(data,res){
       } else {
         res.status(200).send()
       }
-  })    
+  })
 }
-// pedidos
+
+/**
+* Función que añade un pedido a la tabla pedidos.
+* @params pedido
+* @params callback
+* @returns results.insertId
+*/
 const addPedido = function(pedido,callback){
     let sql='INSERT INTO pedido SET mesa = ?, num_comensales = ?,estado_aviso = ?,estado_aviso_cuenta = ?';
     console.log(pedido.mesa);
@@ -208,6 +295,12 @@ const addPedido = function(pedido,callback){
         }
     });
 };
+
+/**
+* Función que obtiene un pedido a la tabla pedidos.
+* @params callback
+* @returns results
+*/
 const getPedido = function (callback) {
     let sql = 'SELECT * FROM pedido';
     connection.query(sql,'',function (error,results,fields) {
@@ -218,6 +311,13 @@ const getPedido = function (callback) {
         }
     })
 };
+
+/**
+* Función que actualiza un pedido a la tabla pedidos. En caso de error
+* devuelve un código de error 201
+* @params data
+* @params res
+*/
 const actualizar_pedido = function (data, res) {
     let sql = 'UPDATE item SET estado = ? WHERE id_item = ? AND num_pedido = ? ';
     connection.query(sql,data, function (err, result) {
@@ -230,6 +330,11 @@ const actualizar_pedido = function (data, res) {
   })
 };
 
+/**
+* Función que elimina un pedido a la tabla pedidos.
+* @params idPedido
+* @params callback
+*/
 const borrar_pedido = function (idPedido,callback) {
 
     let sql_item = 'DELETE FROM item WHERE num_pedido = ?';
@@ -249,12 +354,20 @@ const borrar_pedido = function (idPedido,callback) {
     })
 };
 
+/**
+*
+*/
 const getPedidoSinTerminar =function () {
     let sql = '';
 };
 
 
-// Servicios
+/**
+* Función que devuelve los avisos que se ha realizado en un pedido. En caso de
+* error devuelve un código de error 204
+* @params res
+* @returns result
+*/
 const get_avisos = function (res) {
     let sql = 'SELECT mesa, estado_aviso FROM pedido WHERE estado_aviso = 1'
     connection.query(sql, function (err, result) {
@@ -266,6 +379,13 @@ const get_avisos = function (res) {
       }
   })
 };
+
+/**
+* Función que desactiva un aviso del camarero. En caso de
+* error devuelve un código de error 201
+* @params data
+* @params res
+*/
 const call_camarero_avisos = function (data, res) {
     let sql = 'update pedido set estado_aviso = ? where mesa=? and estado_aviso_cuenta=0'
     connection.query(sql,data, function (err, result) {
@@ -278,6 +398,13 @@ const call_camarero_avisos = function (data, res) {
   })
 };
 
+/**
+* Función que permite solicitar la cuenta modificando el campo
+* estado_aviso_cuenta a 1. Sólo lo realiza si todos los platos se han servido.
+* En caso de error devuelve un código de error 500
+* @params data
+* @params res
+*/
 const pedir_cuenta = function (data, res) {
     let sql = 'UPDATE pedido SET estado_aviso_cuenta = 1 WHERE num_pedido=(SELECT num_pedido FROM item i WHERE num_pedido= ? AND NOT EXISTS (SELECT * FROM item j WHERE i.num_pedido=j.num_pedido AND j.estado <> 2) LIMIT 1)'
     connection.query(sql,data, function (err, result) {
