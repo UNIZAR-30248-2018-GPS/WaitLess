@@ -9,10 +9,16 @@ var bd = require('../database/querys');
 var tipos_de_item_carta = require('../modules/carta/carta').tipos;
 
 chai.use(chaiHttp);
-//CARTA
 
+/**
+* Tests de carta
+*/
 describe('Carta', function () {
 
+    /**
+    * Test que hace una petición GET a /api/carta y comprueba que se devuelve un
+    * estado 200
+    */
     it('Deberia listar toda la carta /carta GET',function (done) {
         chai.request(server)
             .get('/api/carta')
@@ -22,6 +28,10 @@ describe('Carta', function () {
             });
     });
 
+    /**
+    * Test que hace una petición GET a /api/carta indicando un tipo y comprueba
+    * que se devuelve un estado 200
+    */
     it('Deberia listar la carta de cada tipo de item /carta?tipo=<param> GET', function (done) {
         tipos_de_item_carta.enums.forEach(function (tipo) {
             chai.request(server)
@@ -33,10 +43,16 @@ describe('Carta', function () {
         done();
     });
 });
-//PLATOS
 
+/**
+* Tests de platos
+*/
 describe('Platos', function() {
 
+    /**
+    * Test que hace una petición GET a /api/plato/ingredientes/91 y comprueba
+    * que se devuelve un estado 200
+    */
     it('Deberia listar todos los ingredientes /ingredientes/<id> GET', function(done) {
         chai.request(server)
             .get('/api/plato/ingredientes/91')
@@ -46,7 +62,10 @@ describe('Platos', function() {
             });
     });
 
-
+    /**
+    * Test que hace una petición GET a /api/plato/ingredientes/90 y comprueba
+    * que se devuelve un estado 204 puesto que el plato no existe
+    */
     it('NO Deberia listar ningún ingrediente /ingredientes/<id> GET', function(done) {
         chai.request(server)
             .get('/api/plato/ingredientes/90')
@@ -56,7 +75,10 @@ describe('Platos', function() {
             });
     });
 
-
+    /**
+    * Test que hace una petición GET a /api/plato/alergenos/91 y comprueba
+    * que se devuelve un estado 200
+    */
     it('Deberia listar todos los alergenos /alergenos/<id> GET', function(done) {
         chai.request(server)
             .get('/api/plato/alergenos/91')
@@ -66,7 +88,10 @@ describe('Platos', function() {
             });
     });
 
-
+    /**
+    * Test que hace una petición GET a /api/plato/ingredientes/89 y comprueba
+    * que se devuelve un estado 204 puesto que el plato no existe
+    */
     it('No Deberia listar todos los alergenos /alergenos/<id> GET', function(done) {
         chai.request(server)
             .get('/api/plato/alergenos/89')
@@ -76,7 +101,11 @@ describe('Platos', function() {
             });
     });
 
-
+    /**
+    * Test que realiza una petición POST a /api/plato/nuevoPlato con los
+    * atributos para crear un nuevo plato y comprueba que se recibe un estado
+    * 200 indicando que se ha creado
+    */
     it('Deberia añadir un plato  /nuevoPlato/<nombre>/<descripcion>/<precio>/<tipo> POST', function(done) {
         chai.request(server)
             .post('/api/plato/nuevoPlato/plato-test/Este plato esta siendo probado/5/1')
@@ -86,7 +115,11 @@ describe('Platos', function() {
             });
     });
 
-
+    /**
+    * Test que realiza una petición POST a /api/plato/nuevoPlato con los
+    * atributos mal creados y comprueba que se recibe un estado
+    * 404 indicando que no se encuentra el plato y, por lo tanto, no se ha creado
+    */
     it('NO deberia añadir un plato  /nuevoPlato/<nombre>/<descripcion>/<precio>/<tipo> POST', function(done) {
         chai.request(server)
             .post('/api/plato/nuevoPlato//Gulas/Este plato no deberia//0')
@@ -96,7 +129,11 @@ describe('Platos', function() {
             });
     });
 
-
+    /**
+    * Test que realiza una petición POST a /api/plato/modificarPlato con los
+    * atributos para modificar un nuevo plato y comprueba que se recibe un estado
+    * 200 indicando que se ha modificado
+    */
     it('Deberia modificar un plato  /modificarPlato/<nuevonombre>/<descripcion>/<precio>/<tipo>/<id> POST', function(done) {
         chai.request(server)
             .post('/api/plato/modificarPlato/Pimientos del piquillo/unos pican otros no/4/0/1/81')
@@ -106,7 +143,11 @@ describe('Platos', function() {
             });
     });
 
-
+    /**
+    * Test que realiza una petición POST a /api/plato/modificarPlato con los
+    * atributos de un plato no válido y comprueba que se recibe un estado
+    * 201 indicando que no se ha modificado
+    */
     it('NO deberia modificar un plato  /modificarPlato/<nuevonombre>/<descripcion>/<precio>/<tipo>/<id> POST', function(done) {
         chai.request(server)
             .post('/api/plato/modificarPlato/No deberia modificar/ No se modifica/4/0/1/12')
@@ -116,7 +157,11 @@ describe('Platos', function() {
             });
     });
 
-
+    /**
+    * Test que realiza una petición POST a /api/plato/borrarPlato con el
+    * atributo nombre para borrar un plato y comprueba que se recibe un estado
+    * 200 indicando que se ha eliminado
+    */
     it('Deberia borrar un plato  /borrarPlato/<nombre> POST', function(done) {
         chai.request(server)
             .post('/api/plato/borrarPlato/plato-test')
@@ -126,7 +171,11 @@ describe('Platos', function() {
             });
     });
 
-
+    /**
+    * Test que realiza una petición POST a /api/plato/borrarPlato con el
+    * atributo nombre inválido para borrar un plato y comprueba que se recibe un
+    * estado 201 indicando que no se ha eliminado
+    */
     it('NO deberia borrar un plato  /borrarPlato/<nombre> POST', function(done) {
         chai.request(server)
             .post('/api/plato/borrarPlato/plato-no-existe')
@@ -138,11 +187,18 @@ describe('Platos', function() {
 });
 
 
-//PEDIDOS
+/**
+* Tests de Pedidos
+*/
 describe('Pedidos',function () {
     before(()=>{
         pedido_ws = new WebSocket('ws://localhost:3030/api/pedido/ws');
     });
+
+    /**
+    * Test que realiza una petición POST a /api/pedido añadir un pedido y
+    * comprueba que se ha añadido 
+    */
     it('Deberia añadir un pedido /pedido?mesaId=<idMesa> POST',function (done) {
         chai.request(server)
             .post('/api/pedido?mesaId=5')
