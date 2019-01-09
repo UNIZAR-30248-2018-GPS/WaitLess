@@ -28,7 +28,13 @@ const pedido_post = function (req,res) {
                 console.log('Pedido no añadido');
             });
         }else {
-            console.log(pedido);
+            let pedido_parseado={};
+            pedido_parseado.num_pedido = pedidoId;
+            pedido_parseado.mesa = pedido.mesa;
+            pedido_parseado.items = pedido.items;
+            pedido_parseado.items.forEach(function (item) {
+                item.estado=0;
+            });
             pub.publish("pedidos", JSON.stringify(pedido), redis.print);
             res.statusCode=201;
             res.setHeader('Content-Type', 'application/json');
@@ -65,18 +71,23 @@ const pedido_get = function(req,res){
         }
     })
 };
-
+/**
+ * Funcion API web que recibe la conexion Websockets y envía a traves de este los pedidos cacheados
+ * en Redis , o los pedidos pendientes almacenados en BD en caso de que no haya ninguno cacheado.
+ *
+ * @param ws Objeto conexion websocket entrante, recibida a través de Middleware
+ * @param req Objeto request que contiene los headers y datos Http iniciales.'
+ */
 const pedido_get_ws = function (ws,req) {
     console.log("websockets connection");
     ws.on('message',function (msg) {
-        ws.send(msg);
+        ws.ping(msg,false,true);
     });
     sub.subscribe("pedidos");
     sub.on("message",function (channel,message) {
         console.log(message);
         ws.send(message);
     });
-    //TODO:Comprobar pedidos pendientes en la base de datos y enviarlos a cocina
     //TODO: Añadir ping para quitar conexiones
 
     bd.getPedidoSinTerminar(function (err,pedidos){
@@ -84,7 +95,19 @@ const pedido_get_ws = function (ws,req) {
             console.log(err);
         }else{
             pedidos.forEach(function (pedido) {
-                pub.publish("pedidos", JSON.stringify(pedido), redis.print);
+                let pedido_parseado={};
+                pedido_parseado.num_pedido = pedido.num_pedido ? pedido.num_pedido:'';
+                pedido_parseado.mesa = pedido.mesa;
+                let array_item_nombre = pedido.item_nombre.split(',');
+                let array_item_estado = pedido.item_estado.split(',');
+                let array_item_comentario = pedido.item_comentario.split(',');
+                let i=0;
+                pedido_parseado.item=[];
+                while(i<array_item_nombre.length){
+                    pedido_parseado.item.push({nombre:array_item_nombre[i],estado:array_item_estado[i],comentario:array_item_comentario[i]});
+                    i++;
+                }
+                ws.send(JSON.stringify(pedido_parseado));
             });
         }
     });

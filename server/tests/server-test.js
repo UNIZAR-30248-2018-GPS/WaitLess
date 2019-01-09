@@ -1,5 +1,6 @@
 var chai = require('chai');
 var chaiHttp = require('chai-http');
+var WebSocket = require('ws');
 //Variable de entrono para mockear redis
 process.env.NODE_ENV = 'test';
 var server = require('../app');
@@ -139,7 +140,9 @@ describe('Platos', function() {
 
 //PEDIDOS
 describe('Pedidos',function () {
-
+    before(()=>{
+        pedido_ws = new WebSocket('ws://localhost:3030/api/pedido/ws');
+    });
     it('Deberia añadir un pedido /pedido?mesaId=<idMesa> POST',function (done) {
         chai.request(server)
             .post('/api/pedido?mesaId=5')
@@ -168,4 +171,21 @@ describe('Pedidos',function () {
 
             })
     });
+
+    //WIP Test
+    // it('Deberia recibir un pedido', function (done) {
+    //     chai.request(server)
+    //     pedido_ws.once('message',function (message) {
+    //
+    //         let message_parsed = JSON.parse(message);
+    //         message_parsed.should.have.property('num_pedido');
+    //         message_parsed.num_pedido.should.not.be.empty;
+    //         done();
+    //         requester.close();
+    //     });
+    //     pedido_ws.onopen=function () {
+    //         pedido_ws.send('ping');
+    //     };
+    //
+    // })
 });

@@ -249,8 +249,24 @@ const borrar_pedido = function (idPedido,callback) {
     })
 };
 
-const getPedidoSinTerminar =function () {
-    let sql = '';
+const getPedidoSinTerminar =function (callback) {
+    let sql = 'SELECT pedido.num_pedido,' +
+        'pedido.mesa,' +
+        'pedido.num_comensales,' +
+        'pedido.estado_aviso,' +
+        'pedido.estado_aviso_cuenta,' +
+        ' GROUP_CONCAT(carta.nombre) as item_nombre,' +
+        'GROUP_CONCAT(item.estado) as item_estado,' +
+        'GROUP_CONCAT(item.comentario) as item_comentario  ' +
+        'FROM pedido, item,carta WHERE pedido.num_pedido=item.num_pedido AND item.id_carta = carta.id  AND item.estado=0 GROUP BY pedido.num_pedido';
+    connection.query(sql, function (err,result) {
+        if(err){
+            console.log(err);
+            callback(err);
+        }else{
+            callback(0,result);
+        }
+    })
 };
 
 

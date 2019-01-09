@@ -161,7 +161,7 @@
           comentario: ''
         }],
         multipleSelection: [],
-        wsData : ['hoi']
+        wsData : []
       }
     }
 

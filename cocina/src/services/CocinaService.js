@@ -7,7 +7,7 @@ export default {
       console.log('Ws closed');
     };
     conn.onmessage=function (event) {
-      console.log(event.data);
+      console.log(JSON.parse(event.data));
       callback(event.data);
     };
     conn.onopen=function () {
