@@ -49,7 +49,7 @@
              <v-list-tile-action>
                <v-icon @click="dialog_settings=true">settings</v-icon>
              </v-list-tile-action>
-             <v-list-tile-content class="grey--text">
+             <v-list-tile-content class="grey--text" @click="dialog_settings=true">
                <v-list-tile-title>Ajustes</v-list-tile-title>
              </v-list-tile-content>
             </v-list-tile>
@@ -101,6 +101,7 @@
             label="Añade tu comentario"
             rows="1"
             v-model="modelo[index]"
+            :disabled="disable_coment==true"
             v-on:keyup.enter="addComentario(p[0],p[1],p[4],index)"
           ></v-textarea>
         </v-flex>
@@ -288,6 +289,7 @@ export default {
       show1: false,
       password: '',
       pwd: 'WaitLess',
+      disable_coment: false,
 
     }
   },
@@ -394,6 +396,7 @@ export default {
          this.$session.set('dialog_finalizar',false);
          this.disable_menu = false;
          this.$session.set('dialog_menu',false);
+         this.disable_coment=true;
         },(error) => { console.log(error); swal ( "Pedido" ,  "Tu pedido no ha podido ser realizado.\n" +
         "              Vuelva a intentarlo, disculpe las molestias." ,  "error" );}
         );
@@ -430,6 +433,7 @@ export default {
         this.pedido_total=[];
         this.cuenta=[];
         this.modelo=[];
+        this.disable_coment=false;
         this.$session.set('comensales',this.selected);
         this.$session.set('card_comensales',true);
         this.$session.set('dialog_menu',true);

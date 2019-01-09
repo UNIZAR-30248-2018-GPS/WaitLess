@@ -16,7 +16,14 @@
       </v-list>
 
 
-    <v-card-actions>
+    <v-card-actions v-if="name[7]==false">
+      <br>
+      <br>
+      <span style="color: red; margin-left: 2%;">No hay stock</span>
+
+
+    </v-card-actions>
+    <v-card-actions v-else>
       <v-btn fab  small color="grey lighten-1" id="decrement" @click="decrement">
         <v-icon dark>remove</v-icon>
       </v-btn>
