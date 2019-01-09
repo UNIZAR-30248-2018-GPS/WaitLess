@@ -10,8 +10,7 @@ const estado_item = new Enum({'pendiente':0,'servido':1},{ignoreCase: true});
 
 /**
  * Funcion que trata los nuevos pedidos que entran en la aplicacion
- * @param req request http, contiene:
- *          -body
+ * @param req
  * @param res
  */
 const pedido_post = function (req,res) {
@@ -48,7 +47,8 @@ const pedido_post = function (req,res) {
 };
 
 /**
- *
+ * Función que obtiene los pedidos a través de Redis. En caso de error devuelve
+ * un código de error 500
  * @param req
  * @param res
  */
@@ -113,6 +113,11 @@ const pedido_get_ws = function (ws,req) {
     });
 };
 
+/**
+*
+* @param req
+* @param res
+**/
 const pedido_servido = function (req,res) {
     let data = [
         estado_item.get('servido').value,
