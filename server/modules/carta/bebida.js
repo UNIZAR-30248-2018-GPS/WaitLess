@@ -2,6 +2,12 @@ const bd = require('../../database/querys');
 const Enum = require('enum');
 const tipo = new Enum({'plato':0,'bebida':1,'menu':2},{ignoreCase: true});
 
+/**
+* Función que establece la estructura de bebida con los atributos nombre y
+* precio y realiza la llamada a la base de datos
+* @params req
+* @params res
+*/
 const bebida_insert = function (req,res) {
     //TODO: Sacar descripcion de body
     let data = [
@@ -14,6 +20,12 @@ const bebida_insert = function (req,res) {
     bd.bebida_insert(data, res);
 };
 
+/**
+* Función que establece la estructura de bebida con el atributo nombre y realiza
+* la llamada a la base de datos.
+* @params req
+* @params res
+*/
 const bebida_delete = function (req,res) {
     let data = [
         req.params.nombre,
