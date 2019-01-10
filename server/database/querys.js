@@ -115,7 +115,7 @@ const bebida_insert = function (data, res) {
 * @returns res.status
 */
 const bebida_delete = function (data, res) {
-    let sql = 'DELETE FROM carta WHERE nombre = ?';
+    let sql = 'DELETE FROM carta WHERE id = ?';
     connection.query(sql,data, function (err, result) {
     if (err) throw err;
     if (result.affectedRows === 0) {
@@ -155,7 +155,7 @@ const plato_insert = function (data, res) {
 * @returns res.status
 */
 const plato_delete = function (data, res) {
-    let sql = 'DELETE FROM carta WHERE nombre = ?';
+    let sql = 'DELETE FROM carta WHERE id = ?';
     connection.query(sql,data, function (err, result) {
     if (err) throw err;
     if (result.affectedRows === 0) {
@@ -174,7 +174,7 @@ const plato_delete = function (data, res) {
 * @returns res.status
 */
 const plato_modify = function (data, res) {
-    let sql = 'UPDATE carta SET nombre = ?, precio = ?, tipo = ?, descripcion = ?, disponible = ? WHERE id = ?';
+    let sql = 'UPDATE carta SET nombre = ?, precio = ?, descripcion = ? WHERE id = ?';
     connection.query(sql,data, function (err, result) {
     if (err) throw err;
     if (result.affectedRows === 0) {
@@ -203,6 +203,64 @@ const plato_alergenos = function (data, res) {
       }
   })
 };
+
+/**
+ * Función que permite añadir un ingrediente a la tabla ingrediente. En caso de error
+ * lanza un código de error 204
+ * @params data
+ * @params res
+ * @returns result
+ */
+const anadir_despensa = function (data, res) {
+    let sql = 'INSERT INTO ingrediente(nombre) VALUES (?) ';
+    connection.query(sql,data, function (err, result) {
+        if (err) throw err;
+        if (result[0] === undefined) {
+            res.status(204).send()
+        } else {
+            res.status(200).send(result)
+        }
+    })
+};
+
+/**
+ * Función que muestra todos los alérgenos. En caso de error
+ * lanza un código de error 204
+ * @params data
+ * @params res
+ * @returns result
+ */
+const getAllAlergenos = function (res) {
+    let sql = 'SELECT * FROM alergenos';
+    connection.query(sql, function (err, result) {
+        if (err) throw err;
+        if (result[0] === undefined) {
+            res.status(204).send()
+        } else {
+            res.status(200).send(result)
+        }
+    })
+};
+
+/**
+ * Función que muestra todos los ingredientes. En caso de error
+ * lanza un código de error 204
+ * @params data
+ * @params res
+ * @returns result
+ */
+const getAllIngredientes = function (res) {
+    let sql = 'SELECT * FROM ingrediente';
+    connection.query(sql, function (err, result) {
+        if (err) throw err;
+        if (result[0] === undefined) {
+            res.status(204).send()
+        } else {
+            res.status(200).send(result)
+        }
+    })
+};
+
 
 /**
 * Función que muestra los ingredientes de un plato. En caso de error
@@ -448,6 +506,8 @@ module.exports = {
     actualizar_pedido: actualizar_pedido,
     get_avisos: get_avisos,
     call_camarero_avisos: call_camarero_avisos,
-    pedir_cuenta: pedir_cuenta
-
+    pedir_cuenta: pedir_cuenta,
+    anadir_despensa: anadir_despensa,
+    getAllAlergenos: getAllAlergenos,
+    getAllIngredientes: getAllIngredientes
 };
