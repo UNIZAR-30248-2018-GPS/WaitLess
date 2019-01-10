@@ -43,8 +43,23 @@ const pedir_cuenta = function (req,res) {
    // Deberia mandar solo status 201 si se ha completado con exito
 };
 
+/**
+ * Función que permite indicar la cuenta como pagada
+ * llamando a la base de datos.
+ * @param req
+ * @param res
+ **/
+const finalizar_cuenta = function (req,res) {
+    let data = [
+        req.params.num_pedido
+    ]
+    bd.finalizar_cuenta(data,res);
+    // Deberia mandar solo status 201 si se ha completado con exito
+};
+
 module.exports = {
     get_all_avisos: get_all_avisos,
     call_camarero_avisos: call_camarero_avisos,
-    pedir_cuenta: pedir_cuenta
+    pedir_cuenta: pedir_cuenta,
+    finalizar_cuenta: finalizar_cuenta
 };

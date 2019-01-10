@@ -488,6 +488,24 @@ const pedir_cuenta = function (data, res) {
       }
   })
 };
+
+/**
+ * Función que permite indicar al camarero que la cuenta ya ha sido pagada. En caso de error devuelve un código
+ * 201
+ * @params data
+ * @params res
+ */
+const finalizar_cuenta = function (data, res) {
+    let sql = 'UPDATE pedido SET estado_aviso_cuenta = 2 WHERE num_pedido=?'
+    connection.query(sql,data, function (err, result) {
+        if (err) throw err
+        if (result.affectedRows === 0) {
+            res.status(201).send()
+        } else {
+            res.status(200).send()
+        }
+    })
+};
 module.exports = {
     getAllCarta: getAllCarta,
     addPedido: addPedido,
@@ -509,5 +527,6 @@ module.exports = {
     pedir_cuenta: pedir_cuenta,
     anadir_despensa: anadir_despensa,
     getAllAlergenos: getAllAlergenos,
-    getAllIngredientes: getAllIngredientes
+    getAllIngredientes: getAllIngredientes,
+    finalizar_cuenta: finalizar_cuenta
 };

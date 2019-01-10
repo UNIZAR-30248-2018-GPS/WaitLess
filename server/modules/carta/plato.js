@@ -116,6 +116,7 @@ const anadir_despensa = function(req,res){
 
 /**
  * Función que devuelve todos los alérgenos
+ * @params req
  * @params res
  */
 const getAllAlergenos = function(req,res){
@@ -124,6 +125,7 @@ const getAllAlergenos = function(req,res){
 
 /**
  * Función que devuelve todos los ingredientes
+ * @params req
  * @params res
  */
 const getAllIngredientes = function(req,res){
