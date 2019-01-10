@@ -8,7 +8,19 @@ export default {
     };
     conn.onmessage=function (event) {
       console.log(JSON.parse(event.data));
-      callback(event.data);
+      /*var datos = {"mesa":"4",
+        "comensales":33,
+        "items":[{
+          "nombre":"Test",
+          "cantidad":1,
+          "id":101,
+          "comentario":""
+        }
+        ]
+      };
+      */
+      callback(JSON.parse(event.data));
+      //callback(datos);
     };
     conn.onopen=function () {
       conn.send('ping');

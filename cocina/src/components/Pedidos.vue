@@ -1,14 +1,14 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :span="12"><div >
+    <el-row v-loading="loading" :gutter="20">
+      <el-col  v-for="pedido in wsData" :key="pedido.num_pedido" :span="12"><div >
         <el-card class="box-card">
           <el-button type="primary" class="botonCamarero" @click="callWs">Avisar camarero</el-button>
-          <strong>Mesa 1</strong>
+          <strong>Mesa </strong>
           <el-tag type="info" class="label">14:17</el-tag>
           <el-table
             ref="multipleTable"
-            :data="tableData2"
+            :data="pedido.item"
             style="width: 100%"
             @selection-change="handleSelectionChange"
             :row-class-name="tableRowClassName">
@@ -17,44 +17,8 @@
               width="50%">
             </el-table-column>
             <el-table-column
-              prop="producto"
+              prop="nombre"
               label="Producto">
-            </el-table-column>
-            <el-table-column
-              prop="cantidad"
-              label="Can"
-              width="50%">
-            </el-table-column>
-            <el-table-column
-              prop="comentario"
-              label="Comentario">
-            </el-table-column>
-          </el-table>
-      </el-card>
-      </div></el-col>
-      <el-col :span="12"><div >
-        <el-card class="box-card">
-          <el-button type="primary" class="botonCamarero">Avisar camarero</el-button>
-          Mesa 1
-          <el-tag type="info" class="label">14:17</el-tag>
-          <el-table
-            ref="multipleTable"
-            :data="tableData2"
-            style="width: 100%"
-            @selection-change="handleSelectionChange"
-            :row-class-name="tableRowClassName">
-            <el-table-column
-              type="selection"
-              width="50%">
-            </el-table-column>
-            <el-table-column
-              prop="producto"
-              label="Producto">
-            </el-table-column>
-            <el-table-column
-              prop="cantidad"
-              label="Can"
-              width="50%">
             </el-table-column>
             <el-table-column
               prop="comentario"
@@ -63,48 +27,8 @@
           </el-table>
         </el-card>
       </div></el-col>
+    </el-row>
 
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="12"><div >
-        <el-card class="box-card">
-          <el-button type="primary" class="botonCamarero">Avisar camarero</el-button>
-          Mesa 1
-          <el-tag type="info" class="label">14:17</el-tag>
-          <el-table
-            ref="multipleTable"
-            :data="tableData2"
-            style="width: 100%"
-            @selection-change="handleSelectionChange"
-            :row-class-name="tableRowClassName">
-            <el-table-column
-              type="selection"
-              width="50%">
-            </el-table-column>
-            <el-table-column
-              prop="producto"
-              label="Producto">
-            </el-table-column>
-            <el-table-column
-              prop="cantidad"
-              label="Can"
-              width="50%">
-            </el-table-column>
-            <el-table-column
-              prop="comentario"
-              label="Comentario">
-            </el-table-column>
-          </el-table>
-        </el-card>
-      </div></el-col>
-      <el-col :span="12"><div >
-        <el-card class="box-card">
-          <el-button type="primary" class="botonCamarero">Avisar camarero</el-button>
-          {{wsData}}
-          <el-tag type="info" class="label">14:17</el-tag>
-        </el-card>
-      </div></el-col>
-    </el-row>
 
 
   </div>
@@ -138,6 +62,8 @@
       },
       newPedido(data){
         this.wsData.push(data);
+        this.loading = false;
+        console.log("DATOS->"+this.wsData)
       }
     },
     mounted: function(){
@@ -147,19 +73,7 @@
     },
     data () {
       return {
-        tableData2:  [{
-          producto: 'Macarrones con tomate',
-          cantidad: '2',
-          comentario: 'Con poco tomate'
-        }, {
-          producto: 'Ternera a la plancha',
-          cantidad: '1',
-          comentario: 'Muy hecha'
-        }, {
-          producto: 'Crema catalana',
-          cantidad: '1',
-          comentario: ''
-        }],
+        loading: false,
         multipleSelection: [],
         wsData : []
       }
