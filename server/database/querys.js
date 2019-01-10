@@ -135,16 +135,34 @@ const bebida_delete = function (data, res) {
 * @params res
 * @returns res.status
 */
-const plato_insert = function (data, res) {
+const plato_insert = function (data, data1, data2, res) {
     let sql = 'INSERT INTO carta (nombre, precio, tipo, descripcion,disponible) VALUES (?)';
-    connection.query(sql,[data], function (err, result) {
-    if (err) throw err;
-    if (result.affectedRows === 0) {
-        res.status(201).send()
-      } else {
-        res.status(200).send()
-      }
-  })
+    connection.query(sql, [data], function (err, result) {
+        if (err) throw err;
+        if (result.affectedRows === 0) {
+            res.status(201).send()
+        } else {
+            let sql_alerg = 'INSERT INTO alergenos_carta (id_carta,id_alergeno) VALUES ?';
+            var values = [];
+            data1.forEach(function (item) {
+                values.push([result.insertId, item]);
+            });
+            connection.query(sql_alerg, [values], function (err) {
+                if (err) throw err;
+                else {
+                    let sql_ing = 'INSERT INTO ingredientes_carta (id_carta,id_ingrediente) VALUES ?';
+                    var values = [];
+                    data2.forEach(function (item) {
+                        values.push([result.insertId, item]);
+                    });
+                    connection.query(sql_ing, [values], function (err) {
+                        if (err) throw err;
+                        else res.status(201).send();
+                    })
+                }
+            })
+        }
+    })
 };
 
 /**

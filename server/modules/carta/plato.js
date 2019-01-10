@@ -8,13 +8,23 @@ const bd = require('../../database/querys');
 */
 const plato_insert = function (req,res) {
     let data = [
-        req.params.nombre,
-        req.params.precio,
-        req.params.tipo,
-        req.params.descripcion,
+        req.body.nombre,
+        req.body.precio,
+        req.body.tipo,
+        req.body.descripcion,
         true
     ];
-    bd.plato_insert(data, res);
+    let data1 =
+        req.body.alergenos
+    ;
+    let data2 =
+        req.body.ingredientes
+    ;
+    console.log(data);
+    console.log(data1);
+    console.log(data2);
+
+    bd.plato_insert(data, data1, data2, res);
 };
 
 /**
