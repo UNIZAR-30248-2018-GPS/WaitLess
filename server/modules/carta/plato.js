@@ -100,6 +100,37 @@ const plato_disponible = function(req,res){
     ]
     bd.plato_disponible(data,res)
 }
+
+/**
+ * Función que establece la estructura del ingrediente
+ * que se va a añadir con el atributo nombre y llama a la base de datos
+ * @params req
+ * @params res
+ */
+const anadir_despensa = function(req,res){
+    let data = [
+        req.params.nombre
+    ]
+    bd.anadir_despensa(data,res)
+}
+
+/**
+ * Función que devuelve todos los alérgenos
+ * @params req
+ * @params res
+ */
+const getAllAlergenos = function(req,res){
+    bd.getAllAlergenos(res)
+}
+
+/**
+ * Función que devuelve todos los ingredientes
+ * @params req
+ * @params res
+ */
+const getAllIngredientes = function(req,res){
+    bd.getAllIngredientes(res)
+}
 module.exports = {
     plato_insert: plato_insert,
     plato_delete: plato_delete,
@@ -107,5 +138,8 @@ module.exports = {
     plato_alergenos: plato_alergenos,
     plato_ingredientes: plato_ingredientes,
     plato_nodisponible: plato_nodisponible,
-    plato_disponible: plato_disponible
+    plato_disponible: plato_disponible,
+    anadir_despensa: anadir_despensa,
+    getAllAlergenos: getAllAlergenos,
+    getAllIngredientes: getAllIngredientes
 };
