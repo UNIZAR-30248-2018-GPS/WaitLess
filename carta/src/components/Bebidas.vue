@@ -53,6 +53,10 @@
 
     },
     methods: {
+      /**
+       * Función que pide los productos tipo bebida a la api
+       * y los guarda en la variable items.
+       */
       fetchItems() {
         let uri = 'http://localhost:3030/api/carta?tipo=bebida';
 

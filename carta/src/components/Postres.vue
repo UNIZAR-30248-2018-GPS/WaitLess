@@ -54,6 +54,10 @@
 
     },
     methods: {
+      /**
+       * Función que pide los productos tipo postre a la api
+       * y los guarda en la variable items.
+       */
       fetchItems() {
         axios({
           method: 'get',

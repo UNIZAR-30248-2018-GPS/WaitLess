@@ -88,8 +88,7 @@
       >
 
         <v-list-tile>
-          <v-list-tile-avatar>{{p[4]}} </v-list-tile-avatar>
-          <v-list-tile-content id=index>{{p[1]}}</v-list-tile-content>
+          <v-list-tile-content id=index>- {{p[1]}}</v-list-tile-content>
           <v-list-tile-avatar>{{p[2]}}€</v-list-tile-avatar>
 
         </v-list-tile>
@@ -102,7 +101,7 @@
             rows="1"
             v-model="modelo[index]"
             :disabled="disable_coment==true"
-            v-on:keyup.enter="addComentario(p[0],p[1],p[4],index)"
+            @blur="addComentario(p[0],p[1],p[4],index)"
           ></v-textarea>
         </v-flex>
 

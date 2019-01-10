@@ -53,11 +53,15 @@
       this.fetchItems();
     },
     methods: {
+      /**
+       * Función que pide los productos tipo plato a la api
+       * y los guarda en la variable items.
+       */
       fetchItems() {
 
         axios({
             method: 'get',
-            url: 'http://localhost:3030/api/carta?tipo=plato'}
+            url: 'http://localhost:3030/api/carta?tipo=menu1'}
         ).then(response => {
           this.$session.set('primeros',response.data);
           this.items = this.$session.get('primeros');
