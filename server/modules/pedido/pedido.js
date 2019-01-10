@@ -30,11 +30,11 @@ const pedido_post = function (req,res) {
             let pedido_parseado={};
             pedido_parseado.num_pedido = pedidoId;
             pedido_parseado.mesa = pedido.mesa;
-            pedido_parseado.items = pedido.items;
-            pedido_parseado.items.forEach(function (item) {
+            pedido_parseado.item = pedido.items;
+            pedido_parseado.item.forEach(function (item) {
                 item.estado=0;
             });
-            pub.publish("pedidos", JSON.stringify(pedido), redis.print);
+            pub.publish("pedidos", JSON.stringify(pedido_parseado), redis.print);
             res.statusCode=201;
             res.setHeader('Content-Type', 'application/json');
             response={pedidoId:pedidoId};

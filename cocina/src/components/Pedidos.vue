@@ -1,11 +1,10 @@
 <template>
   <div>
-    <el-row v-loading="loading" :gutter="20">
-      <el-col  v-for="pedido in wsData" :key="pedido.num_pedido" :span="12"><div >
+    <el-row v-loading="loading" v-for="i in Math.ceil(wsData.length / 3)" :gutter="20">
+      <el-col  v-for="pedido in wsData.slice((i - 1) * 3, i * 3)" :key="pedido.num_pedido" :span="8"><div >
         <el-card class="box-card">
-          <el-button type="primary" class="botonCamarero" @click="callWs">Avisar camarero</el-button>
-          <strong>Mesa </strong>
-          <el-tag type="info" class="label">14:17</el-tag>
+          <el-button type="primary" class="botonCamarero" @click="callWsCamarero">Avisar camarero</el-button>
+          <strong>Mesa {{pedido.mesa}}</strong>
           <el-table
             ref="multipleTable"
             :data="pedido.item"

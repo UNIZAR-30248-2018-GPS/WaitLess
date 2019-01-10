@@ -35,6 +35,14 @@ export default {
   },
   nuevoPlato(nombre, descripcion, precio, tipo) {
     return Api().post('plato/nuevoPlato/'+nombre+'/'+descripcion+'/'+precio+'/'+tipo)
+  },
+
+  disponibilidad(idPlato, disponibilidad) {
+    if(disponibilidad) {
+      return Api().post('plato/darDisponibilidad/'+idPlato)
+    } else {
+      return Api().post('plato/borrarDisponibilidad/'+idPlato)
+    }
   }
 
 }

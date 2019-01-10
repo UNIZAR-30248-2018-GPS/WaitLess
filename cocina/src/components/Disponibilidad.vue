@@ -19,9 +19,7 @@
             placeholder="Buscar en la carta"/>
         </template>
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="handleEdit(scope.$index, scope.row)">Cambiar disponibilidad</el-button>
+          <el-checkbox-button v-model="platos[scope.$index].disponible" @change="cambiaDisponibilidad(scope.$index)">Disponible</el-checkbox-button>
         </template>
       </el-table-column>
     </el-table>
@@ -34,19 +32,6 @@
   export default {
     data() {
       return {
-        tableData: [{
-          disponibilidad: true,
-          plato: 'Macarrones con tomate',
-        }, {
-          disponibilidad: true,
-          plato: 'Ternera a la plancha',
-        }, {
-          disponibilidad: false,
-          plato: 'Lubina al horno',
-        }, {
-          disponibilidad: true,
-          plato: 'Crema catalana',
-        }],
         platos: [],
         search: '',
         loading: true
@@ -71,6 +56,10 @@
         }
         return ''
       },
+      cambiaDisponibilidad(value) {
+        console.log(this.platos[value].nombre +" -> " + this.platos[value].disponible);
+        CocinaService.disponibilidad(this.platos[value].id,this.platos[value].disponible);
+      }
     },
     beforeMount() {
       this.cargarPlatos()
