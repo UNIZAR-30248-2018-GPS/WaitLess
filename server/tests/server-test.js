@@ -83,7 +83,7 @@ describe('Platos', function() {
         chai.request(server)
             .get('/api/plato/alergenos/91')
             .end(function(err, res){
-                res.should.have.status(200);
+                res.should.have.status(204);
                 done();
             });
     });
@@ -184,8 +184,127 @@ describe('Platos', function() {
                 done();
             });
     });
+
+
+    /**
+    * Test que realiza una petición get a /api/plato/getAllIngrendientes 
+    * y comprueba que se recibe un estado
+    * 200 indicando que se han devuelto todos los ingredientes
+    */
+   it('Deberia devolver todos los ingredientes /getAllIngredientes/ GET', function(done) {
+    chai.request(server)
+        .get('/api/plato/getAllIngredientes/')
+        .end(function(err, res){
+            res.should.have.status(200);
+            done();
+        }); 
+    });
+
+    /**
+    * Test que realiza una petición get a /api/plato/getAlergenos 
+    * y comprueba que se recibe un estado
+    * 200 indicando que se han devuelto todos los alergenos
+    */
+   it('Deberia devolver todos los alergenos /getAllAlergenos/ GET', function(done) {
+    chai.request(server)
+        .get('/api/plato/getAllAlergenos/')
+        .end(function(err, res){
+            res.should.have.status(200);
+            done();
+        }); 
+    });
+
+    /**
+    * Test que realiza una petición post a /api/plato/borrarDisponibilidad/ 
+    * y comprueba que se modifica quitando la disponibilidad meidante el
+    * código 200 
+    */
+   it('Deberia borrar la Disponibilidad de un plato /borrarDisponibilidad/<id_plato> POST', function(done) {
+    chai.request(server)
+        .post('/api/plato/borrarDisponibilidad/81')
+        .end(function(err, res){
+            res.should.have.status(200);
+            done();
+        }); 
+    });
+
+    /**
+    * Test que realiza una petición post a /api/plato/borrarDisponibilidad/ 
+    * y comprueba que no se modifica quitando la disponibilidad meidante el
+    * código 201 
+    */
+   it('NO Deberia borrar la Disponibilidad de un plato /borrarDisponibilidad/<id_plato> POST', function(done) {
+    chai.request(server)
+        .post('/api/plato/borrarDisponibilidad/74')
+        .end(function(err, res){
+            res.should.have.status(201);
+            done();
+        }); 
+    });
+
+    /**
+    * Test que realiza una petición post a /api/plato/darDisponibilidad/
+    * y comprueba que se modifica dando la disponibilidad meidante el
+    * código 200 
+    */
+   it('Deberia dar la Disponibilidad a un plato /darDisponibilidad/<id_plato> POST', function(done) {
+    chai.request(server)
+        .post('/api/plato/darDisponibilidad/81')
+        .end(function(err, res){
+            res.should.have.status(200);
+            done();
+        }); 
+    });
+
+    /**
+    * Test que realiza una petición post a /api/plato/darDisponibilidad/ 
+    * y comprueba que no se modifica dando la disponibilidad meidante el
+    * código 201 
+    */
+it('NO Deberia dar la Disponibilidad a un plato /darDisponibilidad/<id_plato> POST', function(done) {
+    chai.request(server)
+        .post('/api/plato/darDisponibilidad/74')
+        .end(function(err, res){
+            res.should.have.status(201);
+            done();
+        }); 
+    });
+
+
+    /**
+    * Test que realiza una petición post a /api/plato/anadir_despensa/
+    * y comprueba que se ha añadido un plato a la despensa meidante el
+    * código 200 
+    */
+   it('Deberia anadir a la despensa  un plato /anadir_despensa/<id_plato> POST', function(done) {
+    chai.request(server)
+        .post('/api/plato/anadir_despensa/pimienta')
+        .end(function(err, res){
+            res.should.have.status(200);
+            done();
+        }); 
+    });
+
+     /**
+    * Test que realiza una petición post a /api/plato/anadir_despensa/
+    * y comprueba que no se ha añadido un plato a la despensa meidante el
+    * código 204 
+    */
+   it('NO Deberia anadir a la despensa  un plato /anadir_despensa/<id_plato> POST', function(done) {
+    chai.request(server)
+        .post('/api/plato/anadir_despensa/ ')
+        .end(function(err, res){
+            res.should.have.status(404);
+            done();
+        }); 
+    });
+
+   
 });
 
+   
+
+  
 
 /**
 * Tests de Pedidos

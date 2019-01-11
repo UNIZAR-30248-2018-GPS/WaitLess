@@ -233,7 +233,7 @@ const anadir_despensa = function (data, res) {
     let sql = 'INSERT INTO ingrediente(nombre) VALUES (?) ';
     connection.query(sql,data, function (err, result) {
         if (err) throw err;
-        if (result[0] === undefined) {
+        if (result.affectedRows === 0) {
             res.status(204).send()
         } else {
             res.status(200).send(result)
