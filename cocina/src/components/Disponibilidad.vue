@@ -7,7 +7,6 @@
 
         <el-table
           v-loading="loading"
-          :row-class-name="tableRowClassName"
           :data="platos.filter(data => !search || data.nombre.toLowerCase().includes(search.toLowerCase()))"
           style="width: 100%">
           <el-table-column
@@ -23,7 +22,7 @@
                 placeholder="Buscar en la carta"/>
             </template>
             <template slot-scope="scope">
-              <el-checkbox-button v-model="platos[scope.$index].disponible" @change="cambiaDisponibilidad(scope.$index)">Disponible</el-checkbox-button>
+              <el-checkbox-button v-model="platos.find(plato => plato.id === scope.row.id).disponible" @change="cambiaDisponibilidad(scope.row.id)">Disponible</el-checkbox-button>
             </template>
           </el-table-column>
         </el-table>
@@ -54,18 +53,9 @@
       handleEdit(index, row) {
         console.log(index, row);
       },
-      tableRowClassName({ row }) {
-
-        if (row.disponibilidad === true) {
-          return 'success-row'
-        } else if (row.disponibilidad === false) {
-          return 'warning-row'
-        }
-        return ''
-      },
       cambiaDisponibilidad(value) {
-        console.log(this.platos[value].nombre +" -> " + this.platos[value].disponible);
-        CocinaService.disponibilidad(this.platos[value].id,this.platos[value].disponible);
+        console.log(this.platos.find(plato => plato.id === value).nombre +" -> " +this.platos.find(plato => plato.id === value).disponible);
+        CocinaService.disponibilidad(value,this.platos.find(plato => plato.id === value).disponible);
       }
     },
     beforeMount() {
