@@ -1,28 +1,35 @@
 <template>
   <div>
     <h1>Disponibilidad de la carta</h1>
-    <el-table
-      v-loading="loading"
-      :row-class-name="tableRowClassName"
-      :data="platos.filter(data => !search || data.nombre.toLowerCase().includes(search.toLowerCase()))"
-      style="width: 100%">
-      <el-table-column
-        label="Plato o bebida"
-        prop="nombre">
-      </el-table-column>
-      <el-table-column
-        align="right">
-        <template slot="header" slot-scope="scope">
-          <el-input
-            v-model="search"
-            size="mini"
-            placeholder="Buscar en la carta"/>
-        </template>
-        <template slot-scope="scope">
-          <el-checkbox-button v-model="platos[scope.$index].disponible" @change="cambiaDisponibilidad(scope.$index)">Disponible</el-checkbox-button>
-        </template>
-      </el-table-column>
-    </el-table>
+
+    <el-row :gutter="20">
+      <el-col :span="20" :offset="2">
+
+        <el-table
+          v-loading="loading"
+          :row-class-name="tableRowClassName"
+          :data="platos.filter(data => !search || data.nombre.toLowerCase().includes(search.toLowerCase()))"
+          style="width: 100%">
+          <el-table-column
+            label="Plato o bebida"
+            prop="nombre">
+          </el-table-column>
+          <el-table-column
+            align="right">
+            <template slot="header" slot-scope="scope">
+              <el-input
+                v-model="search"
+                size="mini"
+                placeholder="Buscar en la carta"/>
+            </template>
+            <template slot-scope="scope">
+              <el-checkbox-button v-model="platos[scope.$index].disponible" @change="cambiaDisponibilidad(scope.$index)">Disponible</el-checkbox-button>
+            </template>
+          </el-table-column>
+        </el-table>
+
+      </el-col>
+    </el-row>
   </div>
 </template>
 

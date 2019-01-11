@@ -8,33 +8,27 @@ export default {
     };
     conn.onmessage=function (event) {
       console.log(JSON.parse(event.data));
-      /*var datos = {"mesa":"4",
-        "comensales":33,
-        "items":[{
-          "nombre":"Test",
-          "cantidad":1,
-          "id":101,
-          "comentario":""
-        }
-        ]
-      };
-      */
       callback(JSON.parse(event.data));
-      //callback(datos);
     };
     conn.onopen=function () {
       conn.send('ping');
     };
 
   },
-  pedidos() {
-    //return Api().get('carta?tipo=menu1')
-  },
+
   carta() {
     return Api().get('carta')
   },
-  nuevoPlato(nombre, descripcion, precio, tipo) {
-    return Api().post('plato/nuevoPlato/'+nombre+'/'+descripcion+'/'+precio+'/'+tipo)
+  nuevoPlato(nombre, descripcion, precio, tipo, alergenos, ingredientes) {
+
+    return Api().post('plato/nuevoPlato', {
+      nombre: nombre,
+      descripcion: descripcion,
+      precio: precio,
+      tipo: tipo,
+      alergenos: alergenos,
+      ingredientes: ingredientes
+    })
   },
 
   disponibilidad(idPlato, disponibilidad) {
@@ -43,6 +37,18 @@ export default {
     } else {
       return Api().post('plato/borrarDisponibilidad/'+idPlato)
     }
+  },
+
+  alergenos() {
+    return Api().get('/plato/getAllAlergenos')
+  },
+
+  ingredientes() {
+    return Api().get('plato/getAllIngredientes')
+  },
+
+  nuevoIngrediente(nombreIngrediente) {
+    return Api().post('/plato/anadir_despensa/'+nombreIngrediente)
   }
 
 }
