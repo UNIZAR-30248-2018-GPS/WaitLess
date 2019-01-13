@@ -142,26 +142,30 @@ const plato_insert = function (data, data1, data2, res) {
         if (result.affectedRows === 0) {
             res.status(201).send()
         } else {
-            let sql_alerg = 'INSERT INTO alergenos_carta (id_carta,id_alergeno) VALUES ?';
-            var values = [];
-            data1.forEach(function (item) {
-                values.push([result.insertId, item]);
-            });
-            connection.query(sql_alerg, [values], function (err) {
-                if (err) throw err;
-                else {
-                    let sql_ing = 'INSERT INTO ingredientes_carta (id_carta,id_ingrediente) VALUES ?';
-                    var values = [];
-                    data2.forEach(function (item) {
+                let sql_alerg = 'INSERT INTO alergenos_carta (id_carta,id_alergeno) VALUES ?';
+                var values = [];
+                if (data1.length > 0) {
+                        data1.forEach(function (item) {
                         values.push([result.insertId, item]);
+                    });
+                    connection.query(sql_alerg, [values], function (err) {
+                        if (err) throw err;
+                            
+                    })
+                }
+                let sql_ing = 'INSERT INTO ingredientes_carta (id_carta,id_ingrediente) VALUES ?';
+                var values = [];
+                if (data2.length >0){
+                            data2.forEach(function (item) {
+                            values.push([result.insertId, item]);
                     });
                     connection.query(sql_ing, [values], function (err) {
                         if (err) throw err;
                         else res.status(201).send();
                     })
                 }
-            })
-        }
+        }   
+        res.status(200).send()
     })
 };
 
@@ -461,8 +465,8 @@ const get_avisos = function (res) {
     let sql = 'SELECT mesa, estado_aviso FROM pedido WHERE estado_aviso = 1'
     connection.query(sql, function (err, result) {
     if (err) throw err
-    if (result[0] === undefined) {
-        res.status(204).send()
+    if (result.affectedRows === 0) {
+        res.status(404).send()
       } else {
         res.status(200).send(result)
       }
