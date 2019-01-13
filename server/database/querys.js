@@ -364,8 +364,7 @@ const addPedido = function(pedido,callback){
                     for(var i = results_item.insertId; i < results_item.insertId + results_item.affectedRows*10;i=i+10){
                         rowIds.push(i);
                     }
-                    console.log(rowIds);
-                    callback(false,results.insertId);
+                    callback(false,results.insertId,rowIds);
                 }
             })
         }
@@ -438,7 +437,8 @@ const getPedidoSinTerminar =function (callback) {
         'pedido.estado_aviso_cuenta,' +
         ' GROUP_CONCAT(carta.nombre) as item_nombre,' +
         'GROUP_CONCAT(item.estado) as item_estado,' +
-        'GROUP_CONCAT(item.comentario) as item_comentario  ' +
+        'GROUP_CONCAT(item.comentario) as item_comentario,  ' +
+        'GROUP_CONCAT(item.id_item) as item_id  ' +
         'FROM pedido, item,carta WHERE pedido.num_pedido=item.num_pedido AND item.id_carta = carta.id  AND item.estado=0 GROUP BY pedido.num_pedido';
     connection.query(sql, function (err,result) {
         if(err){

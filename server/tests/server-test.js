@@ -349,17 +349,36 @@ describe('Pedidos',function () {
             })
     });
 
-    it('Deberia recibir un pedido', function (done) {
+    it('Cocina Deberia recibir un pedido', function (done) {
         pedido_ws = new WebSocket('ws://localhost:3030/api/pedido/ws');
         pedido_ws.once('message',function (message) {
 
             let message_parsed = JSON.parse(message);
             message_parsed.should.have.property('num_pedido');
             message_parsed.num_pedido.should.not.be.empty;
+            console.log(message_parsed);
             done();
         });
         pedido_ws.onopen=function () {
             pedido_ws.send('ping');
+        };
+    });
+
+    it('Camarero Deberia recibir un pedido', function (done) {
+        pedido_ws = new WebSocket('ws://localhost:3030/api/servicio/ws');
+        pedido_ws.once('message',function (message) {
+
+            let message_parsed = JSON.parse(message);
+            message_parsed.should.have.property('header');
+            message_parsed.header.should.equal('pedido');
+            let message_data = message_parsed.data;
+            message_data.should.have.property('num_pedido');
+            message_data.num_pedido.should.not.be.empty;
+            console.log(message_parsed);
+            done();
+        });
+        pedido_ws.onopen=function () {
+            pedido_ws.send(JSON.stringify({header:'pedidos'}));
         };
     })
 });
