@@ -311,9 +311,11 @@ it('NO Deberia dar la Disponibilidad a un plato /darDisponibilidad/<id_plato> PO
 */
 describe('Pedidos',function () {
     before(()=>{
-        pedido_ws = new WebSocket('ws://localhost:3030/api/pedido/ws');
+        requester = chai.request(server).keepOpen();
     });
-
+    after(()=>{
+       requester.close();
+    });
     /**
     * Test que realiza una petición POST a /api/pedido añadir un pedido y
     * comprueba que se ha añadido 
@@ -347,20 +349,17 @@ describe('Pedidos',function () {
             })
     });
 
-    //WIP Test
-    // it('Deberia recibir un pedido', function (done) {
-    //     chai.request(server)
-    //     pedido_ws.once('message',function (message) {
-    //
-    //         let message_parsed = JSON.parse(message);
-    //         message_parsed.should.have.property('num_pedido');
-    //         message_parsed.num_pedido.should.not.be.empty;
-    //         done();
-    //         requester.close();
-    //     });
-    //     pedido_ws.onopen=function () {
-    //         pedido_ws.send('ping');
-    //     };
-    //
-    // })
+    it('Deberia recibir un pedido', function (done) {
+        pedido_ws = new WebSocket('ws://localhost:3030/api/pedido/ws');
+        pedido_ws.once('message',function (message) {
+
+            let message_parsed = JSON.parse(message);
+            message_parsed.should.have.property('num_pedido');
+            message_parsed.num_pedido.should.not.be.empty;
+            done();
+        });
+        pedido_ws.onopen=function () {
+            pedido_ws.send('ping');
+        };
+    })
 });
