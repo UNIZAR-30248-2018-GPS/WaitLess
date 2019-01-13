@@ -303,8 +303,89 @@ it('NO Deberia dar la Disponibilidad a un plato /darDisponibilidad/<id_plato> PO
 });
 
    
+/**
+* Tests de avisos
+*/
+describe('Avisos', function () {
 
-  
+    /**
+    * Test que hace una petición GET a /api/listarAvisos y comprueba que se devuelve un
+    * estado 200
+    */
+    it('Deberia listar todos los avisos /listarAvisos GET',function (done) {
+        chai.request(server)
+            .get('/api/servicio/listarAvisos')
+            .end(function(err, res){
+                res.should.have.status(200);
+                done();
+            });
+    });
+
+     /**
+    * Test que hace una petición GET a /api/listarAvisos y comprueba que se devuelve un
+    * estado 204
+    */
+   it('NO Deberia listar todos los avisos /listarAvisos GET',function (done) {
+    chai.request(server)
+        .get('/api/servicios/listarAvisos')
+        .end(function(err, res){
+            res.should.have.status(404);
+            done();
+        });
+});
+
+ /**
+    * Test que hace una petición POST a /api/llamarCamarero/ y comprueba que se devuelve un
+    * estado 200
+    */
+   it('Deberia llamar al camarrero desde la mesa <mesa> /llamarCamarero/<mesa> POST',function (done) {
+    chai.request(server)
+        .post('/api/servicio/llamarCamarero/3')
+        .end(function(err, res){
+            res.should.have.status(200);
+            done();
+        });
+});
+
+ /**
+    * Test que hace una petición POST a /api/llamarCamarero/ y comprueba que se devuelve un
+    * estado 201 indicando que este no se ha podido llamar
+    */
+   it('NO Deberia llamar al camarrero desde la mesa <mesa> /llamarCamarero/<mesa> POST',function (done) {
+    chai.request(server)
+        .post('/api/servicio/llamarCamarero/999')
+        .end(function(err, res){
+            res.should.have.status(201);
+            done();
+        });
+});
+
+/**
+    * Test que hace una petición POST a /api/pedirCuenta/ y comprueba que se devuelve un
+    * estado 200
+    */
+   it('Deberia pedir la cuenta <num_pedido> /pedirCuenta/<num_pedido> POST',function (done) {
+    chai.request(server)
+        .post('/api/servicio/pedirCuenta/301')
+        .end(function(err, res){
+            res.should.have.status(200);
+            done();
+        });
+});
+
+/**
+    * Test que hace una petición POST a /api/pedirCuenta/ y comprueba que se devuelve un
+    * estado 500 indicando que no se puede pedir la cuenta 
+    */
+   it('NO Deberia pedir la cuenta <num_pedido> /pedirCuenta/<num_pedido> POST',function (done) {
+    chai.request(server)
+        .post('/api/servicio/pedirCuenta/2')
+        .end(function(err, res){
+            res.should.have.status(500);
+            done();
+        });
+});
+});
 
 /**
 * Tests de Pedidos
