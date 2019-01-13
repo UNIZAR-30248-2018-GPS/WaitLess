@@ -385,6 +385,32 @@ describe('Avisos', function () {
             done();
         });
 });
+
+/**
+    * Test que hace una petición POST a /api/finalizarCuenta/ y comprueba que se devuelve un
+    * estado 200
+    */
+   it('Deberia poder anular la cuenta de un pedido /finalizarCuenta/<num_pedido> POST',function (done) {
+    chai.request(server)
+        .post('/api/servicio/finalizarCuenta/391')
+        .end(function(err, res){
+            res.should.have.status(200);
+            done();
+        });
+});
+/**
+    * Test que hace una petición POST a /api/finalizarCuenta/ y comprueba que se devuelve un
+    * estado 500 indicando que no se ha modificado la cuenta a 0.
+    */
+   it('NO Deberia poder anular la cuenta de un pedido /finalizarCuenta/<num_pedido> POST',function (done) {
+    chai.request(server)
+        .post('/api/servicio/finalizarCuenta/2')
+        .end(function(err, res){
+            res.should.have.status(201);
+            done();
+        });
+});
+
 });
 
 /**
