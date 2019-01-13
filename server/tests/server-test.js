@@ -48,7 +48,7 @@ describe('Carta', function () {
 * Tests de platos
 */
 describe('Platos', function() {
-
+    let idNuevoPlato=0;
     /**
     * Test que hace una petición GET a /api/plato/ingredientes/91 y comprueba
     * que se devuelve un estado 200
@@ -108,8 +108,16 @@ describe('Platos', function() {
     */
     it('Deberia añadir un plato  /nuevoPlato/<nombre>/<descripcion>/<precio>/<tipo> POST', function(done) {
         chai.request(server)
-            .post('/api/plato/nuevoPlato/plato-test/Este plato esta siendo probado/5/1')
+            .post('/api/plato/nuevoPlato')
+            .send({
+                "nombre":"plato-test",
+                "descripcion":"Este plato esta siendo probado",
+                "precio":"5",
+                "tipo":"1"
+            })
             .end(function(err, res){
+                console.log(res.body);
+                idNuevoPlato = res.body.id;
                 res.should.have.status(200);
                 done();
             });
@@ -136,7 +144,7 @@ describe('Platos', function() {
     */
     it('Deberia modificar un plato  /modificarPlato/<nuevonombre>/<descripcion>/<precio>/<tipo>/<id> POST', function(done) {
         chai.request(server)
-            .post('/api/plato/modificarPlato/Pimientos del piquillo/unos pican otros no/4/0/1/81')
+            .post('/api/plato/modificarPlato/Pimientos del piquillo/unos pican otros no/4/0/1/'+idNuevoPlato)
             .end(function(err, res){
                 res.should.have.status(200);
                 done();
@@ -164,7 +172,7 @@ describe('Platos', function() {
     */
     it('Deberia borrar un plato  /borrarPlato/<nombre> POST', function(done) {
         chai.request(server)
-            .post('/api/plato/borrarPlato/plato-test')
+            .post('/api/plato/borrarPlato/'+idNuevoPlato)
             .end(function(err, res){
                 res.should.have.status(200);
                 done();

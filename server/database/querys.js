@@ -140,11 +140,13 @@ const plato_insert = function (data, data1, data2, res) {
     connection.query(sql, [data], function (err, result) {
         if (err) throw err;
         if (result.affectedRows === 0) {
-            res.status(201).send()
+            res.setHeader('Content-Type', 'application/json');
+            res.statusCode=200;
+            res.send({id:result.insertId});
         } else {
                 let sql_alerg = 'INSERT INTO alergenos_carta (id_carta,id_alergeno) VALUES ?';
                 var values = [];
-                if (data1.length > 0) {
+                if (data1 && data1.length > 0) {
                         data1.forEach(function (item) {
                         values.push([result.insertId, item]);
                     });
@@ -155,17 +157,23 @@ const plato_insert = function (data, data1, data2, res) {
                 }
                 let sql_ing = 'INSERT INTO ingredientes_carta (id_carta,id_ingrediente) VALUES ?';
                 var values = [];
-                if (data2.length >0){
+                if (data2 && data2.length >0){
                             data2.forEach(function (item) {
                             values.push([result.insertId, item]);
                     });
                     connection.query(sql_ing, [values], function (err) {
                         if (err) throw err;
-                        else res.status(201).send();
+                        else {
+                            res.setHeader('Content-Type', 'application/json');
+                            res.statusCode=201;
+                            res.send({id:result.insertId});
+                        }
                     })
                 }
-        }   
-        res.status(200).send()
+        }
+        res.setHeader('Content-Type', 'application/json');
+        res.statusCode=200;
+        res.send({id:result.insertId});
     })
 };
 
@@ -196,7 +204,7 @@ const plato_delete = function (data, res) {
 * @returns res.status
 */
 const plato_modify = function (data, res) {
-    let sql = 'UPDATE carta SET nombre = ?, precio = ?, descripcion = ? WHERE id = ?';
+    let sql = 'UPDATE carta SET nombre = ?, precio = ?, tipo = ?, descripcion = ?, disponible = ? WHERE id = ?';
     connection.query(sql,data, function (err, result) {
     if (err) throw err;
     if (result.affectedRows === 0) {

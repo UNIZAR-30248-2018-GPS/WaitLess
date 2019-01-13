@@ -54,7 +54,7 @@ const plato_modificar = function (req,res) {
 */
 const plato_delete = function (req,res) {
     let data = [
-        req.params.nombre
+        req.params.id
     ]
     bd.plato_delete(data, res);
 };
