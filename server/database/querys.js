@@ -384,34 +384,57 @@ const addPedido = function(pedido,callback){
 };
 
 /**
-* Función que obtiene un pedido a la tabla pedidos.
+* Función que obtiene un pedido a la tabla pedidos dado un num_pedido, o saca todos.
 * @params callback
 * @returns results
 */
-const getPedido = function (callback) {
-    let sql = 'SELECT * FROM pedido';
-    connection.query(sql,'',function (error,results,fields) {
-        if(error){
-            callback(error);
-        }else {
-            callback(false,results);
-        }
-    })
+const getPedido = function (callback,num_pedido) {
+    if(num_pedido !== null && num_pedido!==undefined){
+        let sql = 'SELECT pedido.num_pedido,' +
+            'pedido.mesa,' +
+            'pedido.num_comensales,' +
+            'pedido.estado_aviso,' +
+            'pedido.estado_aviso_cuenta,' +
+            ' GROUP_CONCAT(carta.nombre) as item_nombre,' +
+            'GROUP_CONCAT(item.estado) as item_estado,' +
+            'GROUP_CONCAT(item.comentario) as item_comentario,  ' +
+            'GROUP_CONCAT(item.id_item) as item_id  ' +
+            'FROM pedido, item,carta WHERE pedido.num_pedido = ? AND pedido.num_pedido=item.num_pedido AND item.id_carta = carta.id GROUP BY pedido.num_pedido';
+        connection.query(sql,[num_pedido], function (err,result) {
+            if (err) {
+                console.log(err);
+                callback(err);
+            } else {
+                callback(0, result);
+            }
+        });
+    }else {
+        let sql = 'SELECT * FROM pedido';
+        connection.query(sql, '', function (error, results, fields) {
+            if (error) {
+                callback(error);
+            } else {
+                callback(false, results);
+            }
+        })
+    }
 };
 
 /**
-* Función que actualiza un pedido a la tabla pedidos. En caso de error
+* Función que actualiza un pedido a la tabla items de pedidos. En caso de error
 * devuelve un código de error 201
 * @params data
 * @params res
 */
-const actualizar_pedido = function (data, res) {
+const actualizar_pedido = function (data, callback) {
     let sql = 'UPDATE item SET estado = ? WHERE id_item = ? AND num_pedido = ? ';
     connection.query(sql,data, function (err, result) {
-    if (err) throw err
+    if (err) throw err;
     if (result.affectedRows === 0) {
+        callback(201);
         res.status(201).send()
       } else {
+        callback(200);
         res.status(200).send()
       }
   })
@@ -487,15 +510,15 @@ const get_avisos = function (res) {
 * @params data
 * @params res
 */
-const call_camarero_avisos = function (data, res) {
+const call_camarero_avisos = function (data, callback) {
     let sql = 'update pedido set estado_aviso = ? where mesa=? and estado_aviso_cuenta=0'
     connection.query(sql,data, function (err, result) {
-    if (err) throw err
+    if (err) throw err;
     if (result.affectedRows === 0) {
-        res.status(201).send()
+        callback(201);
       } else {
-        res.status(200).send()
-      }
+        callback(200);
+    }
   })
 };
 
@@ -506,15 +529,15 @@ const call_camarero_avisos = function (data, res) {
 * @params data
 * @params res
 */
-const pedir_cuenta = function (data, res) {
+const pedir_cuenta = function (data, callback) {
     let sql = 'UPDATE pedido SET estado_aviso_cuenta = 1 WHERE num_pedido=(SELECT num_pedido FROM item i WHERE num_pedido= ? AND NOT EXISTS (SELECT * FROM item j WHERE i.num_pedido=j.num_pedido AND j.estado <> 2) LIMIT 1)'
     connection.query(sql,data, function (err, result) {
     if (err) throw err
     if (result.affectedRows === 0) {
         // no se puede pedir la cuenta porque no todo el pedido esta terminado
-        res.status(500).send()
+        callback(400);
       } else {
-        res.status(200).send()
+        callback(200);
       }
   })
 };

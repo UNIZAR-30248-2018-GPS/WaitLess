@@ -315,7 +315,12 @@ it('NO Deberia dar la Disponibilidad a un plato /darDisponibilidad/<id_plato> PO
 * Tests de avisos
 */
 describe('Avisos', function () {
-
+    before(()=>{
+        requester = chai.request(server).keepOpen();
+    });
+    after(()=>{
+        requester.close();
+    });
     /**
     * Test que hace una petición GET a /api/listarAvisos y comprueba que se devuelve un
     * estado 200
@@ -383,13 +388,13 @@ describe('Avisos', function () {
 
 /**
     * Test que hace una petición POST a /api/pedirCuenta/ y comprueba que se devuelve un
-    * estado 500 indicando que no se puede pedir la cuenta 
+    * estado 400 indicando que no se puede pedir la cuenta
     */
    it('NO Deberia pedir la cuenta <num_pedido> /pedirCuenta/<num_pedido> POST',function (done) {
     chai.request(server)
         .post('/api/servicio/pedirCuenta/2')
         .end(function(err, res){
-            res.should.have.status(500);
+            res.should.have.status(400);
             done();
         });
 });
@@ -419,6 +424,26 @@ describe('Avisos', function () {
         });
 });
 
+   it('Deberia recibir aviso a traves de ws',function (done) {
+       this.timeout(4000);
+       camarero_ws = new WebSocket('ws://localhost:3030/api/servicio/ws');
+       camarero_ws.on('message',function (msg) {
+          let message_parsed = JSON.parse(msg);
+          if(message_parsed.header==='ok'){
+              console.log(message_parsed);
+          chai.request(server)
+              .post('/api/servicio/llamarCamarero/3')
+              .end();
+          }
+          if(message_parsed.header==='aviso'){
+              message_parsed.data.should.equal("3");
+              done();
+          }
+       });
+       camarero_ws.onopen=function () {
+           camarero_ws.send(JSON.stringify({header:'avisos'}));
+       };
+   });
 });
 
 /**
@@ -464,6 +489,9 @@ describe('Pedidos',function () {
             })
     });
 
+    /**
+     * Test que establece una conexion ws para verificar que se envian los nuevos pedidos a cocina
+     */
     it('Cocina Deberia recibir un pedido', function (done) {
         pedido_ws = new WebSocket('ws://localhost:3030/api/pedido/ws');
         pedido_ws.once('message',function (message) {
@@ -479,6 +507,9 @@ describe('Pedidos',function () {
         };
     });
 
+    /**
+     * Test que establece una conexion ws para verificar que se envian los nuevos pedidos al camarero
+     */
     it('Camarero Deberia recibir un pedido', function (done) {
         pedido_ws = new WebSocket('ws://localhost:3030/api/servicio/ws');
         pedido_ws.once('message',function (message) {
