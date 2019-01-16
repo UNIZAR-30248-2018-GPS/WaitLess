@@ -245,6 +245,10 @@ describe('App.vue', () => {
   });
 
   test('Add comments on the products', () => {
+    localStorage.clear();
+    localStorage.__STORE__ = {};
+    localStorage.setItem("10",'0');
+    localStorage.setItem("10",[]);
 
     const datos = ['10','Chuleton','35','Chuleton a la brasa',1,1];
     const name = ['10','Chuleton','35','Chuleton a la brasa',['1kg de chuleton'],0,[''],true];
@@ -255,7 +259,7 @@ describe('App.vue', () => {
       data(){
         return{
           show: false,
-          quantity: 0,
+          quantity: localStorage.getItem("10"),
         }
       }
     });
@@ -267,22 +271,45 @@ describe('App.vue', () => {
 
     wrapper_app.vm.$on('emmitEvent',datos => {
       expect(wrapper_app.vm.value).toBe(datos);
+      localStorage.setItem("pedido",datos);
       expect(wrapper_app.vm.pedido.length).toBe(1);
+      expect(localStorage.getItem("pedido").length).toBe(1);
+      localStorage.setItem("coment0",null);
     });
 
     const wrapper_app_1= mount(App, {
       data(){
         return{
-          pedido: ['10','Chuleton','35','Chuleton a la brasa',1,1],
-          modelo:[]
+          pedido: localStorage.getItem("pedido"),
+          modelo: [],
+          pedido_total: []
         }
       }
     });
     expect(wrapper_app_1.html().includes('index')).toBe(true);
     expect(wrapper_app_1.find('#index').text()).toMatch('- Chuleton');
+    expect(wrapper_app.vm.pedido.length).toBe(1);
 
     wrapper_app_1.find('#comentario').trigger('blur');
     expect(wrapper_app_1.vm.modelo.length).toBe(1);
+    let coment = wrapper_app_1.vm.modelo;
+    localStorage.setItem("coment0",coment[0]);
+    let pedido_total = wrapper_app_1.vm.pedido_total;
+    localStorage.setItem("pedido_total",pedido_total);
+
+    const wrapper_app_2= mount(App, {
+      data(){
+        return{
+          pedido: localStorage.getItem("pedido"),
+          modelo: [],
+          pedido_total: localStorage.getItem("pedido_total")
+        }
+      }
+    });
+    expect(wrapper_app_2.vm.pedido.length).toBe(1);
+    expect(wrapper_app_2.vm.pedido_total.length).toBe(1);
+    let comentario = wrapper_app_2.vm.pedido_total[0].comentario;
+    expect(localStorage.getItem("coment0")).toBe(comentario);
 
   });
 
