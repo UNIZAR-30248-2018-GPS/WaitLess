@@ -63,7 +63,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="comprobarFormulario('form')">Añadir a la carta</el-button>
+            <el-button class="boton" type="primary" @click="comprobarFormulario('form')">Añadir a la carta</el-button>
           </el-form-item>
         </el-form>
 
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-  import CocinaService from '@/services/CocinaService'
+  import CocinaService from '../services/CocinaService'
 
   export default {
     data () {

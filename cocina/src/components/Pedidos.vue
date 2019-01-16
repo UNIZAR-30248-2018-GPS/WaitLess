@@ -1,8 +1,9 @@
 <template>
   <div>
+    <h1>Pedidos</h1>
     <el-row v-loading="loading" v-for="i in Math.ceil(wsData.length / 3)" :gutter="20">
       <el-col  v-for="pedido in wsData.slice((i - 1) * 3, i * 3)" :key="pedido.num_pedido" :span="8"><div >
-        <el-card class="box-card">
+        <el-card jest="card" class="box-card">
           <el-button type="primary" class="botonCamarero" @click="callWsCamarero">Avisar camarero</el-button>
           <strong>Mesa {{pedido.mesa}}</strong>
           <el-table
@@ -35,7 +36,7 @@
 </template>
 
 <script>
-  import CocinaService from '@/services/CocinaService'
+  import CocinaService from '../services/CocinaService'
   export default {
     methods: {
       tableRowClassName({row, rowIndex}) {

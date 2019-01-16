@@ -22,7 +22,7 @@
                 placeholder="Buscar en la carta"/>
             </template>
             <template slot-scope="scope">
-              <el-checkbox-button v-model="platos.find(plato => plato.id === scope.row.id).disponible" @change="cambiaDisponibilidad(scope.row.id)">Disponible</el-checkbox-button>
+              <el-checkbox-button  v-model="platos.find(plato => plato.id === scope.row.id).disponible" @change="cambiaDisponibilidad(scope.row.id)">Disponible</el-checkbox-button>
             </template>
           </el-table-column>
         </el-table>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  import CocinaService from '@/services/CocinaService'
+  import CocinaService from '../services/CocinaService'
 
   export default {
     data() {
