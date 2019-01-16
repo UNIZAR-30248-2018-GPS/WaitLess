@@ -41,7 +41,8 @@
     methods: {
       tableRowClassName({row, rowIndex}) {
         if (rowIndex === 1) {
-          return 'success-row';
+          //return 'success-row';
+          return '';
         }
         return '';
       },
