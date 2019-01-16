@@ -88,7 +88,7 @@
       >
 
         <v-list-tile>
-          <v-list-tile-content id=index>- {{p[1]}}</v-list-tile-content>
+          <v-list-tile-content id="index">- {{p[1]}}</v-list-tile-content>
           <v-list-tile-avatar>{{p[2]}}€</v-list-tile-avatar>
 
         </v-list-tile>
@@ -172,11 +172,18 @@
           </v-card-title>
 
           <v-card-text style="font-size: 18px">
-            Numero de mesa: {{mesa}} <br>
+            Selecciona número de mesa y comensales:
             <br>
-
             <v-flex xs16 sm26 d-flex>
-              Selecciona el numero de comenales
+              <v-select
+                :items="comensales"
+                label="Mesa"
+                v-model="mesa"
+                solo
+              ></v-select>
+
+            </v-flex>
+            <v-flex xs16 sm26 d-flex>
               <v-select
                 :items="comensales"
                 label="Comensales"
@@ -251,6 +258,8 @@ import Carta from './layouts/card_carta'
 import bus from './EventBus'
 import Vue from 'vue';
 import swal from 'sweetalert';
+import VueSession from 'vue-session';
+Vue.use(VueSession);
 
 export default {
   data() {
@@ -266,6 +275,7 @@ export default {
 
       ],
       comensales:['1','2','3','4','5'],
+      mesas: ['1','2','3','4','5','6','7','8'],
       miniVariant: false,
       right: true,
       rightDrawer: true,
@@ -280,7 +290,7 @@ export default {
       dialog_failed: false,
       dialog: false,
       disable_menu:true,
-      mesa: 3,
+      mesa: 0,
       selected:0,
       pedido: [],
       dialog_settings: false,
@@ -418,6 +428,7 @@ export default {
       this.disable_menu=this.$session.get('dialog_menu');
       this.$session.set('mesa',this.mesa);
       this.$session.set('comensales',this.selected);
+      this.$session.set('mesa',this.mesa);
       this.$session.set('card_comensales',false);
       this.$session.set('dialog_finalizar',false);
       this.$router.push({name: 'Bebidas'});
@@ -427,6 +438,7 @@ export default {
       if (this.password=this.pwd){
         this.$session.clear();
         this.selected=0;
+        this.mesa=0;
         this.total=0;
         this.pedido=[];
         this.pedido_total=[];

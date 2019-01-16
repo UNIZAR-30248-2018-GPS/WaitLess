@@ -50,6 +50,8 @@
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
     "jest": "^23.6.0",
+    "jest-mock-axios": "^2.1.11",
+    "mock-local-storage": "^1.1.8",
     "node-notifier": "^5.1.2",
     "nodemon": "^1.18.7",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
@@ -78,6 +80,7 @@
   },
   "jest": {
     "verbose": true,
+    "setupTestFrameworkScriptFile": "mock-local-storage",
     "moduleFileExtensions": [
       "js",
       "json",

@@ -2,7 +2,7 @@
   <v-card class="elevation-{10}; mx-5;">
     <v-card-title class="grey" >
       <div>
-          <v-list-tile-title> {{name[1]}} </v-list-tile-title>
+          <v-list-tile-title id="product"> {{name[1]}} </v-list-tile-title>
       </div>
     </v-card-title>
 
@@ -41,12 +41,12 @@
         Ingredientes:
 
           <v-card-text>
-            <p  v-for="(item) in name[4]">-{{item}}</p>
+            <p  v-for="(item) in name[4]" id=ingrediente>-{{item}}</p>
 
           </v-card-text>
         Alergenos:
         <v-card-text>
-          <p  v-for="(item) in name[6]">-{{item}}</p>
+          <p  v-for="(item) in name[6]" id="alergeno">-{{item}}</p>
         </v-card-text>
         </v-card-text>
 
@@ -77,7 +77,7 @@
         this.clickMe(1);
       },
       decrement () {
-        if(this.quantity === 0) {
+        if(this.quantity == 0) {
           swal ( "Error" ,  "No se permite elegir un producto con cantidad negativa" ,  "error" )
         } else {
           this.quantity--;
