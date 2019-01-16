@@ -45,7 +45,7 @@ describe('card_carta.vue', () => {
     localStorage.setItem("10",'2');
     expect(wrapper_1.vm.quantity).toBe(2);
     expect(localStorage.getItem("10")).toBe('2');
-
+    localStorage.clear();
   });
 
   test('decremnts quantity when button is clicked', () => {
@@ -83,6 +83,8 @@ describe('card_carta.vue', () => {
     localStorage.setItem("10",'0');
     expect(wrapper_1.vm.quantity).toBe(0);
     expect(localStorage.getItem("10")).toBe('0');
+
+    localStorage.clear();
   });
 
   test('decremnts quantity when button is clicked and quantity is 0', () => {
@@ -104,6 +106,8 @@ describe('card_carta.vue', () => {
     expect(wrapper.find('#cantidad').text()).toMatch('0');
     expect(wrapper.vm.quantity).toBe('0');
     expect(localStorage.getItem("10")).toBe('0');
+
+    localStorage.clear();
   })
 });
 
@@ -155,6 +159,8 @@ describe('App.vue', () => {
     expect(wrapper_app_1.find('#index').text()).toMatch('- Chuleton');
     expect(wrapper_app.vm.pedido.length).toBe(1);
 
+    localStorage.clear();
+
   });
 
   test('List second course with ingredients and allogens',() => {
@@ -178,7 +184,7 @@ describe('App.vue', () => {
     expect(wrapper.html().includes('alergeno')).toBe(false);
     expect(wrapper.find('#descrip').text()).toMatch('Descripcion:');
     expect(wrapper.find('#precio').text()).toMatch('15');
-
+    localStorage.clear();
   });
 
   test('List first course with ingredients and allogens',() => {
@@ -198,7 +204,7 @@ describe('App.vue', () => {
     expect(wrapper.find('#descrip').text()).toMatch('Descripcion:');
     expect(wrapper.find('#precio').text()).toMatch('3.7');
 
-
+    localStorage.clear();
   });
 
   test('List desserts with ingredients and allogens', () => {
@@ -223,6 +229,7 @@ describe('App.vue', () => {
     expect(wrapper.find('#descrip').text()).toMatch('Descripcion: Con nata');
     expect(wrapper.find('#precio').text()).toMatch('2');
 
+    localStorage.clear();
   });
 
   test('List drinks with ingredients and allogens', () => {
@@ -242,6 +249,7 @@ describe('App.vue', () => {
     expect(wrapper.find('#descrip').text()).toMatch('Descripcion: 330cc');
     expect(wrapper.find('#precio').text()).toMatch('1.8');
 
+    localStorage.clear();
   });
 
   test('Add comments on the products', () => {
@@ -288,10 +296,10 @@ describe('App.vue', () => {
     });
     expect(wrapper_app_1.html().includes('index')).toBe(true);
     expect(wrapper_app_1.find('#index').text()).toMatch('- Chuleton');
-    expect(wrapper_app.vm.pedido.length).toBe(1);
+    expect(wrapper_app_1.vm.pedido.length).toBe(2);
 
     wrapper_app_1.find('#comentario').trigger('blur');
-    expect(wrapper_app_1.vm.modelo.length).toBe(1);
+    expect(wrapper_app_1.vm.modelo.length).toBe(2);
     let coment = wrapper_app_1.vm.modelo;
     localStorage.setItem("coment0",coment[0]);
     let pedido_total = wrapper_app_1.vm.pedido_total;
@@ -306,11 +314,12 @@ describe('App.vue', () => {
         }
       }
     });
-    expect(wrapper_app_2.vm.pedido.length).toBe(1);
-    expect(wrapper_app_2.vm.pedido_total.length).toBe(1);
+    expect(wrapper_app_2.vm.pedido.length).toBe(2);
+    expect(wrapper_app_2.vm.pedido_total.length).toBe(2);
     let comentario = wrapper_app_2.vm.pedido_total[0].comentario;
     expect(localStorage.getItem("coment0")).toBe(comentario);
 
+    localStorage.clear();
   });
 
   test('Call the waiter', () => {
@@ -349,7 +358,7 @@ describe('App.vue', () => {
       }
     });
 
-    expect(wrapper_app.vm.pedido.length).toBe(0);
+    expect(wrapper_app.vm.pedido.length).toBe(2);
     expect(localStorage.getItem("pedido").length).toBe(0);
 
 
@@ -375,7 +384,7 @@ describe('App.vue', () => {
     });
     expect(wrapper_app_1.html().includes('index')).toBe(true);
     expect(wrapper_app_1.find('#index').text()).toMatch('- Chuleton');
-    expect(wrapper_app.vm.pedido.length).toBe(1);
+    expect(wrapper_app.vm.pedido.length).toBe(3);
 
     expect(wrapper_app_1.html().includes('Finalizar')).toBe(true);
     wrapper_app_1.find('#Finalizar').trigger('click');
@@ -391,10 +400,9 @@ describe('App.vue', () => {
     expect(wrapper_p.vm.idPedido).toBe('119');
     expect(wrapper_p.find('#confirmar').text()).toMatch('Confirmación del Pedido '+ localStorage.getItem("idPedido"));
     expect(wrapper_app_1.find('#index').text()).toMatch('- Chuleton');
-    expect(wrapper_app_1.vm.pedido.length).toBe(1);
+    expect(wrapper_app_1.vm.pedido.length).toBe(3);
 
-
-
+    localStorage.clear();
   });
 
 });

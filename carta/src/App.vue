@@ -304,6 +304,10 @@ export default {
 
     }
   },
+  /**
+   * Función que cuando se crea el componente vue, se encarga de crear la sesion
+   * con todos los datos que se necesitan
+   */
   created: function(){
     if (!this.$session.exists()){
       this.$session.start();
@@ -327,6 +331,10 @@ export default {
     }
 
   },
+  /**
+   * Función que se encarga de gestionar el bus de comunicación con
+   * card_carta y añade los productos seleccionados al pedido
+   */
   mounted: function () {
     bus.$on('emittedEvent', data => {
       this.value = data;
@@ -368,6 +376,10 @@ export default {
 
   },
   methods: {
+    /**
+     * Función que permite mostrar la cuenta calculandola a partir
+     * de los precios de los productos que han sido seleccionados
+     */
     mostrarCuenta(){
       this.total=0;
       var total_cuenta=0.00;
@@ -377,6 +389,10 @@ export default {
         this.$session.set('precio_total',this.total);
       }
     },
+    /**
+     * Función que permite guardar los comentarios escritos
+     * por el usuario
+     */
     addComentario: function (id, nombre, cantidad, index) {
       Vue.set(this.pedido_total, index, {
         "nombre": nombre,
@@ -388,6 +404,11 @@ export default {
       this.$session.set('pedido_total', this.pedido_total);
       console.log("comentario", this.pedido_total);
     },
+
+    /**
+     * Función que envia a la api el pedido completo finalizado
+     * por el usuario
+     */
     enviarPedido(){
       this.dialog = false;
       axios({
@@ -412,6 +433,10 @@ export default {
         "              Vuelva a intentarlo, disculpe las molestias." ,  "error" );}
         );
     },
+
+    /**
+     * Función que envia una peticion a la api para avisar al camarero
+     */
     llamarCamarero(){
       axios({
           method: 'post',
@@ -427,6 +452,11 @@ export default {
         );
 
     },
+
+    /**
+     * Función que guarda los datos introducidos (mesa y comensales) al
+     * inicio de la aplicación
+     */
     guardarDatos(){
       this.disable_menu=this.$session.get('dialog_menu');
       this.$session.set('mesa',this.mesa);
@@ -436,6 +466,11 @@ export default {
       this.$session.set('dialog_finalizar',false);
       this.$router.push({name: 'Bebidas'});
     },
+
+    /**
+     * Función comprueba que la password que se ha introducido en el
+     * formulario de ajustes es la correcta
+     */
     comprobarPwd(){
 
       if (this.password=this.pwd){

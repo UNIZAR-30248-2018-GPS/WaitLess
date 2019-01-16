@@ -54,7 +54,7 @@
     },
     methods: {
       /**
-       * Función que pide los productos tipo plato a la api
+       * Función que pide los productos tipo menu1 (primer platos) a la api
        * y los guarda en la variable items.
        */
       fetchItems() {

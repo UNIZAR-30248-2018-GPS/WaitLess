@@ -55,7 +55,7 @@
     },
     methods: {
       /**
-       * Función que pide los productos tipo menu2 a la api
+       * Función que pide los productos tipo menu2 (segundos platos) a la api
        * y los guarda en la variable items.
        */
       fetchItems() {

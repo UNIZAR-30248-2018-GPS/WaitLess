@@ -71,6 +71,10 @@ div{
       }
     },
     methods: {
+      /**
+       * Función que realiza un post a la api para avisar al camarero
+       * de que el cliente quiere la cuenta
+       */
       pedirCuenta(){
         axios({
             method: 'post',

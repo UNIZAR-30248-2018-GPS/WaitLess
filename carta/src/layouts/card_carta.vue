@@ -71,11 +71,21 @@
       'name'
     ],
     methods: {
+
+      /**
+       * Función que incrementa la cantidad en una unidad si se ha hecho click
+       * en el boton de añadir
+       */
       increment () {
         this.quantity++;
         this.$session.set(this.name[0],this.quantity);
         this.clickMe(1);
       },
+
+      /**
+       * Función que disminuye  la cantidad en una unidad si se ha hecho click
+       * en el boton de añadir, sin permitir que la cantidad final sea negativa
+       */
       decrement () {
         if(this.quantity == 0) {
           swal ( "Error" ,  "No se permite elegir un producto con cantidad negativa" ,  "error" )
@@ -86,6 +96,13 @@
         }
 
       },
+
+      /**
+       * Función que envia un evento por el bus a App.vue para que se pueda añadir
+       * al pedido
+       * @params num, indica si se ha disminuido la cantidad con un '0' o si por el
+       * contrario se ha aumentado con un '1'
+       */
       clickMe(num) {
         bus.$emit('emittedEvent', [this.name[0],this.name[1],this.name[2],this.name[3],1,num]);
       }
