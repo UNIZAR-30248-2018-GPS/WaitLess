@@ -9,8 +9,8 @@
       <v-list class="elevation-{20};" >
 
         <v-list-tile>
-          <v-list-tile-content>Precio: {{name[2]}} €
-            <v-list-tile-sub-title>Descripcion: {{name[3]}}</v-list-tile-sub-title>
+          <v-list-tile-content id="precio">Precio: {{name[2]}} €
+            <v-list-tile-sub-title id="descrip">Descripcion: {{name[3]}}</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>

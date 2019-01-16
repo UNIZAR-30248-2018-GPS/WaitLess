@@ -26,6 +26,7 @@
           <v-btn
             color="info"
             flat
+            id="pedirCuenta"
             @click="pedirCuenta"
           >
             Pedir La Cuenta
@@ -60,6 +61,7 @@ div{
 </style>
 
 <script>
+  const axios = require('axios');
   export default {
     name: 'Pedido',
     data(){
@@ -69,7 +71,7 @@ div{
     },
     methods: {
       pedirCuenta(){
-        this.axios({
+        axios({
             method: 'post',
             url: 'http://localhost:3030/api/servicio/pedirCuenta/'+ this.$session.get('idPedido'),
           }

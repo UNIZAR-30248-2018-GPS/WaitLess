@@ -39,6 +39,7 @@
 
 <script>
   import Carta from '../layouts/card_carta'
+  const axios = require('axios');
   export default {
     name:"Bebidas",
     data(){
@@ -58,18 +59,20 @@
        * y los guarda en la variable items.
        */
       fetchItems() {
-        let uri = 'http://localhost:3030/api/carta?tipo=bebida';
+        axios({
+          method: 'get',
+          url: 'http://localhost:3030/api/carta?tipo=bebida'}
+        ).then(response => {
+            this.$session.set('primeros',response.data);
+            this.items = this.$session.get('primeros');
 
-        this.axios.get(uri).then((response) => {
-          this.$session.set('bebidas',response.data);
-          this.items = this.$session.get('bebidas');
-
-          for (let index = 0; index < this.items.length; index++) {
-            if (!this.$session.has(this.items[index].id)){
-              this.$session.set(this.items[index].id,'0');
+            for (let index = 0; index < this.items.length; index++) {
+              if (!this.$session.has(this.items[index].id)){
+                this.$session.set(this.items[index].id,'0');
+              }
             }
           }
-        }).catch(function (error) {
+        ).catch(function (error) {
           console.log('Error: ' + error);
         });
 

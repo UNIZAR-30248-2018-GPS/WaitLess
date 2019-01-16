@@ -56,7 +56,7 @@
 
        </v-list>
 
-      <v-btn color="blue lighten-2" dark  @click="llamarCamarero" style="margin-top: 170%; margin-left: 8%">
+      <v-btn color="blue lighten-2" dark id="camarero" @click="llamarCamarero" style="margin-top: 170%; margin-left: 8%">
         <v-icon>{{'call'}}</v-icon>
         Llamar al camarero
       </v-btn>
@@ -100,6 +100,7 @@
             label="Añade tu comentario"
             rows="1"
             v-model="modelo[index]"
+            id = "comentario"
             :disabled="disable_coment==true"
             @blur="addComentario(p[0],p[1],p[4],index)"
           ></v-textarea>
@@ -260,6 +261,7 @@ import Vue from 'vue';
 import swal from 'sweetalert';
 import VueSession from 'vue-session';
 Vue.use(VueSession);
+const axios = require('axios');
 
 export default {
   data() {
@@ -388,7 +390,7 @@ export default {
     },
     enviarPedido(){
       this.dialog = false;
-      this.axios({
+      axios({
         method: 'post',
         url: 'http://localhost:3030/api/pedido?mesaId='+this.mesa,
         data:
@@ -411,7 +413,7 @@ export default {
         );
     },
     llamarCamarero(){
-      this.axios({
+      axios({
           method: 'post',
           url: 'http://localhost:3030/api/servicio/llamarCamarero/'+this.mesa,
         }
@@ -419,10 +421,11 @@ export default {
           console.log('respuesta',response);
           swal ( "Llamar al Camarero" ,  "Se ha avisado al camarero. \n" +
             "En unos minutos le atenderan." ,  "success" );
-
+          return response;
         },(error) => { console.log(error); swal ( "Llamar al Camarero" ,  "No se ha podido realizar la llamada " +
         "al camarero.\n" + "Vuelva a intentarlo, disculpe las molestias." ,  "error" );}
-      );
+        );
+
     },
     guardarDatos(){
       this.disable_menu=this.$session.get('dialog_menu');
