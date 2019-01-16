@@ -7,8 +7,9 @@
         <v-card-title
           class="headline grey lighten-2"
           primary-title
+          id="confirmar"
         >
-          Confirmación del Pedido {{$session.get('idPedido')}}
+          Confirmación del Pedido {{idPedido}}
         </v-card-title>
 
         <v-card-text style="font-size: 18px">
@@ -66,7 +67,7 @@ div{
     name: 'Pedido',
     data(){
       return{
-
+          idPedido: this.$session.get('idPedido')
       }
     },
     methods: {

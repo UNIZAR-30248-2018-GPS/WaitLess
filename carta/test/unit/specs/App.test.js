@@ -325,7 +325,75 @@ describe('App.vue', () => {
 
     const wrapper = mount(PedidoFinalizado);
     expect(wrapper.html().includes('pedirCuenta')).toBe(true);
-    let cuenta = wrapper.find('#pedirCuenta').trigger('click');
+    wrapper.find('#pedirCuenta').trigger('click');
+
+  });
+
+  test('Finalize order', () => {
+    localStorage.clear();
+    localStorage.__STORE__ = {};
+
+    const datos = ['10','Chuleton','35','Chuleton a la brasa',1,1];
+    const name = ['10','Chuleton','35','Chuleton a la brasa',['1kg de chuleton'],0,[''],true];
+    localStorage.setItem("pedido",[]);
+    localStorage.setItem("10",'0');
+
+    const wrapper_app = mount(App);
+    const wrapper = mount(card_carta, {
+      propsData: { name },
+      data(){
+        return{
+          show: false,
+          quantity: localStorage.getItem("10"),
+        }
+      }
+    });
+
+    expect(wrapper_app.vm.pedido.length).toBe(0);
+    expect(localStorage.getItem("pedido").length).toBe(0);
+
+
+    wrapper.find('#increment').trigger('click');
+    wrapper.vm.$emit('emittedEvent', datos);
+    expect(wrapper.emitted().emittedEvent).toBeTruthy();
+    expect(wrapper.emitted().emittedEvent.length).toBe(1);
+
+    wrapper_app.vm.$on('emmitEvent',datos => {
+      expect(wrapper_app.vm.value).toBe(datos);
+      localStorage.setItem("pedido",datos);
+      expect(wrapper_app.vm.pedido.length).toBe(1);
+      expect(localStorage.getItem("pedido").length).toBe(1);
+
+    });
+
+    const wrapper_app_1= mount(App, {
+      data(){
+        return{
+          pedido: localStorage.getItem("pedido")
+        }
+      }
+    });
+    expect(wrapper_app_1.html().includes('index')).toBe(true);
+    expect(wrapper_app_1.find('#index').text()).toMatch('- Chuleton');
+    expect(wrapper_app.vm.pedido.length).toBe(1);
+
+    expect(wrapper_app_1.html().includes('Finalizar')).toBe(true);
+    wrapper_app_1.find('#Finalizar').trigger('click');
+    localStorage.setItem("idPedido",'119');
+
+    const wrapper_p= mount(PedidoFinalizado,
+      {
+        data(){
+          return{
+            idPedido: localStorage.getItem("idPedido")
+          }
+        }});
+    expect(wrapper_p.vm.idPedido).toBe('119');
+    expect(wrapper_p.find('#confirmar').text()).toMatch('Confirmación del Pedido '+ localStorage.getItem("idPedido"));
+    expect(wrapper_app_1.find('#index').text()).toMatch('- Chuleton');
+    expect(wrapper_app_1.vm.pedido.length).toBe(1);
+
+
 
   });
 

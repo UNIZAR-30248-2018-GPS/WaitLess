@@ -117,7 +117,7 @@
         <div class="text-xs-center">
 
           <v-dialog v-model="dialog" width="500px"  v-if="pedido && $session.get('dialog_finalizar')===true">
-              <v-btn slot="activator" color="blue lighten-2" dark >Finalizar Pedido</v-btn>
+              <v-btn slot="activator" color="blue lighten-2" dark id="Finalizar" >Finalizar Pedido</v-btn>
 
               <v-card>
                 <v-card-title>
