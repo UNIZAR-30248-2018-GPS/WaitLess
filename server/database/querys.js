@@ -137,12 +137,15 @@ const bebida_delete = function (data, res) {
 */
 const plato_insert = function (data, data1, data2, res) {
     let sql = 'INSERT INTO carta (nombre, precio, tipo, descripcion,disponible) VALUES (?)';
+    let response_body='';
     connection.query(sql, [data], function (err, result) {
         if (err) throw err;
         if (result.affectedRows === 0) {
             res.setHeader('Content-Type', 'application/json');
             res.statusCode=200;
-            res.send({id:result.insertId});
+            response_body={id:result.insertId};
+            res.send(response_body);
+            res.end();
         } else {
                 let sql_alerg = 'INSERT INTO alergenos_carta (id_carta,id_alergeno) VALUES ?';
                 var values = [];
@@ -166,14 +169,13 @@ const plato_insert = function (data, data1, data2, res) {
                         else {
                             res.setHeader('Content-Type', 'application/json');
                             res.statusCode=201;
-                            res.send({id:result.insertId});
+                            response_body={id:result.insertId};
+                            res.send(response_body);
+                            res.end();
                         }
                     })
                 }
         }
-        res.setHeader('Content-Type', 'application/json');
-        res.statusCode=200;
-        res.send({id:result.insertId});
     })
 };
 
