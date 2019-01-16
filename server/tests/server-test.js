@@ -353,7 +353,7 @@ describe('Avisos', function () {
     */
    it('Deberia llamar al camarrero desde la mesa <mesa> /llamarCamarero/<mesa> POST',function (done) {
     chai.request(server)
-        .post('/api/servicio/llamarCamarero/3')
+        .post('/api/servicio/llamarCamarero/2')
         .end(function(err, res){
             res.should.have.status(200);
             done();
@@ -379,7 +379,7 @@ describe('Avisos', function () {
     */
    it('Deberia pedir la cuenta <num_pedido> /pedirCuenta/<num_pedido> POST',function (done) {
     chai.request(server)
-        .post('/api/servicio/pedirCuenta/301')
+        .post('/api/servicio/pedirCuenta/1431')
         .end(function(err, res){
             res.should.have.status(200);
             done();
