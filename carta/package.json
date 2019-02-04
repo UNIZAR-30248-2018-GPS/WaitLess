@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "test": "jest",
+    "test": "jest --coverage",
     "build": "node build/build.js",
     "swagger_edit": "swagger project edit WaitLess-swagger"
   },

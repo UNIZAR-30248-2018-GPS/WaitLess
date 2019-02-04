@@ -154,6 +154,8 @@ const pedido_cocina_get_ws = function (ws,req) {
  *  -pedido: Pedido que llega a cocina
  *  -estado_item: Cambio en el estado del item de un pedido concreto
  *  -estado_pedido: Cambio en el estado de un pedido
+ *  -aviso: Aviso al camarero desde la carta
+ *  -aviso_cuenta: Aviso de que un cliente desea la cuenta
  *
  * @param ws Conexion WebSockets abierta
  * @param req Http Request inicial

@@ -147,33 +147,41 @@ const plato_insert = function (data, data1, data2, res) {
             res.send(response_body);
             res.end();
         } else {
-                let sql_alerg = 'INSERT INTO alergenos_carta (id_carta,id_alergeno) VALUES ?';
-                var values = [];
-                if (data1 && data1.length > 0) {
+                if(data2 && data2.length > 0) {
+                    let sql_alerg = 'INSERT INTO alergenos_carta (id_carta,id_alergeno) VALUES ?';
+                    var values = [];
+                    if (data1 && data1.length > 0) {
                         data1.forEach(function (item) {
-                        values.push([result.insertId, item]);
-                    });
-                    connection.query(sql_alerg, [values], function (err) {
-                        if (err) throw err;
-                            
-                    })
-                }
-                let sql_ing = 'INSERT INTO ingredientes_carta (id_carta,id_ingrediente) VALUES ?';
-                var values = [];
-                if (data2 && data2.length >0){
-                            data2.forEach(function (item) {
                             values.push([result.insertId, item]);
-                    });
-                    connection.query(sql_ing, [values], function (err) {
-                        if (err) throw err;
-                        else {
-                            res.setHeader('Content-Type', 'application/json');
-                            res.statusCode=201;
-                            response_body={id:result.insertId};
-                            res.send(response_body);
-                            res.end();
-                        }
-                    })
+                        });
+                        connection.query(sql_alerg, [values], function (err) {
+                            if (err) throw err;
+
+                        })
+                    }
+                    let sql_ing = 'INSERT INTO ingredientes_carta (id_carta,id_ingrediente) VALUES ?';
+                    var values = [];
+                    if (data2 && data2.length > 0) {
+                        data2.forEach(function (item) {
+                            values.push([result.insertId, item]);
+                        });
+                        connection.query(sql_ing, [values], function (err) {
+                            if (err) throw err;
+                            else {
+                                res.setHeader('Content-Type', 'application/json');
+                                res.statusCode = 201;
+                                response_body = {id: result.insertId};
+                                res.send(response_body);
+                                res.end();
+                            }
+                        })
+                    }
+                }else{
+                    res.setHeader('Content-Type', 'application/json');
+                    res.statusCode = 200;
+                    response_body = {id: result.insertId};
+                    res.send(response_body);
+                    res.end();
                 }
         }
     })

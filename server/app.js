@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const swaggerUI = require('swagger-ui-express');
 const expressVue = require('express-vue');
 const YAML = require('yamljs');
@@ -18,7 +19,9 @@ const routerPlato = require('./routes/plato');
 const routerServicio = require('./routes/servicio');
 
 app.use(cors());
-
+app.use(express.static(path.join(__dirname,'public'),{index:false}));
+app.use('/cliente_carta',express.static(path.join(__dirname,'public'),{index:'carta.html'}));
+app.use('/cliente_cocina',express.static(path.join(__dirname,'public'),{index:'cocina.html'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/docs',swaggerUI.serve, swaggerUI.setup(swaggerDoc));
