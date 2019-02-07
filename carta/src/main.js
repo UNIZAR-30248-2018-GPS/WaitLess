@@ -10,6 +10,9 @@ import VueAxios from 'vue-axios';
 import axios from 'axios';
 Vue.use(VueAxios, axios);
 
+import VueSession from 'vue-session';
+Vue.use(VueSession);
+
 import App from './App.vue';
 
 import {
@@ -22,10 +25,23 @@ import {
   VIcon,
   VCard,
   VTextarea,
-  VGrid,
+  VDialog,
+  VAlert,
+  VParallax,
+  VDataTable,
+  VDivider,
+  VSelect,
+  VTextField,
   VToolbar,
-  transitions
+  VGrid,
+  transitions,
 } from 'vuetify'
+import{
+  VLayout,
+  VCardText,
+  VSlideYTransition,
+
+} from 'vuetify/lib'
 import '../node_modules/vuetify/src/stylus/app.styl'
 
 Vue.use(Vuetify, {
@@ -38,6 +54,16 @@ Vue.use(Vuetify, {
     VIcon,
     VCard,
     VTextarea,
+    VDialog,
+    VAlert,
+    VParallax,
+    VDataTable,
+    VDivider,
+    VSelect,
+    VLayout,
+    VCardText,
+    VSlideYTransition,
+    VTextField,
     VGrid,
     VToolbar,
     transitions
@@ -51,9 +77,9 @@ Vue.use(Vuetify, {
     success: '#4CAF50',
     warning: '#FFC107'
   }
-})
+});
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 
 import Home from './components/Home'
@@ -61,7 +87,7 @@ import Bebidas from './components/Bebidas'
 import Primeros from './components/Primeros'
 import Segundos from './components/Segundos'
 import Postres from './components/Postres'
-
+import Pedido from './components/PedidoFinalizado'
 
 const routes = [
   {
@@ -88,14 +114,20 @@ const routes = [
     name: 'Postres y otros',
     path: '/postres',
     component: Postres
+  },
+  {
+    name: 'Pedido',
+    path: '/pedido',
+    component: Pedido
   }
+
 ];
 
 const router = new VueRouter
 ({
   mode: 'history',
   routes
-})
+});
 
 
 window.app = new Vue({

@@ -1,15 +1,15 @@
 <template>
   <v-container fluid style="margin-left: 60px">
-  <v-slide-y-transition >
+  <v-slide-y-transition>
     <v-layout row wrap>
       <v-flex
         v-for="(item,index) in items"
-        :key="item.id"
+        :key="index"
         xs3
         mr-5
         my-3
       >
-        <Carta v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,ingredientes,index,alergenos]></Carta>
+        <Carta v-bind:name=[item.id,item.nombre,item.precio,item.descripcion,item.nombres_ingredientes,index,item.nombres_alergenos,item.disponible]></Carta>
 
       </v-flex>
     </v-layout>
@@ -39,57 +39,45 @@
 
 <script>
   import Carta from '../layouts/card_carta'
+  const axios = require('axios');
   export default {
     name:"Primeros",
     data(){
       return{
-        items: [],
-        count: 0,
-        ingredientes:[],
-        alergenos:[],
+        items: this.$session.get('primeros'),
       }
     },
 
     created: function()
     {
       this.fetchItems();
-
     },
     methods: {
+      /**
+       * Función que pide los productos tipo menu1 (primer platos) a la api
+       * y los guarda en la variable items.
+       */
       fetchItems() {
-        let uri = 'http://localhost:3030/api/carta?tipo=plato';
 
-        this.axios.get(uri).then((response) => {
-          this.items = response.data;
-          let item;
-          for(item in this.items){
-            console.log(this.items[item]);
-            this.fetchIngredientes(this.items[item].id);
-            this.fetchAlergenos(this.items[item].id);
+        axios({
+            method: 'get',
+            url: 'http://localhost:3030/api/carta?tipo=menu1'}
+        ).then(response => {
+          this.$session.set('primeros',response.data);
+          this.items = this.$session.get('primeros');
+
+          for (let index = 0; index < this.items.length; index++) {
+            if (!this.$session.has(this.items[index].id)){
+              this.$session.set(this.items[index].id,'0');
+            }
           }
-        }).catch(function (error) {
+          }
+        ).catch(function (error) {
           console.log('Error: ' + error);
         });
 
-      },
-      fetchIngredientes(id) {
-        this.axios.get('http://localhost:3030/api/plato/ingredientes/'+id).then((response) => {
-          this.ingredientes[this.count] = response.data;
-          this.count++;
-          console.log(this.ingredientes,'data', response.data);
-        }).catch(function (error) {
-          console.log('Error: ' + error);
-        });
-      },
-      fetchAlergenos(id) {
-        this.axios.get('http://localhost:3030/api/plato/alergenos/'+id).then((response) => {
-          this.alergenos[this.count] = response.data;
-          this.count++;
-          console.log(this.alergenos,'data', response.data);
-        }).catch(function (error) {
-          console.log('Error: ' + error);
-        });
       }
+
     },
     components: {
       Carta

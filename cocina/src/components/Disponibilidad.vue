@@ -1,52 +1,43 @@
 <template>
   <div>
     <h1>Disponibilidad de la carta</h1>
-    <el-table
-      v-loading="loading"
-      :row-class-name="tableRowClassName"
-      :data="platos.filter(data => !search || data.nombre.toLowerCase().includes(search.toLowerCase()))"
-      style="width: 100%">
-      <el-table-column
-        label="Plato o bebida"
-        prop="nombre">
-      </el-table-column>
-      <el-table-column
-        align="right">
-        <template slot="header" slot-scope="scope">
-          <el-input
-            v-model="search"
-            size="mini"
-            placeholder="Buscar en la carta"/>
-        </template>
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="handleEdit(scope.$index, scope.row)">Cambiar disponibilidad</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+
+    <el-row :gutter="20">
+      <el-col :span="20" :offset="2">
+
+        <el-table
+          v-loading="loading"
+          :data="platos.filter(data => !search || data.nombre.toLowerCase().includes(search.toLowerCase()))"
+          style="width: 100%">
+          <el-table-column
+            label="Plato o bebida"
+            prop="nombre">
+          </el-table-column>
+          <el-table-column
+            align="right">
+            <template slot="header" slot-scope="scope">
+              <el-input
+                v-model="search"
+                size="mini"
+                placeholder="Buscar en la carta"/>
+            </template>
+            <template slot-scope="scope">
+              <el-checkbox-button  v-model="platos.find(plato => plato.id === scope.row.id).disponible" @change="cambiaDisponibilidad(scope.row.id)">Disponible</el-checkbox-button>
+            </template>
+          </el-table-column>
+        </el-table>
+
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-  import CocinaService from '@/services/CocinaService'
+  import CocinaService from '../services/CocinaService'
 
   export default {
     data() {
       return {
-        tableData: [{
-          disponibilidad: true,
-          plato: 'Macarrones con tomate',
-        }, {
-          disponibilidad: true,
-          plato: 'Ternera a la plancha',
-        }, {
-          disponibilidad: false,
-          plato: 'Lubina al horno',
-        }, {
-          disponibilidad: true,
-          plato: 'Crema catalana',
-        }],
         platos: [],
         search: '',
         loading: true
@@ -62,15 +53,10 @@
       handleEdit(index, row) {
         console.log(index, row);
       },
-      tableRowClassName({ row }) {
-
-        if (row.disponibilidad === true) {
-          return 'success-row'
-        } else if (row.disponibilidad === false) {
-          return 'warning-row'
-        }
-        return ''
-      },
+      cambiaDisponibilidad(value) {
+        console.log(this.platos.find(plato => plato.id === value).nombre +" -> " +this.platos.find(plato => plato.id === value).disponible);
+        CocinaService.disponibilidad(value,this.platos.find(plato => plato.id === value).disponible);
+      }
     },
     beforeMount() {
       this.cargarPlatos()

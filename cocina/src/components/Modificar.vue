@@ -3,7 +3,7 @@
     <h1>Modificar carta</h1>
     <el-row v-loading="loading" :gutter="20">
       <el-col v-for="plato in platos" :key="plato.id" :span="8"><div >
-        <el-card class="box-card">
+        <el-card jest="card" class="box-card">
           <div slot="header" class="clearfix">
             <el-tag v-if="plato.tipo==='plato'" class="etiquetaPlato">Plato</el-tag>
             <el-tag v-if="plato.tipo==='bebida'" type="success" class="etiquetaPlato">Bebida</el-tag>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-  import CocinaService from '@/services/CocinaService'
+  import CocinaService from '../services/CocinaService'
 
   export default {
     data () {
