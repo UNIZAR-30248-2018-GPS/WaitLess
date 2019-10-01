@@ -1,4 +1,3 @@
-
 # WaitLess 
 
 ### Master: [![Master](https://travis-ci.com/UNIZAR-30248-2018-GPS/WaitLess.svg?branch=master)](https://travis-ci.com/UNIZAR-30248-2018-GPS/WaitLess)

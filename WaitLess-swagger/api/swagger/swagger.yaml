@@ -31,7 +31,7 @@ paths:
       operationId: carta
       responses:
         "200":
-          description: Exito
+          description: Success
           schema:
             type: array
             items: 
