@@ -1,27 +1,27 @@
-# waitless
+# WaitLess 
 
-> A Vue.js project
+### Master: [![Master](https://travis-ci.com/UNIZAR-30248-2018-GPS/WaitLess.svg?branch=master)](https://travis-ci.com/UNIZAR-30248-2018-GPS/WaitLess)
+### Test: [![Test](https://travis-ci.com/UNIZAR-30248-2018-GPS/WaitLess.svg?branch=test)](https://travis-ci.com/UNIZAR-30248-2018-GPS/WaitLess)
 
-## Build Setup
-
-``` bash
-# install dependencies
+**Para iniciar el servidor y el cliente en conjunto, tanto instalacion como puesta en marcha es necesario ejecutar desde la raíz del proyecto**
+````
 npm install
+npm start
+````
+**O para iniciar el servidor y el cliente por separado, ejecutar los siguientes comandos desde el directorio raíz del proyecto /WaitLess en varias terminales**
+````
+npm run server-install
+npm run server
 
-# serve with hot reload at localhost:8080
-npm run dev
+npm run cocina-install
+npm run cocina
 
-# build for production with minification
-npm run build
+npm run carta-install
+npm run carta
+````
 
-# build for production and view the bundle analyzer report
-npm run build --report
+server: `localhost:3030`
 
-# run unit tests
-npm run unit
+cocina: `localhost:8081`
 
-# run all tests
-npm test
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+carta: `localhost:8080`

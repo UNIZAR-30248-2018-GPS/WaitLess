@@ -1,0 +1,245 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: WaitLess
+# during dev, should point to your local machine
+host: localhost:3030
+# basePath prefixes all resource paths 
+basePath: /api
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a cocina can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the cocina (Accepts)
+produces:
+  - application/json
+paths:
+  /carta:
+    get:
+      description: Obtiene un listado de todos los productos del menú, junto con su precio
+      # used as the method name of the controller
+      operationId: carta
+      responses:
+        "200":
+          description: Exito
+          schema:
+            type: array
+            items: 
+            # a pointer to a definition
+              $ref: "#/definitions/cartaResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /pedido/{mesa}:
+    post:
+      description: Añade un nuevo pedido al sistema tras confirmarlo
+      parameters:
+        - name: mesa 
+          in: path
+          description: Mesa que realiza el pedido
+          required: true
+          type: string
+
+        - name: pedidos
+          in: body
+          description: Pedido a añadir
+          required: true
+          schema:
+            $ref: '#/definitions/NuevoPedido'
+      responses:
+        "201":
+          description: Exito al añadir
+  /pedido/pedidopreparado/{numPedido}/{itemId}:
+    post:
+      description: actualiza el estado del pedido para cada item a preparado
+      parameters:
+        - name: numPedido 
+          in: path
+          description: número del pedido que se desea actualizar
+          required: true
+          type: integer
+
+        - name: itemId
+          in: path
+          description: número del item que se desea actualizar
+          required: true
+          type: integer
+      responses:
+        "201":
+          description: Exito al modificar el estado
+  /pedido/pedidoservido/{numPedido}/{itemId}:
+    post:
+      description: actualiza el estado del pedido para cada item a servido
+      parameters:
+        - name: numPedido 
+          in: path
+          description: número del pedido que se desea actualizar
+          required: true
+          type: integer
+
+        - name: itemId
+          in: path
+          description: número del item que se desea actualizar
+          required: true
+          type: integer
+      responses:
+        "201":
+          description: Exito al modificar el estado
+  /bebida/nuevaBebida/{nombre}/{precio}:
+    post:
+      description: Añade una nueva bebida
+      parameters:
+        - name: nombre
+          in: path
+          description: nombre de la bebida a añadir
+          required: true
+          type: string 
+
+        - name: precio
+          in: path
+          description: precio de la bebida a añadir
+          required: true
+          type: string 
+      responses:
+        "201":
+          description: Exito al añadir bebida
+  /bebida/borrarBebida/{nombre}:
+    post:
+      description: borra una bebida
+      parameters:
+        - name: nombre
+          in: path
+          description: nombre de la bebida a borrar
+          required: true
+          type: string 
+      responses:
+        "201":
+          description: Exito al eliminar bebida
+  /plato/nuevoPlato/{nombre}/{descripcion}/{precio}/{tipo}:
+    post:
+      description: inserta un plato
+      parameters:
+        - name: nombre
+          in: path
+          description: nombre del plato
+          required: true
+          type: string
+        - name: descripcion
+          in: path
+          description: Descripcion del nuevo plato
+          required: true
+          type: string 
+        - name: precio
+          in: path
+          description: Precio del nuevo plato
+          required: true
+          type: double 
+        - name: tipo
+          in: path
+          description: tipo del plato introducido
+          required: true
+          type: string 
+      responses:
+        "201":
+          description: Exito al introducir nuevo plato
+  /plato/modificarPlato/{nombre}/{descripcion}/{precio}/{tipo}/{id}:
+    post:
+      description: modifica un plato
+      parameters:
+        - name: nombre
+          in: path
+          description: nuevo nombre del plato
+          required: true
+          type: string
+        - name: descripcion
+          in: path
+          description: Descripcion del plato a modificar
+          required: true
+          type: string 
+        - name: precio
+          in: path
+          description: Precio del plato a modificar
+          required: true
+          type: double 
+        - name: tipo
+          in: path
+          description: tipo del plato a modificar
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: id del plato a modificar
+          required: true
+          type: integer
+      responses:
+        "201":
+          description: Exito al modificar plato
+  /plato/borrarPlato/{nombre}:
+    post:
+      description: borrar un plato
+      parameters:
+        - name: nombre
+          in: path
+          description: nombre del plato a borrar
+          required: true
+          type: string
+      responses:
+        "201":
+          description: Exito al borrar plato
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  cartaResponse:
+    required:
+      - nombre
+      - precio
+      - tipo
+      - id
+    properties:
+      nombre:
+        type: string
+      id:
+        type: string
+      precio:
+        type: integer
+      tipo:
+        type: string
+        enum:
+          - plato
+          - bebida
+          - menu
+  NuevoPedido:
+    required:
+      - items
+    properties:
+      comensales:
+        type: integer
+      items:
+        type: array
+        items:
+         $ref: "#/definitions/ItemPedido"
+  ItemPedido:
+    required:
+      - nombre
+      - cantidad
+      - id
+    properties:
+      nombre:
+        type: string
+      cantidad:
+        type: integer
+      id:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
